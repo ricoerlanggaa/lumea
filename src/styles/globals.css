@@ -1,3 +1,41 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btn-white {
+  background-color: #FFFFFF;
+}
+.btn-white.btn-outline {
+  background-color: transparent;
+  color: #FFFFFF;
+  border-color: #FFFFFF;
+}
+.btn-white:hover {
+  background-color: #FFFFFF;
+  color: #171717;
+}
+.gradient-border {
+  position: relative;
+  border: none;
+}
+.gradient-border::before {
+  content: ;
+  position: absolute;
+  inset: 0;
+  border: 2px solid transparent;
+  border-radius: inherit;
+  background: linear-gradient(91.06deg #ff1cf7 2.26% #00f0ff 100%);
+  background-origin: border-box;
+  background-clip: border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+.gradient-border:hover::before {
+  background: none;
+  -webkit-mask: none;
+  mask-composite: none;
+}
+.btn-outline.btn-secondary:hover{
+  background-color: #ffffff;
+}

@@ -10,6 +10,7 @@ export default {
   theme: {
     extend: {},
   },
+  safelist: [{ pattern: /(grid|col|row|order|flex|basis|grow|shrink)-./ }],
   plugins: [daisyui],
   daisyui: {
     logs: false,

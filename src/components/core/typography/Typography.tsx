@@ -66,7 +66,7 @@ export default function Typography<T extends ElementType = 'p'>({
     italic && 'italic',
   );
   return (
-    <Component className={classes} {...rest}>
+    <Component {...rest} className={classes}>
       {children}
     </Component>
   );

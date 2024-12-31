@@ -44,17 +44,17 @@ export default function Button({
   );
   if (href) {
     return (
-      <Link href={href} role="button" className={buttonClasses} {...rest}>
+      <Link {...rest} href={href} role="button" className={buttonClasses}>
         <span className={textClasses}>{children}</span>
       </Link>
     );
   }
   return (
     <button
+      {...rest}
       type={type === 'submit' ? 'submit' : 'button'}
       className={buttonClasses}
       disabled={disabled}
-      {...rest}
     >
       <span className={textClasses}>{children}</span>
     </button>

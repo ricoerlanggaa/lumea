@@ -1,7 +1,12 @@
 import { classNames } from '@/utilities/formats/string';
 import Link from 'next/link';
-import type { ButtonColor, ButtonSize, ButtonProps } from './Button.d';
+import type { ButtonColor, ButtonSize, ButtonProps, ButtonVariant } from './Button.d';
 
+const variantClasses: Record<ButtonVariant, string> = {
+  filled: 'btn',
+  outlined: 'btn btn-outline border-2',
+  ghost: 'btn btn-ghost',
+};
 const colorClasses: Record<ButtonColor, string> = {
   primary: 'btn-primary',
   secondary: 'btn-secondary',
@@ -20,10 +25,10 @@ const sizeClasses: Record<ButtonSize, string> = {
 export default function Button({
   type = 'button',
   children = 'Button',
+  variant = 'filled',
   color = 'primary',
   size = 'md',
   className,
-  outlined,
   block,
   disabled,
   href,
@@ -31,11 +36,10 @@ export default function Button({
 }: ButtonProps) {
   const isGradientButton = color === 'primary' || color === 'secondary';
   const buttonClasses = classNames(
-    'btn',
+    variantClasses[variant],
     colorClasses[color],
     sizeClasses[size],
-    outlined && 'btn-outline border-2',
-    outlined && isGradientButton && 'gradient-border',
+    variant === 'outlined' && isGradientButton && 'gradient-border',
     block && 'btn-block',
     disabled && 'btn-disabled',
     className,

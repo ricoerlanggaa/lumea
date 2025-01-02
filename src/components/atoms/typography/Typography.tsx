@@ -55,6 +55,7 @@ export default function Typography<T extends ElementType = 'p'>({
   weight = 'normal',
   variant = 'body',
   italic,
+  className,
   children,
   ...rest
 }: TypographyProps<T> & ComponentPropsWithoutRef<T>) {
@@ -64,9 +65,10 @@ export default function Typography<T extends ElementType = 'p'>({
     colorClasses[color],
     weightClasses[weight],
     italic && 'italic',
+    className,
   );
   return (
-    <Component {...rest} className={classes}>
+    <Component className={classes} {...rest}>
       {children}
     </Component>
   );

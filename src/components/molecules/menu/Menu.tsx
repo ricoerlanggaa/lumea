@@ -8,18 +8,18 @@ const bgColorClasses: Record<MenuBackgrounColor, string> = {
   secondary: 'bg-secondary',
 };
 
-export default function Menu({ orientation, items, bgColor, ...rest }: MenuProps) {
+export default function Menu({ orientation, items, bgColor, className, ...rest }: MenuProps) {
   const classes = classNames(
     'menu',
-    'rounded-box',
     bgColor && bgColorClasses[bgColor],
     orientation === 'horizontal' ? 'menu-horizontal' : 'menu-vertical',
+    className,
   );
   const renderMenuItems = (menuItems: MenuItems) => {
     return menuItems.map((item) => {
       if (item.children) {
         return (
-          <li>
+          <li key={item.key}>
             <details>
               <summary>{item.label}</summary>
               <ul>{renderMenuItems(item.children)}</ul>
@@ -28,7 +28,7 @@ export default function Menu({ orientation, items, bgColor, ...rest }: MenuProps
         );
       }
       return (
-        <li>
+        <li key={item.key}>
           <Link href={item.href ?? '#'}>{item.label}</Link>
         </li>
       );
@@ -36,7 +36,7 @@ export default function Menu({ orientation, items, bgColor, ...rest }: MenuProps
   };
 
   return (
-    <ul {...rest} className={classes}>
+    <ul className={classes} {...rest}>
       {items && renderMenuItems(items)}
     </ul>
   );

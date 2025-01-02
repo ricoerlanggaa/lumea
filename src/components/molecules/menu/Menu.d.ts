@@ -1,8 +1,9 @@
 import type { HTMLAttributes } from 'react';
 
 type MenuItems = {
-  href?: string;
+  key: number | string;
   label: string;
+  href?: string;
   children?: MenuItems;
 }[];
 

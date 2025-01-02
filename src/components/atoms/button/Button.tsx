@@ -22,6 +22,7 @@ export default function Button({
   children = 'Button',
   color = 'primary',
   size = 'md',
+  className,
   outlined,
   block,
   disabled,
@@ -37,6 +38,7 @@ export default function Button({
     outlined && isGradientButton && 'gradient-border',
     block && 'btn-block',
     disabled && 'btn-disabled',
+    className,
   );
   const textClasses = classNames(
     isGradientButton &&
@@ -44,17 +46,17 @@ export default function Button({
   );
   if (href) {
     return (
-      <Link {...rest} href={href} role="button" className={buttonClasses}>
+      <Link href={href} role="button" className={buttonClasses} {...rest}>
         <span className={textClasses}>{children}</span>
       </Link>
     );
   }
   return (
     <button
-      {...rest}
       type={type === 'submit' ? 'submit' : 'button'}
       className={buttonClasses}
       disabled={disabled}
+      {...rest}
     >
       <span className={textClasses}>{children}</span>
     </button>

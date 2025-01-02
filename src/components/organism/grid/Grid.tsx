@@ -10,6 +10,7 @@ function Grid<T extends ElementType = 'div'>({
   md,
   lg,
   xl,
+  className,
   children,
   ...rest
 }: GridProps<T> & ComponentPropsWithoutRef<T>) {
@@ -26,9 +27,10 @@ function Grid<T extends ElementType = 'div'>({
     md?.rows && `md:grid-rows-${md.rows}`,
     lg?.rows && `lg:grid-rows-${lg.rows}`,
     xl?.rows && `xl:grid-rows-${xl.rows}`,
+    className,
   );
   return (
-    <Component {...rest} className={classes}>
+    <Component className={classes} {...rest}>
       {children}
     </Component>
   );
@@ -43,6 +45,7 @@ function GridItem<T extends ElementType = 'div'>({
   md,
   lg,
   xl,
+  className,
   children,
   ...rest
 }: GridItemProps<T> & ComponentPropsWithoutRef<T>) {
@@ -63,6 +66,7 @@ function GridItem<T extends ElementType = 'div'>({
     xl?.colSpan && `col-span-${xl.colSpan}`,
     xl?.rowSpan && `row-span-${xl.rowSpan}`,
     xl?.order && `order-${xl.order}`,
+    className,
   );
   return (
     <Component className={classes} {...rest}>

@@ -27,7 +27,7 @@ export default function Button({
   children = 'Button',
   variant = 'filled',
   color = 'primary',
-  size = 'md',
+  size,
   className,
   block,
   disabled,
@@ -35,11 +35,12 @@ export default function Button({
   ...rest
 }: ButtonProps) {
   const isGradientButton = color === 'primary' || color === 'secondary';
+  const isGradientOutline = variant === 'outlined' && isGradientButton;
   const buttonClasses = classNames(
     variantClasses[variant],
     colorClasses[color],
-    sizeClasses[size],
-    variant === 'outlined' && isGradientButton && 'gradient-border',
+    size && sizeClasses[size],
+    isGradientOutline && 'btn-gradient',
     block && 'btn-block',
     disabled && 'btn-disabled',
     className,

@@ -3,39 +3,33 @@
 @tailwind utilities;
 
 .btn-white {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 }
 .btn-white.btn-outline {
   background-color: transparent;
-  color: #FFFFFF;
-  border-color: #FFFFFF;
+  color: #ffffff;
+  border-color: #ffffff;
 }
 .btn-white:hover {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   color: #171717;
 }
-.gradient-border {
+.btn-gradient {
   position: relative;
   border: none;
 }
-.gradient-border::before {
-  content: ;
+.btn-gradient::before {
+  content: '';
   position: absolute;
   inset: 0;
-  border: 2px solid transparent;
   border-radius: inherit;
-  background: linear-gradient(91.06deg #ff1cf7 2.26% #00f0ff 100%);
-  background-origin: border-box;
-  background-clip: border-box;
-  -webkit-mask: linear-gradient(#fff 0 0) padding-box linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
+  padding: 2px;
+  background: linear-gradient(91.06deg, #ff1cf7 2.26%, #00f0ff 100%);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
   mask-composite: exclude;
 }
-.gradient-border:hover::before {
-  background: none;
-  -webkit-mask: none;
-  mask-composite: none;
-}
-.btn-outline.btn-secondary:hover{
-  background-color: #ffffff;
+.btn-gradient:hover::before {
+  content: none;
 }

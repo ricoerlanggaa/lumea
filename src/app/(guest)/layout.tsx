@@ -19,7 +19,7 @@ export default function GuestLayout({
     <div className="drawer">
       <input id={toggleId} type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
-        <header className="navbar bg-primary text-primary-content">
+        <header className="navbar fixed bg-primary text-primary-content">
           <div className="flex-none md:hidden">
             <label htmlFor={toggleId} className="drawer-button btn btn-square btn-ghost">
               <Icon path={mdiMenu} size={1} />

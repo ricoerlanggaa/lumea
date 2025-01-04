@@ -14,6 +14,9 @@
   background-color: #ffffff;
   color: #171717;
 }
+.btn-disabled {
+  background-color: #F2F2F2 !important;
+}
 .btn-gradient {
   position: relative;
   border: none;

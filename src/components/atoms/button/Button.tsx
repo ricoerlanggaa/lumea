@@ -46,7 +46,8 @@ export default function Button({
     className,
   );
   const textClasses = classNames(
-    isGradientButton &&
+    !disabled &&
+      isGradientButton &&
       'bg-clip-text text-transparent bg-gradient-to-r from-[#FF1CF7] to-[#00F0FF]',
   );
   if (href) {

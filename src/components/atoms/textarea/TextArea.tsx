@@ -17,7 +17,7 @@ export default function TextArea<TInputValues extends FieldValues>({
     ? (errors[inputKey as keyof typeof errors] as FieldError | undefined)
     : undefined;
   const hasError = !!(errors && errorMessages);
-  const classes = classNames('textarea textarea-bordered', className);
+  const classes = classNames('textarea textarea-bordered', hasError && 'textarea-error', className);
   return (
     <div className="form-control">
       {label && (

@@ -8,3 +8,7 @@ export async function createCSAI<T>(formData: T) {
   console.log(formData);
   redirect('/product-setup/ai-customer-service');
 }
+export async function createProductKnowledge<T>(formData: T) {
+  console.log(formData);
+  redirect('/product-setup/product-knowledge');
+}

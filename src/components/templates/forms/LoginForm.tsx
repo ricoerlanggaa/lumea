@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -24,7 +25,9 @@ export default function LoginForm() {
   } = useForm<LoginFormValues>({
     resolver: yupResolver(loginValidationSchema),
   });
+  const [loading, setLoading] = useState(false);
   const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
+    setLoading(true);
     await loginUser<LoginFormValues>(data);
   };
   return (
@@ -45,7 +48,7 @@ export default function LoginForm() {
         register={register}
         errors={errors}
       />
-      <Button type="submit" color="primary" className="mt-4" block>
+      <Button type="submit" color="primary" className="mt-4" disabled={loading} block>
         Masuk
       </Button>
     </form>

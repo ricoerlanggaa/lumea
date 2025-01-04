@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -30,7 +31,9 @@ export default function RegisterForm() {
   } = useForm<RegisterFormValues>({
     resolver: yupResolver(registerValidationSchema),
   });
+  const [loading, setLoading] = useState(false);
   const onSubmit: SubmitHandler<RegisterFormValues> = async (data) => {
+    setLoading(true);
     await registerUser<RegisterFormValues>(data);
   };
   return (
@@ -59,7 +62,7 @@ export default function RegisterForm() {
         register={register}
         errors={errors}
       />
-      <Button type="submit" color="primary" className="mt-4" block>
+      <Button type="submit" color="primary" className="mt-4" disabled={loading} block>
         Daftar
       </Button>
     </form>

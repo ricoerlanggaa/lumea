@@ -4,6 +4,6 @@ export async function registerUser<T>(formData: T) {
   console.log(formData);
 }
 
-export async function loginUser(formData: FormData) {
+export async function loginUser<T>(formData: T) {
   console.log(formData);
 }

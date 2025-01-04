@@ -50,7 +50,7 @@ const defaultComponent: Record<TypographyVariant, TypographyElement> = {
 };
 
 export default function Typography<T extends ElementType = 'p'>({
-  variant = 'body',
+  variant,
   as,
   color,
   weight,
@@ -59,9 +59,9 @@ export default function Typography<T extends ElementType = 'p'>({
   children,
   ...rest
 }: TypographyProps<T> & ComponentPropsWithoutRef<T>) {
-  const Component = as ?? defaultComponent[variant];
+  const Component = as ?? defaultComponent[variant ?? 'body'];
   const classes = classNames(
-    variantClasses[variant],
+    variant && variantClasses[variant],
     color && colorClasses[color],
     weight && weightClasses[weight],
     italic && 'italic',

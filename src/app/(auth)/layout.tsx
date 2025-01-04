@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
 import Icon from '@mdi/react';
 import { mdiArrowLeft } from '@mdi/js';
-import { Button } from '@/components';
+
+import { Button } from '@/components/atoms';
 
 export default function AuthLayout({
   children,

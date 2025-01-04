@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { FormRegister, Typography } from '@/components';
+import { Typography } from '@/components/atoms';
+import { FormRegister } from '@/components/templates';
 
 export const metadata: Metadata = {
   title: 'Daftar Akun — Lumea',

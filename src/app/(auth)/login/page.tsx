@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { FormLogin, Typography } from '@/components';
+import { Typography } from '@/components/atoms';
+import { FormLogin } from '@/components/templates';
 
 export const metadata: Metadata = {
   title: 'Login — Lumea',

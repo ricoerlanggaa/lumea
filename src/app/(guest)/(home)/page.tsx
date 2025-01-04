@@ -1,4 +1,4 @@
-import { Button, Typography } from '@/components';
+import { Button, Typography } from '@/components/atoms';
 
 export default function Home() {
   return (

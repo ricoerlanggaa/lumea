@@ -4,9 +4,8 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { loginUser } from '@/actions/auth';
-import Input from '@/components/atoms/input/Input';
-import Button from '@/components/atoms/button/Button';
 import { emailValidation, passwordValidation } from '@/utilities/validations/schema';
+import { Button, Input } from '@/components/atoms';
 
 interface LoginFormValues {
   email: string;

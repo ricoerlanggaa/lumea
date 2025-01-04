@@ -3,9 +3,8 @@
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { Button, Input } from '@/components/atoms';
 import { registerUser } from '@/actions/auth';
-import Input from '@/components/atoms/input/Input';
-import Button from '@/components/atoms/button/Button';
 import {
   confirmPasswordValidation,
   emailValidation,

@@ -1,7 +1,8 @@
 import { useId, type ReactNode } from 'react';
 import { mdiMenu } from '@mdi/js';
 import Icon from '@mdi/react';
-import { Button, Menu } from '@/components';
+import { Button } from '@/components/atoms';
+import { Menu } from '@/components/molecules';
 
 const menuItems = [
   { key: 1, label: 'Features', href: '/features' },

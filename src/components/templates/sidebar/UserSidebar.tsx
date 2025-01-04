@@ -8,7 +8,7 @@ import {
   mdiLogout,
   mdiViewDashboard,
 } from '@mdi/js';
-import Menu from '@/components/molecules/menu/Menu';
+import { Menu } from '@/components/molecules';
 
 export default function UserSidebar() {
   const pathname = usePathname();
@@ -23,13 +23,13 @@ export default function UserSidebar() {
           key: 21,
           label: 'AI Customer Service',
           href: '/product-setup/ai-customer-service',
-          active: pathname === '/product-setup/ai-customer-service',
+          active: pathname.includes('/product-setup/ai-customer-service'),
         },
         {
           key: 22,
           label: 'Product Knowledge',
           href: '/product-setup/product-knowledge',
-          active: pathname === '/product-setup/product-knowledge',
+          active: pathname.includes('/product-setup/product-knowledge'),
         },
       ],
     },

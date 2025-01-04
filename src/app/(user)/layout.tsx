@@ -1,7 +1,9 @@
 import { useId, type ReactNode } from 'react';
 import Icon from '@mdi/react';
 import { mdiCommentQuestionOutline, mdiLogout, mdiMenu } from '@mdi/js';
-import { Button, Menu, SidebarUser } from '@/components';
+import { Button } from '@/components/atoms';
+import { Menu } from '@/components/molecules';
+import { SidebarUser } from '@/components/templates';
 
 const menuDropdown = [
   { key: 3, label: 'Help', icon: <Icon path={mdiCommentQuestionOutline} size={1} /> },
@@ -49,7 +51,7 @@ export default function UserLayout({
       <div className="grow">
         <div className="drawer md:drawer-open">
           <input id={toggleId} type="checkbox" className="drawer-toggle" />
-          <main className="drawer-content bg-base-200 h-[calc(100vh-4rem)] overflow-y-auto">
+          <main className="drawer-content bg-base-200 h-[calc(100vh-4rem)] overflow-y-auto p-4">
             {children}
           </main>
           <aside className="drawer-side h-full md:h-[calc(100vh-4rem)] overflow-y-auto">

@@ -5,3 +5,5 @@ export { default as Menu } from './molecules/menu/Menu';
 
 export { default as FormRegister } from './templates/forms/RegisterForm';
 export { default as FormLogin } from './templates/forms/LoginForm';
+
+export { default as SidebarUser } from './templates/sidebar/UserSidebar';

@@ -1,23 +1,23 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { FormRegister, Typography } from '@/components';
+import { FormLogin, Typography } from '@/components';
 
 export const metadata: Metadata = {
-  title: 'Daftar Akun — Lumea',
+  title: 'Login — Lumea',
 };
 
-export default function Register() {
+export default function Login() {
   return (
     <div className="card w-full sm:w-4/5 md:w-3/4 lg:w-1/2">
       <div className="card-body">
         <Typography as="h1" variant="h2" weight="semibold">
-          Daftar
+          Masuk
         </Typography>
-        <FormRegister />
+        <FormLogin />
         <Typography className="text-center">
-          Already have an account?{' '}
-          <Link href="/login" className="hover:underline">
-            Login
+          Don&apos;t have an account?{' '}
+          <Link href="/register" className="hover:underline">
+            Register
           </Link>
         </Typography>
       </div>

@@ -4,7 +4,10 @@ import { Typography } from '@/components/atoms';
 import { FormLogin } from '@/components/templates';
 
 export const metadata: Metadata = {
-  title: 'Login — Lumea',
+  title: 'Login | Lumea AI',
+  description:
+    'Masuk ke akun Lumea AI Anda dan kelola leads serta chat pelanggan secara efisien. Login sekarang untuk memanfaatkan teknologi AI terbaik untuk customer service.',
+  keywords: 'login Lumea AI, customer service berbasis AI login, platform AI untuk leads',
 };
 
 export default function Login() {

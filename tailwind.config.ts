@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 import daisyui from 'daisyui';
+import { light } from 'daisyui/src/theming/themes';
 
 export default {
   content: [
@@ -16,16 +17,28 @@ export default {
     themes: [
       {
         'lumea-light': {
-          'color-scheme': 'light',
+          ...light,
           primary: '#171717',
           secondary: '#FFFFFF',
           info: '#2563EB',
           success: '#22C55E',
           warning: '#F59E0B',
-          error: '#EF4444',
+          error: '#DC2626',
+          accent: '#9333EA',
+          neutral: '#2B3440',
+
+          'primary-content': '#FFFFFF',
+          'secondary-content': '#171717',
+          'info-content': '#FFFFFF',
+          'success-content': '#FFFFFF',
+          'warning-content': '#FFFFFF',
+          'error-content': '#FFFFFF',
+          'accent-content': '#FFFFFF',
+          'neutral-content': '#D7DDE4',
+
           'base-100': '#FFFFFF',
-          'base-200': '#F2F2F2',
-          'base-300': '#E5E6E6',
+          'base-200': '#F3F4F6',
+          'base-300': '#E5E7EB',
           'base-content': '#171717',
         },
       },

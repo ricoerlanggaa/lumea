@@ -29,7 +29,7 @@ export default function Input<TInputValues extends FieldValues>({
     <div className="form-control">
       {label && (
         <label htmlFor={inputId} className="label">
-          <span className="label-text">{label}</span>
+          <span className="text-xs md:text-sm leading-tight">{label}</span>
         </label>
       )}
       <label className={classes}>

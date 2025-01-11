@@ -48,7 +48,7 @@ export default function LoginForm() {
         register={register}
         errors={errors}
       />
-      <Button type="submit" color="primary" className="mt-4" disabled={loading} block>
+      <Button type="submit" color="primary" className="mt-4" disabled={loading} width="block">
         Masuk
       </Button>
     </form>

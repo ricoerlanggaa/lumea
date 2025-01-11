@@ -62,7 +62,7 @@ export default function RegisterForm() {
         register={register}
         errors={errors}
       />
-      <Button type="submit" color="primary" className="mt-4" disabled={loading} block>
+      <Button type="submit" color="primary" className="mt-4" disabled={loading} width="block">
         Daftar
       </Button>
     </form>

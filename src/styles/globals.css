@@ -2,37 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
-.btn-white {
-  background-color: #ffffff;
-}
-.btn-white.btn-outline {
-  background-color: transparent;
-  color: #ffffff;
-  border-color: #ffffff;
-}
-.btn-white:hover {
-  background-color: #ffffff;
-  color: #171717;
-}
-.btn-disabled {
-  background-color: #F2F2F2 !important;
-}
-.btn-gradient {
-  position: relative;
-  border: none;
-}
-.btn-gradient::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 2px;
-  background: linear-gradient(91.06deg, #ff1cf7 2.26%, #00f0ff 100%);
-  mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  mask-composite: exclude;
-}
-.btn-gradient:hover::before {
-  content: none;
+@layer components {
+  .text-gradient {
+    background: linear-gradient(91.06deg, #ff1cf7 2.26%, #00f0ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .btn-outline-gradient {
+    position: relative;
+    border: none;
+  }
+  .btn-outline-gradient::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(91.06deg, #ff1cf7 2.26%, #00f0ff 100%);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+  }
+  .btn-outline-gradient:hover::before {
+    content: none;
+  }
+  .btn-outline-gradient:disabled::before {
+    content: none;
+  }
 }

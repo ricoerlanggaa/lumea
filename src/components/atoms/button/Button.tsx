@@ -1,11 +1,28 @@
-import { classNames } from '@/utilities/formats/string';
 import Link from 'next/link';
-import type { ButtonColor, ButtonSize, ButtonProps, ButtonVariant } from './Button.d';
+import { classNames } from '@/utilities/formats/string';
+import type {
+  ButtonColor,
+  ButtonSize,
+  ButtonProps,
+  ButtonVariant,
+  ButtonShape,
+  ButtonWidth,
+} from './Button.d';
 
 const variantClasses: Record<ButtonVariant, string> = {
-  filled: 'btn',
+  solid: 'btn',
   outlined: 'btn btn-outline border-2',
   ghost: 'btn btn-ghost',
+};
+const widthClasses: Record<ButtonWidth, string> = {
+  default: '',
+  wide: 'btn-wide',
+  block: 'btn-block',
+};
+const shapeClasses: Record<ButtonShape, string> = {
+  none: '',
+  circle: 'btn-circle',
+  square: 'btn-square',
 };
 const colorClasses: Record<ButtonColor, string> = {
   primary: 'btn-primary',
@@ -14,7 +31,8 @@ const colorClasses: Record<ButtonColor, string> = {
   warning: 'btn-warning',
   info: 'btn-info',
   error: 'btn-error',
-  white: 'btn-white',
+  black: 'btn-primary',
+  white: 'btn-secondary',
 };
 const sizeClasses: Record<ButtonSize, string> = {
   sm: 'btn-sm',
@@ -25,39 +43,33 @@ const sizeClasses: Record<ButtonSize, string> = {
 export default function Button({
   type = 'button',
   children = 'Button',
-  variant = 'filled',
+  variant = 'solid',
   color = 'primary',
-  size,
-  className,
-  block,
-  disabled,
+  size = 'md',
+  width = 'default',
+  shape = 'none',
+  disabled = false,
   href,
+  className,
   ...rest
 }: ButtonProps) {
-  const isGradientButton = color === 'primary' || color === 'secondary';
-  const isGradientOutline = variant === 'outlined' && isGradientButton;
+  const isGradient = color === 'primary' || color === 'secondary';
   const buttonClasses = classNames(
     variantClasses[variant],
     colorClasses[color],
-    size && sizeClasses[size],
-    isGradientOutline && 'btn-gradient',
-    block && 'btn-block',
-    disabled && 'btn-disabled',
+    sizeClasses[size],
+    widthClasses[width],
+    shapeClasses[shape],
+    isGradient && variant === 'outlined' && 'btn-outline-gradient',
+    disabled && 'btn-disabled text-base-content',
     className,
   );
-  const textClasses = classNames(
-    !disabled &&
-      isGradientButton &&
-      'bg-clip-text text-transparent bg-gradient-to-r from-[#FF1CF7] to-[#00F0FF]',
-  );
-  if (href) {
-    return (
-      <Link href={href} role="button" className={buttonClasses} {...rest}>
-        <span className={textClasses}>{children}</span>
-      </Link>
-    );
-  }
-  return (
+  const textClasses = classNames(!disabled && isGradient && 'text-gradient');
+  return href ? (
+    <Link href={href} role="button" className={buttonClasses} aria-disabled={disabled} {...rest}>
+      <span className={textClasses}>{children}</span>
+    </Link>
+  ) : (
     <button
       type={type === 'submit' ? 'submit' : 'button'}
       className={buttonClasses}

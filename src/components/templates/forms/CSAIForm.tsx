@@ -55,7 +55,7 @@ export default function CSAIForm() {
         errors={errors}
       />
       <div className="flex justify-end mt-4">
-        <Button type="submit" color="primary" disabled={loading} className="btn-wide">
+        <Button type="submit" color="primary" disabled={loading} width="wide">
           Simpan
         </Button>
       </div>

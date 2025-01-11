@@ -1,4 +1,13 @@
+import type { Metadata } from 'next';
 import { Button, Typography } from '@/components/atoms';
+
+export const metadata: Metadata = {
+  title: 'Lumea AI - Solusi Customer Service Berbasis AI untuk Leads Hingga Closing',
+  description:
+    'Tingkatkan produktivitas bisnis Anda dengan Lumea AI, platform customer service berbasis AI yang membantu menangani leads, chat masuk, hingga proses closing. Optimalkan efisiensi dan tingkatkan kepuasan pelanggan.',
+  keywords:
+    'AI Customer Service, platform AI untuk bisnis, handle leads otomatis, chat AI hingga closing, Lumea AI',
+};
 
 export default function Home() {
   return (

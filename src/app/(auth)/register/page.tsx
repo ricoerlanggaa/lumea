@@ -4,7 +4,10 @@ import { Typography } from '@/components/atoms';
 import { FormRegister } from '@/components/templates';
 
 export const metadata: Metadata = {
-  title: 'Daftar Akun — Lumea',
+  title: 'Daftar | Lumea AI',
+  description:
+    'Daftar sekarang di Lumea AI dan tingkatkan pengalaman customer service bisnis Anda. Manfaatkan teknologi AI untuk menangani leads, chat pelanggan, dan closing otomatis.',
+  keywords: 'daftar Lumea AI, registrasi platform AI, customer service AI, handle leads otomatis',
 };
 
 export default function Register() {

@@ -22,7 +22,7 @@ const variantClasses: Record<TypographyVariant, string> = {
 };
 const colorClasses: Record<TypographyColor, string> = {
   base: 'text-base-content',
-  primary: 'bg-clip-text text-transparent bg-gradient-to-r from-[#FF1CF7] to-[#00F0FF]',
+  primary: 'text-gradient',
   secondary: 'text-secondary',
   success: 'text-success',
   warning: 'text-warning',
@@ -48,6 +48,7 @@ const defaultComponent: Record<TypographyVariant, TypographyElement> = {
   'body-small': 'p',
   caption: 'span',
 };
+const heading = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
 
 export default function Typography<T extends ElementType = 'p'>({
   variant,
@@ -60,10 +61,12 @@ export default function Typography<T extends ElementType = 'p'>({
   ...rest
 }: TypographyProps<T> & ComponentPropsWithoutRef<T>) {
   const Component = as ?? defaultComponent[variant ?? 'body'];
+  const defaultWeightClasses =
+    variant && heading.some((value) => variant.includes(value)) && 'font-semibold';
   const classes = classNames(
     variant && variantClasses[variant],
     color && colorClasses[color],
-    weight && weightClasses[weight],
+    weight ? weightClasses[weight] : defaultWeightClasses,
     italic && 'italic',
     className,
   );

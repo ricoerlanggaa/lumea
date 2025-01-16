@@ -1,9 +1,9 @@
-import type { HTMLAttributes, ReactNode } from 'react';
+import type { HTMLAttributes, ReactElement } from 'react';
 
 type MenuItems = {
   key: number | string;
   label: string;
-  icon?: ReactNode;
+  icon?: ReactElement;
   href?: string;
   active?: boolean;
   disabled?: boolean;

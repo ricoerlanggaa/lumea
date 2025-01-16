@@ -4,8 +4,8 @@ import type { MenuBackgrounColor, MenuItems, MenuProps, MenuSize } from './Menu.
 
 const bgColorClasses: Record<MenuBackgrounColor, string> = {
   base: 'bg-base-200 text-base-content',
-  primary: 'bg-primary text-base-100',
-  secondary: 'bg-secondary',
+  primary: 'bg-primary text-primary-content',
+  secondary: 'bg-secondary text-secondary-content',
 };
 const sizeClasses: Record<MenuSize, string> = {
   sm: 'menu-sm',

@@ -1,8 +1,8 @@
 import { useId, type ReactNode } from 'react';
 import Icon from '@mdi/react';
 import { mdiCommentQuestionOutline, mdiLogout, mdiMenu } from '@mdi/js';
-import { Button } from '@/components/atoms';
-import { Menu } from '@/components/molecules';
+import { Avatar, Button } from '@/components/atoms';
+import { Dropdown } from '@/components/molecules';
 import { SidebarUser } from '@/components/templates';
 
 const menuDropdown = [
@@ -30,22 +30,9 @@ export default function UserLayout({
           </Button>
         </div>
         <div className="flex-none">
-          <div className="dropdown dropdown-end">
-            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-              <div className="w-10 rounded-full">
-                <img
-                  alt="Tailwind CSS Navbar component"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                />
-              </div>
-            </div>
-            <Menu
-              tabIndex={0}
-              className="dropdown-content z-10 rounded-box mt-3 w-44 p-2 shadow"
-              bgColor="base"
-              items={menuDropdown}
-            />
-          </div>
+          <Dropdown placement="bottom-end" bgColor="secondary" menuItems={menuDropdown}>
+            <Avatar shape="circle" name="Rico Erlangga" />
+          </Dropdown>
         </div>
       </header>
       <div className="grow">

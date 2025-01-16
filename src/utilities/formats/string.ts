@@ -1,4 +1,4 @@
-export type ClassNames =
+type ClassNames =
   | string
   | number
   | boolean
@@ -28,4 +28,13 @@ export function classNames(...args: ClassNames[]): string {
     }, [])
     .filter(Boolean)
     .join(' ');
+}
+
+export function getInitials(value: string | undefined) {
+  if (!value) return '';
+  const words = value.trim().split(/\s+/);
+  return words
+    .slice(0, 2)
+    .map((word) => word[0].toUpperCase())
+    .join('');
 }

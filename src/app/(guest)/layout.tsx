@@ -1,8 +1,7 @@
 import { useId, type ReactNode } from 'react';
-import { mdiMenu } from '@mdi/js';
-import Icon from '@mdi/react';
 import { Button } from '@/components/atoms';
 import { Menu } from '@/components/molecules';
+import { Menu02Icon } from 'hugeicons-react';
 
 const menuItems = [
   { key: 1, label: 'Features', href: '/features' },
@@ -23,7 +22,7 @@ export default function GuestLayout({
         <header className="navbar fixed bg-primary text-primary-content">
           <div className="flex-none md:hidden">
             <label htmlFor={toggleId} className="drawer-button btn btn-square btn-ghost">
-              <Icon path={mdiMenu} size={1} />
+              <Menu02Icon />
             </label>
           </div>
           <div className="flex-1">

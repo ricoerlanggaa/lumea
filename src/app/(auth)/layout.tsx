@@ -1,7 +1,5 @@
 import type { ReactNode } from 'react';
-import Icon from '@mdi/react';
-import { mdiArrowLeft } from '@mdi/js';
-
+import { ArrowLeft02Icon } from 'hugeicons-react';
 import { Button } from '@/components/atoms';
 
 export default function AuthLayout({
@@ -11,8 +9,8 @@ export default function AuthLayout({
 }>) {
   return (
     <div className="grid md:grid-cols-5 h-screen bg-base-content">
-      <Button href="/" variant="ghost" className="absolute top-1 left-0">
-        <Icon path={mdiArrowLeft} size={1} className="text-base-content md:text-base-100" />
+      <Button href="/" variant="ghost" shape="square" className="absolute top-1 left-0">
+        <ArrowLeft02Icon className="text-base-content md:text-primary-content" />
       </Button>
       <aside
         className="hidden md:block md:col-span-2 bg-auto bg-no-repeat bg-bottom"

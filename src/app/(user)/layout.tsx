@@ -2,16 +2,15 @@
 
 import { useId, type ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
-import Icon from '@mdi/react';
-import {
-  mdiAccountSupervisor,
-  mdiCommentQuestionOutline,
-  mdiLogout,
-  mdiMenu,
-  mdiViewDashboard,
-} from '@mdi/js';
 import { Button } from '@/components/atoms';
 import { Menu } from '@/components/molecules';
+import {
+  DashboardSquare01Icon,
+  HelpCircleIcon,
+  Logout03Icon,
+  Menu02Icon,
+  UserMultipleIcon,
+} from 'hugeicons-react';
 
 export default function UserLayout({
   children,
@@ -21,11 +20,11 @@ export default function UserLayout({
   const toggleId = useId();
   const pathname = usePathname();
   const menuItems = [
-    { key: 1, label: 'Dashboard', icon: <Icon path={mdiViewDashboard} size={1} />, disabled: true },
+    { key: 1, label: 'Dashboard', icon: <DashboardSquare01Icon />, disabled: true },
     {
       key: 2,
       label: 'Product Setup',
-      icon: <Icon path={mdiAccountSupervisor} size={1} />,
+      icon: <UserMultipleIcon />,
       children: [
         {
           key: 21,
@@ -41,8 +40,8 @@ export default function UserLayout({
         },
       ],
     },
-    { key: 3, label: 'Help', icon: <Icon path={mdiCommentQuestionOutline} size={1} /> },
-    { key: 4, label: 'Logout', icon: <Icon path={mdiLogout} size={1} />, href: '/login' },
+    { key: 3, label: 'Help', icon: <HelpCircleIcon /> },
+    { key: 4, label: 'Logout', icon: <Logout03Icon />, href: '/login' },
   ];
   return (
     <div className="drawer lg:drawer-open">
@@ -51,7 +50,7 @@ export default function UserLayout({
         <header className="navbar bg-base-200">
           <div className="flex-none">
             <label htmlFor={toggleId} className="btn btn-ghost btn-square">
-              <Icon path={mdiMenu} size={1} className="text-base-content" />
+              <Menu02Icon />
             </label>
           </div>
         </header>

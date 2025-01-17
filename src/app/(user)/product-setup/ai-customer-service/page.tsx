@@ -1,8 +1,7 @@
 import Link from 'next/link';
-import Icon from '@mdi/react';
-import { mdiPlus } from '@mdi/js';
 import { Button, Typography } from '@/components/atoms';
 import { Breadcrumbs } from '@/components/molecules';
+import { MetaIcon, PlusSignIcon } from 'hugeicons-react';
 
 const breadcrumbsItems = [
   { key: 1, label: 'Product Setup' },
@@ -24,7 +23,7 @@ export default function AiCustomerService() {
                 href="/product-setup/ai-customer-service/add"
                 className="card h-32 max-w-28 bg-base-200 border-primary hover:cursor-pointer items-center border-2 border-dashed"
               >
-                <Icon path={mdiPlus} size={2} className="my-auto" />
+                <PlusSignIcon size={32} className="my-auto" />
               </Link>
             </div>
           </div>
@@ -36,7 +35,7 @@ export default function AiCustomerService() {
             </Typography>
             <hr className="mb-4" />
             <Button color="black" className="mr-auto">
-              Hubungkan Nomor
+              <MetaIcon className="mr-2" /> Hubungkan Nomor
             </Button>
           </div>
         </div>

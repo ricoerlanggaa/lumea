@@ -12,7 +12,7 @@ type MenuItems = {
 type MenuSize = 'sm' | 'md' | 'lg';
 type MenuBackgrounColor = 'base' | 'primary' | 'secondary';
 
-interface MenuProps extends HTMLAttributes<HTMLElement> {
+interface MenuProps extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
   items?: MenuItems;
   orientation?: 'vertical' | 'horizontal';
   bgColor?: MenuBackgrounColor;

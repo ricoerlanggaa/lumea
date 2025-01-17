@@ -33,7 +33,7 @@ export default function Menu({ orientation, items, bgColor, size, className, ...
       const hasActiveChild = item.children?.some((child) => checkActiveChild(child));
       if (item.children) {
         return (
-          <li key={item.key}>
+          <li key={item.key} role="menuitem">
             <details open={hasActiveChild}>
               <summary>
                 {item.icon}
@@ -45,7 +45,7 @@ export default function Menu({ orientation, items, bgColor, size, className, ...
         );
       }
       return (
-        <li key={item.key} className={classNames(item.disabled && 'disabled')}>
+        <li key={item.key} role="menuitem" className={classNames(item.disabled && 'disabled')}>
           <Link
             href={item.href ?? '#'}
             className={classNames(item.active && 'focus', item.disabled && 'pointer-events-none')}
@@ -60,7 +60,7 @@ export default function Menu({ orientation, items, bgColor, size, className, ...
   };
 
   return (
-    <ul className={classes} {...rest}>
+    <ul className={classes} role="menu" {...rest}>
       {items && renderMenuItems(items)}
     </ul>
   );

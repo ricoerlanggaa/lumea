@@ -64,7 +64,7 @@ export default function Button({
     disabled && 'btn-disabled text-base-content',
     className,
   );
-  const textClasses = classNames(!disabled && isGradient && 'text-gradient');
+  const textClasses = classNames('flex items-center', !disabled && isGradient && 'text-gradient');
   return href ? (
     <Link href={href} role="button" className={buttonClasses} aria-disabled={disabled} {...rest}>
       <span className={textClasses}>{children}</span>

@@ -18,7 +18,7 @@ export default function AiCustomerService() {
               Daftar CS AI
             </Typography>
             <hr className="mb-4" />
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-8 gap-2">
               <Link
                 href="/product-setup/ai-customer-service/add"
                 className="card h-32 max-w-28 bg-base-200 border-primary hover:cursor-pointer items-center border-2 border-dashed"

@@ -10,14 +10,14 @@ const shapeClasses: Record<AvatarShape, string> = {
   triangle: 'mask mask-triangle',
 };
 const sizeClasses: Record<AvatarSize, string> = {
-  sm: 'w-8',
-  md: 'w-10',
-  lg: 'w-16',
+  sm: 'w-10',
+  md: 'w-16',
+  lg: 'w-20',
 };
 const textSizeClasses: Record<AvatarSize, string> = {
-  sm: 'text-sm',
-  md: 'text-md',
-  lg: 'text-2xl',
+  sm: 'text-md',
+  md: 'text-2xl',
+  lg: 'text-3xl',
 };
 
 export default function Avatar({

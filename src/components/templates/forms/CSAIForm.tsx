@@ -4,15 +4,12 @@ import { useState } from 'react';
 import * as yup from 'yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { createCSAI } from '@/actions/productSetup';
 import { csAINameValidation, csAIPersonalityValidation } from '@/utilities/validations/schema';
 import { Button, Input, TextArea } from '@/components/atoms';
+import { createCustomerService, type CreateCustomerServiceDto } from '@/actions/customer-service';
+import { useRouter } from 'next/navigation';
+import useToast from '@/hooks/useToast';
 
-interface CSAIFormValues {
-  csAIName: string;
-  label?: string;
-  csAIPersonality: string;
-}
 const csAiValidationSchema = yup.object().shape({
   csAIName: csAINameValidation,
   csAIPersonality: csAIPersonalityValidation,
@@ -23,13 +20,30 @@ export default function CSAIForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CSAIFormValues>({
+  } = useForm<CreateCustomerServiceDto>({
     resolver: yupResolver(csAiValidationSchema),
   });
+  const router = useRouter();
+  const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
-  const onSubmit: SubmitHandler<CSAIFormValues> = async (data) => {
+  const onSubmit: SubmitHandler<CreateCustomerServiceDto> = async (data) => {
     setLoading(true);
-    await createCSAI<CSAIFormValues>(data);
+    const response = await createCustomerService(data);
+    if (response.status) {
+      showToast({
+        variant: 'success',
+        message: 'Customer Service AI berhasil ditambahkan!',
+        placement: 'bottom-center',
+      });
+      router.push('/login');
+    } else {
+      showToast({
+        variant: 'error',
+        message: response.message || 'Something went wrong!',
+        placement: 'bottom-center',
+      });
+    }
+    setLoading(false);
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

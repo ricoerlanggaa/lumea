@@ -2,7 +2,6 @@ import '@/styles/globals.css';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { Geist, Geist_Mono as GeistMono } from 'next/font/google';
-import StoreProvider from '@/providers/StoreProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -27,9 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" data-theme="lumea-light">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <StoreProvider>{children}</StoreProvider>
-      </body>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
     </html>
   );
 }

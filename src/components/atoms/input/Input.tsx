@@ -44,7 +44,8 @@ export default function Input<TInputValues extends FieldValues>({
         />
         {appendIcon}
       </label>
-      <label htmlFor={inputId} className="label">
+
+      <label htmlFor={inputId} className="label py-[2px]">
         {hasError && <span className="label-text-alt text-error">{errorMessages?.message}</span>}
       </label>
     </div>

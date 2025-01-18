@@ -16,7 +16,7 @@ export default function AuthLayout({
         className="hidden md:block md:col-span-2 bg-auto bg-no-repeat bg-bottom"
         style={{ backgroundImage: 'url("/images/banners/polygon-wave.png")' }}
       />
-      <main className="md:col-span-3 md:rounded-l-2xl bg-base-100 flex items-center justify-center h-full overflow-y-auto">
+      <main className="md:col-span-3 md:rounded-l-2xl grid place-items-center py-8 bg-base-100 h-full overflow-y-auto">
         {children}
       </main>
     </div>

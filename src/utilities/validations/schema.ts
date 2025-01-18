@@ -2,6 +2,10 @@ import * as Yup from 'yup';
 
 const phoneRegExp = /^(\+62|62|0)(8[1-9][0-9]{6,9})$/;
 
+export const fullNameValidation = Yup.string()
+  .min(3, 'Name must be at least 3 characters')
+  .required('Name is required');
+
 export const emailValidation = Yup.string()
   .email('Invalid email address')
   .required('Email is required');

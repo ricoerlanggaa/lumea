@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function Login() {
   return (
     <div className="card w-full sm:w-4/5 md:w-3/4 lg:w-1/2">
-      <div className="card-body">
+      <div className="card-body gap-4">
         <Typography as="h1" variant="h2" weight="semibold">
           Masuk
         </Typography>

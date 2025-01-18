@@ -1,9 +1,12 @@
+'use client';
+
 import Link from 'next/link';
 import { cloneElement, HTMLAttributes, isValidElement, useId } from 'react';
 import { classNames } from '@/utilities/formats/string';
 import type {
   DropdownBackgroundColor,
   DropdownMenuItems,
+  DropdownMenuSize,
   DropdownPlacement,
   DropdownProps,
 } from './Dropdown.d';
@@ -18,6 +21,11 @@ const placementClasses: Record<DropdownPlacement, string> = {
   right: 'dropdown-right',
   'right-end': 'dropdown-right dropdown-end',
 };
+const menuSizeClasses: Record<DropdownMenuSize, string> = {
+  sm: 'menu-sm min-w-36',
+  md: 'menu-md min-w-40',
+  lg: 'menu-lg min-w-44',
+};
 const bgColorClasses: Record<DropdownBackgroundColor, string> = {
   base: 'bg-base-200 text-base-content',
   primary: 'bg-primary text-primary-content',
@@ -28,6 +36,7 @@ export default function Dropdown({
   placement = 'bottom',
   trigger = 'click',
   bgColor = 'base',
+  menuSize = 'md',
   menuItems,
   className,
   children,
@@ -35,13 +44,14 @@ export default function Dropdown({
 }: DropdownProps) {
   const dropdownId = useId();
   const classes = classNames(
-    'dropdown',
+    'dropdown shadow-xl',
     trigger === 'hover' && 'dropdown-hover',
     placementClasses[placement],
     className,
   );
   const contentClasses = classNames(
-    'dropdown-content menu z-[1] min-w-48 rounded-box p-2 shadow',
+    'dropdown-content menu z-[1] rounded-box shadow',
+    menuSizeClasses[menuSize],
     bgColorClasses[bgColor],
   );
   const validChildren = isValidElement<HTMLAttributes<HTMLElement>>(children);
@@ -83,6 +93,7 @@ export default function Dropdown({
             className={classNames(item.active && 'focus', item.disabled && 'pointer-events-none')}
             aria-disabled={item.disabled}
             tabIndex={item.disabled ? -1 : undefined}
+            onClick={item.onClick ? () => item.onClick?.() : undefined}
           >
             {item.icon}
             {item.label}

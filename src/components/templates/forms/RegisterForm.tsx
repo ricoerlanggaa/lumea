@@ -13,7 +13,6 @@ import {
   passwordValidation,
   confirmPasswordValidation,
 } from '@/utilities/validations/schema';
-import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import useToast from '@/hooks/useToast';
 
@@ -37,27 +36,23 @@ export default function RegisterForm() {
   const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
   const onSubmit: SubmitHandler<RegisterUserDto> = async (user) => {
-    try {
-      setLoading(true);
-      const response = await registerUser(user);
-      if (response.data) {
-        showToast({
-          variant: 'success',
-          message: 'Registrasi berhasil!',
-          placement: 'bottom-center',
-        });
-        router.push('/login');
-      }
-    } catch (error) {
-      const err = error as AxiosError;
+    setLoading(true);
+    const response = await registerUser(user);
+    if (response.status) {
       showToast({
-        variant: 'error',
-        message: err.message,
+        variant: 'success',
+        message: 'Registrasi berhasil!',
         placement: 'bottom-center',
       });
-    } finally {
-      setLoading(false);
+      router.push('/login');
+    } else {
+      showToast({
+        variant: 'error',
+        message: response.message || 'Something went wrong!',
+        placement: 'bottom-center',
+      });
     }
+    setLoading(false);
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

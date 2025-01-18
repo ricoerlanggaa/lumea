@@ -8,7 +8,7 @@ export default function AuthLayout({
   children: ReactNode;
 }>) {
   return (
-    <div className="grid md:grid-cols-5 h-screen bg-base-content">
+    <div className="grid md:grid-cols-5 h-screen bg-primary">
       <Button href="/" variant="ghost" shape="square" className="absolute top-1 left-0">
         <ArrowLeft02Icon className="text-base-content md:text-primary-content" />
       </Button>
@@ -16,7 +16,7 @@ export default function AuthLayout({
         className="hidden md:block md:col-span-2 bg-auto bg-no-repeat bg-bottom"
         style={{ backgroundImage: 'url("/images/banners/polygon-wave.png")' }}
       />
-      <main className="md:col-span-3 md:rounded-l-2xl bg-base-100  flex items-center justify-center">
+      <main className="md:col-span-3 md:rounded-l-2xl bg-base-100 flex items-center justify-center h-full overflow-y-auto">
         {children}
       </main>
     </div>

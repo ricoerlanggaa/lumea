@@ -10,15 +10,18 @@ import {
   confirmPasswordValidation,
   emailValidation,
   passwordValidation,
+  phoneNumberValidation,
 } from '@/utilities/validations/schema';
 
 interface RegisterFormValues {
   email: string;
+  phoneNumber: string;
   password: string;
   confirmPassword: string;
 }
 const registerValidationSchema = yup.object().shape({
   email: emailValidation,
+  phoneNumber: phoneNumberValidation,
   password: passwordValidation,
   confirmPassword: confirmPasswordValidation,
 });
@@ -43,6 +46,14 @@ export default function RegisterForm() {
         label="Email"
         placeholder="Masukkan Email Anda"
         inputKey="email"
+        register={register}
+        errors={errors}
+      />
+      <Input
+        type="tel"
+        label="Nomor Telepon"
+        placeholder="Masukkan Nomor Telepon Anda"
+        inputKey="phoneNumber"
         register={register}
         errors={errors}
       />

@@ -1,13 +1,15 @@
-import Link from 'next/link';
 import { Button, Typography } from '@/components/atoms';
 import { Breadcrumbs } from '@/components/molecules';
-import { MetaIcon, PlusSignIcon } from 'hugeicons-react';
+import { MetaIcon } from 'hugeicons-react';
+import { getListCustomerService } from '@/actions/customer-service';
+import { CardCustomerService } from '@/components/templates';
 
 const breadcrumbsItems = [
   { key: 1, label: 'Product Setup' },
   { key: 2, label: 'AI Customer Service' },
 ];
-export default function AiCustomerService() {
+export default async function AiCustomerService() {
+  const { data: customerServices } = await getListCustomerService();
   return (
     <>
       <Breadcrumbs items={breadcrumbsItems} />
@@ -18,14 +20,7 @@ export default function AiCustomerService() {
               Daftar CS AI
             </Typography>
             <hr className="mb-4" />
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-8 gap-2">
-              <Link
-                href="/product-setup/ai-customer-service/add"
-                className="card h-32 max-w-28 bg-base-200 border-primary hover:cursor-pointer items-center border-2 border-dashed"
-              >
-                <PlusSignIcon size={32} className="my-auto" />
-              </Link>
-            </div>
+            <CardCustomerService items={customerServices} />
           </div>
         </div>
         <div className="card bg-base-100">

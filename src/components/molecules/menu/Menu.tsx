@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { classNames } from '@/utilities/formats/string';
 import type { MenuBackgrounColor, MenuItems, MenuProps, MenuSize } from './Menu.d';
@@ -50,6 +52,7 @@ export default function Menu({ orientation, items, bgColor, size, className, ...
             href={item.href ?? '#'}
             className={classNames(item.active && 'focus', item.disabled && 'pointer-events-none')}
             aria-disabled={item.disabled}
+            onClick={item.onClick ? () => item.onClick?.() : undefined}
           >
             {item.icon}
             {item.label}

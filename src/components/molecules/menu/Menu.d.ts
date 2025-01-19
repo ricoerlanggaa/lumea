@@ -5,6 +5,7 @@ type MenuItems = {
   label: string;
   icon?: ReactElement;
   href?: string;
+  onClick?: () => void;
   active?: boolean;
   disabled?: boolean;
   children?: MenuItems;

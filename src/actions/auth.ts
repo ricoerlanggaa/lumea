@@ -1,7 +1,7 @@
 'use server';
 
+import type { AxiosError } from 'axios';
 import apiClient from '@/utilities/http/apiClient';
-import { AxiosError } from 'axios';
 
 export interface RegisterUserDto {
   fullName: string;
@@ -19,8 +19,8 @@ export async function registerUser(user: RegisterUserDto) {
       password: user.password,
       confirm_password: user.confirmPassword,
     });
-    const { status, statusText, data } = response;
-    return { status: status >= 200 && status < 300, message: statusText, data };
+    const { statusText, data } = response;
+    return { status: true, message: statusText, data };
   } catch (error) {
     const err = error as AxiosError;
     return {
@@ -36,10 +36,7 @@ export interface LoginUserDto {
 }
 interface LoginUserResponse {
   meta: { message: string; code: number; status: string };
-  data: {
-    refresh_token: string;
-    access_token: string;
-  };
+  data: { refresh_token: string; access_token: string };
 }
 export async function loginUser(user: LoginUserDto) {
   try {
@@ -47,10 +44,10 @@ export async function loginUser(user: LoginUserDto) {
       email: user.email,
       password: user.password,
     });
-    const { status, statusText, data: responseData } = response;
+    const { statusText, data: responseData } = response;
     const { data } = responseData as LoginUserResponse;
     return {
-      status: status >= 200 && status < 300,
+      status: true,
       message: statusText,
       data: { accessToken: data.access_token, refreshToken: data.refresh_token },
     };

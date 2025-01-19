@@ -13,7 +13,7 @@ import {
 import { useState } from 'react';
 
 interface WhatsappItem {
-  id: number | string;
+  id: string;
   number: string;
   isConnected: boolean;
 }
@@ -29,7 +29,7 @@ export default function WhatsappTable({ items }: { items: WhatsappItem[] }) {
   ) => {
     const response = await actionCallback();
     if (response.status) {
-      onSuccess(); // Jalankan logika perubahan state jika aksi berhasil
+      onSuccess();
       showToast({
         variant: 'success',
         message: successMessage,

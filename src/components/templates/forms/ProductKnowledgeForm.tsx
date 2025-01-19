@@ -4,7 +4,6 @@ import { useState } from 'react';
 import * as yup from 'yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { createProductKnowledge } from '@/actions/productSetup';
 import {
   csAIValidation,
   noWhatsappValidation,
@@ -32,9 +31,8 @@ export default function CSAIForm() {
     resolver: yupResolver(productKnowledgeValidationSchema),
   });
   const [loading, setLoading] = useState(false);
-  const onSubmit: SubmitHandler<ProductKnowledgeFormValues> = async (data) => {
+  const onSubmit: SubmitHandler<ProductKnowledgeFormValues> = async () => {
     setLoading(true);
-    await createProductKnowledge<ProductKnowledgeFormValues>(data);
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

@@ -4,3 +4,5 @@ export { default as FormCSAI } from './forms/CSAIForm';
 export { default as FormProductKnowledge } from './forms/ProductKnowledgeForm';
 
 export { default as CardCustomerService } from './cards/CustomerServiceCard';
+
+export { default as TableWhatsapp } from './tables/WhatsappTable';

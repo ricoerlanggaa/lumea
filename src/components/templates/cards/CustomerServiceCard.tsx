@@ -7,10 +7,7 @@ import {
   PlusSignIcon,
 } from 'hugeicons-react';
 import { Dropdown } from '@/components/molecules';
-import {
-  deleteCustomerService,
-  type ListCustomerServiceResponse,
-} from '@/actions/customer-service';
+import { deleteCustomerService } from '@/actions/customer-service';
 import { Avatar, Typography } from '@/components/atoms';
 import Link from 'next/link';
 import useToast from '@/hooks/useToast';
@@ -21,15 +18,9 @@ type CustomerServiceItem = {
   name: string;
   labels: string;
 };
-export default function CustomerServiceCard({
-  items,
-}: {
-  items: ListCustomerServiceResponse | null;
-}) {
+export default function CustomerServiceCard({ items }: { items: CustomerServiceItem[] }) {
   const { showToast } = useToast();
-  const [listCustomerService, setListCustomerService] = useState<CustomerServiceItem[]>(
-    items?.data || [],
-  );
+  const [listCustomerService, setListCustomerService] = useState<CustomerServiceItem[]>(items);
   const deleteCS = async (id: string | number) => {
     const response = await deleteCustomerService(id);
     if (response.status) {

@@ -2,7 +2,8 @@ import { Button, Typography } from '@/components/atoms';
 import { Breadcrumbs } from '@/components/molecules';
 import { MetaIcon } from 'hugeicons-react';
 import { getListCustomerService } from '@/actions/customer-service';
-import { CardCustomerService } from '@/components/templates';
+import { CardCustomerService, TableWhatsapp } from '@/components/templates';
+import { getListWhatsapp } from '@/actions/whatsapp';
 
 const breadcrumbsItems = [
   { key: 1, label: 'Product Setup' },
@@ -10,6 +11,7 @@ const breadcrumbsItems = [
 ];
 export default async function AiCustomerService() {
   const { data: customerServices } = await getListCustomerService();
+  const { data: whatsappList } = await getListWhatsapp();
   return (
     <>
       <Breadcrumbs items={breadcrumbsItems} />
@@ -20,7 +22,7 @@ export default async function AiCustomerService() {
               Daftar CS AI
             </Typography>
             <hr className="mb-4" />
-            <CardCustomerService items={customerServices} />
+            <CardCustomerService items={customerServices?.data ?? []} />
           </div>
         </div>
         <div className="card bg-base-100">
@@ -29,9 +31,12 @@ export default async function AiCustomerService() {
               Integrasi Nomor Whatsapp
             </Typography>
             <hr className="mb-4" />
-            <Button color="black" className="mr-auto">
+            <Button color="black" className="mr-auto mb-4">
               <MetaIcon className="mr-2" /> Hubungkan Nomor
             </Button>
+            {whatsappList?.data && whatsappList?.data.length > 0 && (
+              <TableWhatsapp items={whatsappList.data} />
+            )}
           </div>
         </div>
       </div>

@@ -1,6 +1,8 @@
 'use server';
 
 import type { AxiosError } from 'axios';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import apiClient from '@/utilities/http/apiClient';
 
 export interface RegisterUserDto {
@@ -59,4 +61,12 @@ export async function loginUser(user: LoginUserDto) {
       data: null,
     };
   }
+}
+export async function logout() {
+  const cookieStore = await cookies();
+
+  cookieStore.delete('access_token');
+  cookieStore.delete('refresh_token');
+
+  redirect('/login');
 }

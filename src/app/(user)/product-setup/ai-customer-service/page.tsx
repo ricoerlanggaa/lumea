@@ -18,7 +18,7 @@ export default async function AiCustomerService() {
         <div className="card bg-base-100">
           <div className="card-body">
             <Typography as="h1" variant="h4" className="card-title mb-2">
-              Daftar CS AI
+              AI Customer Service
             </Typography>
             <hr className="mb-4" />
             <CardCustomerService items={customerServices?.data ?? []} />

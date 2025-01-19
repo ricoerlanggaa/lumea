@@ -77,8 +77,9 @@ export default function CustomerServiceCard({ items }: { items: CustomerServiceI
         </div>
       ))}
       <Link
-        href="/product-setup/ai-customer-service/add"
+        href="/product-setup/ai-customer-service/create"
         className="card h-40 max-w-36 bg-base-200 border-primary hover:cursor-pointer items-center border-2 border-dashed"
+        aria-label="create ai customer service"
       >
         <PlusSignIcon size={42} className="my-auto" />
       </Link>

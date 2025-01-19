@@ -1,8 +1,7 @@
-import { Button, Typography } from '@/components/atoms';
+import { Typography } from '@/components/atoms';
 import { Breadcrumbs } from '@/components/molecules';
-import { MetaIcon } from 'hugeicons-react';
 import { getListCustomerService } from '@/actions/customer-service';
-import { CardCustomerService, TableWhatsapp } from '@/components/templates';
+import { ButtonConnectWhatsapp, CardCustomerService, TableWhatsapp } from '@/components/templates';
 import { getListWhatsapp } from '@/actions/whatsapp';
 
 const breadcrumbsItems = [
@@ -31,9 +30,7 @@ export default async function AiCustomerService() {
               Integrasi Nomor Whatsapp
             </Typography>
             <hr className="mb-4" />
-            <Button color="black" className="mr-auto mb-4">
-              <MetaIcon className="mr-2" /> Hubungkan Nomor
-            </Button>
+            <ButtonConnectWhatsapp />
             {whatsappList?.data && whatsappList?.data.length > 0 && (
               <TableWhatsapp items={whatsappList.data} />
             )}

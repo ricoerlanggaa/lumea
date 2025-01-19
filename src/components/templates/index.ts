@@ -6,3 +6,4 @@ export { default as FormProductKnowledge } from './forms/ProductKnowledgeForm';
 export { default as CardCustomerService } from './cards/CustomerServiceCard';
 
 export { default as TableWhatsapp } from './tables/WhatsappTable';
+export { default as ButtonConnectWhatsapp } from './buttons/ConnectWhatsappButton';

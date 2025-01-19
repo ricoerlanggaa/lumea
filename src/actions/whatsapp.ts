@@ -20,7 +20,29 @@ export async function getListWhatsapp() {
     };
   }
 }
-// export async function generateQRCodeWhatsapp() {}
+interface GenerateQRCodeResponse {
+  meta: { message: string; code: number; status: string };
+  data: {
+    id: string;
+    code: string;
+    isConnected: boolean;
+  };
+}
+export async function generateQRCodeWhatsapp() {
+  try {
+    const response = await apiClient.get('/whatsapp/qr');
+    const { status, statusText, data: responseData } = response;
+    const data = responseData as GenerateQRCodeResponse;
+    return { status: status >= 200 && status < 300, message: statusText, data };
+  } catch (error) {
+    const err = error as AxiosError;
+    return {
+      status: false,
+      message: err.response?.statusText,
+      data: null,
+    };
+  }
+}
 export async function connectWhatsapp(id: number | string) {
   try {
     const response = await apiClient.get(`/whatsapp/connect/${id}`);

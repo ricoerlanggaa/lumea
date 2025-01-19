@@ -8,7 +8,7 @@ const breadcrumbsItems = [
   { key: 1, label: 'Product Setup' },
   { key: 2, label: 'AI Customer Service' },
 ];
-export default async function AiCustomerService() {
+export default async function AICustomerService() {
   const { data: customerServices } = await getListCustomerService();
   const { data: whatsappList } = await getListWhatsapp();
   return (

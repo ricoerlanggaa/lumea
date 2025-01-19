@@ -6,7 +6,11 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { csAINameValidation, csAIPersonalityValidation } from '@/utilities/validations/schema';
 import { Button, Input, TextArea } from '@/components/atoms';
-import { createCustomerService, type CreateCustomerServiceDto } from '@/actions/customer-service';
+import {
+  createCustomerService,
+  updateCustomerService,
+  type CustomerService,
+} from '@/actions/customer-service';
 import { useRouter } from 'next/navigation';
 import useToast from '@/hooks/useToast';
 
@@ -15,24 +19,36 @@ const csAiValidationSchema = yup.object().shape({
   csAIPersonality: csAIPersonalityValidation,
 });
 
-export default function CSAIForm() {
+export default function AICustomerServiceForm({
+  action = 'create',
+  value,
+}: {
+  action?: 'create' | 'update';
+  value?: CustomerService;
+}) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateCustomerServiceDto>({
+  } = useForm<CustomerService>({
     resolver: yupResolver(csAiValidationSchema),
   });
   const router = useRouter();
   const { showToast } = useToast();
+  const [customerService, setCustomerService] = useState<CustomerService>({
+    csAIName: value?.csAIName ?? '',
+    csAIPersonality: value?.csAIPersonality ?? '',
+    label: value?.label ?? '',
+  });
   const [loading, setLoading] = useState(false);
-  const onSubmit: SubmitHandler<CreateCustomerServiceDto> = async (data) => {
+  const onSubmit: SubmitHandler<CustomerService> = async (data) => {
     setLoading(true);
-    const response = await createCustomerService(data);
+    const response =
+      action === 'update' ? await updateCustomerService(data) : await createCustomerService(data);
     if (response.status) {
       showToast({
         variant: 'success',
-        message: 'Customer Service AI berhasil ditambahkan!',
+        message: `AI Customer Service berhasil ${action === 'update' ? 'diperbarui' : 'ditambahkan'}!`,
         placement: 'bottom-center',
       });
       router.push('/login');
@@ -53,6 +69,8 @@ export default function CSAIForm() {
         placeholder="Masukkan Nama Customer Service AI Anda"
         register={register}
         errors={errors}
+        value={customerService.csAIName}
+        onChange={(e) => setCustomerService({ ...customerService, csAIName: e.target.value })}
       />
       <Input
         inputKey="label"
@@ -60,6 +78,8 @@ export default function CSAIForm() {
         placeholder="Masukkan Label Produk Anda"
         register={register}
         errors={errors}
+        value={customerService.label}
+        onChange={(e) => setCustomerService({ ...customerService, label: e.target.value })}
       />
       <TextArea
         inputKey="csAIPersonality"
@@ -67,10 +87,18 @@ export default function CSAIForm() {
         className="h-32"
         register={register}
         errors={errors}
+        value={customerService.csAIPersonality}
+        onChange={(e) =>
+          setCustomerService({ ...customerService, csAIPersonality: e.target.value })
+        }
       />
       <Button type="submit" color="black" width="wide" className="mt-2" disabled={loading}>
-        Simpan
+        {action === 'update' ? 'Update' : 'Simpan'}
       </Button>
     </form>
   );
 }
+AICustomerServiceForm.defaultProps = {
+  action: 'create',
+  value: { csAIName: '', csAIPersonality: '', label: '' } as CustomerService,
+};

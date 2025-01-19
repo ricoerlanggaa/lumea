@@ -38,3 +38,21 @@ export function getInitials(value: string | undefined) {
     .map((word) => word[0].toUpperCase())
     .join('');
 }
+
+export function formatPhoneNumber(phoneNumber: string): string {
+  let normalizedNumber = phoneNumber.trim();
+
+  if (normalizedNumber.startsWith('0')) {
+    normalizedNumber = `+62${normalizedNumber.slice(1)}`;
+  } else if (normalizedNumber.startsWith('62')) {
+    normalizedNumber = `+62${normalizedNumber.slice(2)}`;
+  }
+
+  const phoneRegex = /^\+62\d{9,13}$/;
+  if (!phoneRegex.test(normalizedNumber)) {
+    throw new Error('Invalid phone number');
+  }
+  const formattedNumber = normalizedNumber.replace(/(\+62)(\d{3})(\d{3,4})(\d{4,})/, '$1 $2-$3-$4');
+
+  return formattedNumber;
+}

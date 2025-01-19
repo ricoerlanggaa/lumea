@@ -34,6 +34,7 @@ export default function ConnectWhatsappButton() {
               color="black"
               shape="square"
               className="absolute right-4 top-6"
+              aria-label="close modal"
             >
               <Cancel01Icon size={18} />
             </Button>

@@ -14,14 +14,14 @@ import useToast from '@/hooks/useToast';
 import { useState } from 'react';
 
 type CustomerServiceItem = {
-  id: string | number;
+  id: string;
   name: string;
   labels: string;
 };
 export default function CustomerServiceCard({ items }: { items: CustomerServiceItem[] }) {
   const { showToast } = useToast();
   const [listCustomerService, setListCustomerService] = useState<CustomerServiceItem[]>(items);
-  const deleteCS = async (id: string | number) => {
+  const handleDeleteCustomerService = async (id: string) => {
     const response = await deleteCustomerService(id);
     if (response.status) {
       showToast({
@@ -58,7 +58,7 @@ export default function CustomerServiceCard({ items }: { items: CustomerServiceI
               {
                 key: 2,
                 label: 'Delete',
-                onClick: () => deleteCS(item.id),
+                onClick: () => handleDeleteCustomerService(item.id),
                 icon: <Delete02Icon />,
               },
             ]}

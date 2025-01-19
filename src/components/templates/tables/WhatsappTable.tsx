@@ -96,38 +96,38 @@ export default function WhatsappTable({ items }: { items: WhatsappItem[] }) {
   ];
 
   return (
-    <div className="overflow-x-auto w-full">
-      <table className="table">
-        <thead>
-          <tr className="bg-base-200">
-            <th className="border">Nomor Whatsapp</th>
-            <th className="border">Status</th>
-            <th className="border text-center">Aksi</th>
+    <table className="table w-full">
+      <thead>
+        <tr className="bg-base-200">
+          <th className="border">Nomor Whatsapp</th>
+          <th className="border">Status</th>
+          <th className="border text-center">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {whatsappList?.map((item) => (
+          <tr key={item.id}>
+            <td className="border">
+              <span className="line-clamp-1">{formatPhoneNumber(item.number)}</span>
+            </td>
+            <td className="border">
+              <div
+                className={classNames(
+                  'badge badge-outline',
+                  item.isConnected ? 'badge-success' : 'badge-error',
+                )}
+              >
+                {item.isConnected ? 'Connected' : 'Disconnected'}
+              </div>
+            </td>
+            <td className="border text-center">
+              <Dropdown placement="bottom-end" menuItems={generateMenuItems(item)} menuSize="sm">
+                <MoreHorizontalCircle01Icon size={16} />
+              </Dropdown>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {whatsappList?.map((item) => (
-            <tr key={item.id}>
-              <td className="border">{formatPhoneNumber(item.number)}</td>
-              <td className="border">
-                <div
-                  className={classNames(
-                    'badge badge-outline',
-                    item.isConnected ? 'badge-success' : 'badge-error',
-                  )}
-                >
-                  {item.isConnected ? 'Connected' : 'Disconnected'}
-                </div>
-              </td>
-              <td className="border text-center">
-                <Dropdown placement="bottom-end" menuItems={generateMenuItems(item)} menuSize="sm">
-                  <MoreHorizontalCircle01Icon size={16} />
-                </Dropdown>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+        ))}
+      </tbody>
+    </table>
   );
 }

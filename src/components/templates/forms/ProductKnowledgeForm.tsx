@@ -22,7 +22,7 @@ const productKnowledgeValidationSchema = yup.object().shape({
   productKnowledge: productKnowledgeValidation,
 });
 
-export default function CSAIForm() {
+export default function ProductKnowledgeForm() {
   const {
     register,
     handleSubmit,

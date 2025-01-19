@@ -82,7 +82,7 @@ export async function getDetailCustomerService(id: string) {
     };
   }
 }
-export async function deleteCustomerService(id: string | number) {
+export async function deleteCustomerService(id: string) {
   try {
     const response = await apiClient.delete(`customer-service/${id}`);
     const { statusText, data } = response;

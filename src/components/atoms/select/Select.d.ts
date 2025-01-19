@@ -9,7 +9,7 @@ type SelectItems = {
 
 interface SelectProps<TInputValues extends FieldValues>
   extends Partial<UseFormReturn<TInputValues>>,
-    SelectHTMLAttributes<HTMLElement> {
+    SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
   items?: SelectItems;
   inputKey: Path<TInputValues>;

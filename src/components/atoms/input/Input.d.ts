@@ -3,7 +3,7 @@ import { DeepMap, FieldError, FieldValues, Path, UseFormReturn } from 'react-hoo
 
 interface InputProps<TInputValues extends FieldValues>
   extends Partial<UseFormReturn<TInputValues>>,
-    InputHTMLAttributes<HTMLElement> {
+    InputHTMLAttributes<HTMLInputElement> {
   type?: 'text' | 'number' | 'email' | 'password' | 'tel' | 'url' | 'search';
   label?: string;
   prependIcon?: ReactNode;

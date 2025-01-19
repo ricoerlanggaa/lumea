@@ -3,7 +3,7 @@ import { DeepMap, FieldError, FieldValues, Path, UseFormReturn } from 'react-hoo
 
 interface TextAreaProps<TInputValues extends FieldValues>
   extends Partial<UseFormReturn<TInputValues>>,
-    TextareaHTMLAttributes<HTMLElement> {
+    TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   inputKey: Path<TInputValues>;
   errors?: Partial<DeepMap<TInputValues, FieldError>>;

@@ -30,6 +30,25 @@ export async function getProductKnowledgeList() {
     };
   }
 }
+interface ProductKnowledgeDetail {
+  meta: { message: string; code: 200; status: string };
+  data: { id: string; cs_id: string; number_id: string; description: string };
+}
+export async function getProductKnowledgeDetail(id: string) {
+  try {
+    const response = await apiClient.get(`/knowledge/${id}`);
+    const { statusText, data: responseData } = response;
+    const data = responseData as ProductKnowledgeDetail;
+    return { status: true, message: statusText, data };
+  } catch (error) {
+    const err = error as AxiosError;
+    return {
+      status: false,
+      message: err.response?.statusText,
+      data: null,
+    };
+  }
+}
 export async function deleteProductKnowledge(id: string) {
   try {
     const response = await apiClient.delete(`/knowledge/${id}`);
@@ -45,6 +64,7 @@ export async function deleteProductKnowledge(id: string) {
   }
 }
 export interface ProductKnowledgeItem {
+  id?: string;
   customerServiceId: string;
   whatsappId: string;
   description: string;
@@ -70,6 +90,7 @@ export async function createProductKnowledge(productKnowledge: ProductKnowledgeI
 export async function updateProductKnowledge(productKnowledge: ProductKnowledgeItem) {
   try {
     const response = await apiClient.put('/knowledge', {
+      id: productKnowledge.id,
       cs_id: productKnowledge.customerServiceId,
       number_id: productKnowledge.whatsappId,
       description: productKnowledge.description,

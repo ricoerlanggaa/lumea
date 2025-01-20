@@ -49,7 +49,9 @@ export default function ProductKnowledgeForm({
   const onSubmit: SubmitHandler<ProductKnowledgeItem> = async (data) => {
     setLoading(true);
     const response =
-      action === 'update' ? await updateProductKnowledge(data) : await createProductKnowledge(data);
+      action === 'update'
+        ? await updateProductKnowledge({ ...data, id: value?.id })
+        : await createProductKnowledge(data);
     if (response.status) {
       showToast({
         variant: 'success',

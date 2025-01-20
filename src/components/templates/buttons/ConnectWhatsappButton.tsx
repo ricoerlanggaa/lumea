@@ -15,7 +15,6 @@ export default function ConnectWhatsappButton() {
   const [qrCode, setQRCode] = useState('');
 
   let interval: ReturnType<typeof setInterval> | null = null;
-  const modal = document.getElementById(modalId) as HTMLDialogElement;
 
   const handleQRCodeWhatsapp = async (id: string) => {
     const response = await generateQRCodeWhatsapp(id);
@@ -27,6 +26,7 @@ export default function ConnectWhatsappButton() {
         message: 'Nomor Whatsapp berhasil terhubung!',
         placement: 'bottom-center',
       });
+      const modal = document.getElementById(modalId) as HTMLDialogElement;
       modal.close();
       router.refresh();
     }
@@ -35,6 +35,7 @@ export default function ConnectWhatsappButton() {
     }
   };
   const handleConnectWhatsapp = async () => {
+    const modal = document.getElementById(modalId) as HTMLDialogElement;
     if (modal) modal.showModal();
     try {
       const response = await generateQRCodeWhatsapp('');

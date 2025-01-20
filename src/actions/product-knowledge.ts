@@ -3,7 +3,7 @@
 import type { AxiosError } from 'axios';
 import apiClient from '@/utilities/http/apiClient';
 
-export type ListProductKnowledge = {
+export type ProductKnowledgeList = {
   id: string;
   number_id: string;
   cs_id: string;
@@ -11,15 +11,15 @@ export type ListProductKnowledge = {
   number: string;
   description: string;
 }[];
-interface ListProductKnowledgeResponse {
+interface ProductKnowledgeListResponse {
   meta: { message: string; code: number; status: string };
-  data: ListProductKnowledge;
+  data: ProductKnowledgeList;
 }
-export async function getListProductKnowledge() {
+export async function getProductKnowledgeList() {
   try {
     const response = await apiClient.get('/knowledge');
     const { statusText, data: responseData } = response;
-    const data = responseData as ListProductKnowledgeResponse;
+    const data = responseData as ProductKnowledgeListResponse;
     return { status: true, message: statusText, data };
   } catch (error) {
     const err = error as AxiosError;
@@ -30,7 +30,6 @@ export async function getListProductKnowledge() {
     };
   }
 }
-
 export async function deleteProductKnowledge(id: string) {
   try {
     const response = await apiClient.delete(`/knowledge/${id}`);
@@ -44,4 +43,9 @@ export async function deleteProductKnowledge(id: string) {
       data: null,
     };
   }
+}
+export interface ProductKnowledgeItem {
+  customerServiceId: string;
+  whatsappId: string;
+  description: string;
 }

@@ -1,4 +1,4 @@
-import { getListProductKnowledge } from '@/actions/product-knowledge';
+import { getProductKnowledgeList } from '@/actions/product-knowledge';
 import { Button, Typography } from '@/components/atoms';
 import { Breadcrumbs } from '@/components/molecules';
 import { TableProductKnowledge } from '@/components/templates';
@@ -9,7 +9,7 @@ const breadcrumbsItems = [
   { key: 2, label: 'Product Knowledge' },
 ];
 export default async function ProductKnowledge() {
-  const { data: productKnowledgeList } = await getListProductKnowledge();
+  const { data: productKnowledgeList } = await getProductKnowledgeList();
   return (
     <>
       <Breadcrumbs items={breadcrumbsItems} />

@@ -11,13 +11,12 @@ import { Avatar, Typography } from '@/components/atoms';
 import Link from 'next/link';
 import useToast from '@/hooks/useToast';
 import { useState } from 'react';
-import { CustomerServiceListResponse } from '@/types/services';
 import { apiDeleteCustomerService } from '@/services';
+import { CustomerServiceList } from '@/types/services';
 
-export default function CustomerServiceCard({ items }: { items: CustomerServiceListResponse }) {
+export default function CustomerServiceCard({ items }: { items: CustomerServiceList }) {
   const { showToast } = useToast();
-  const [listCustomerService, setListCustomerService] =
-    useState<CustomerServiceListResponse>(items);
+  const [listCustomerService, setListCustomerService] = useState<CustomerServiceList>(items);
 
   const handleDeleteCustomerService = async (id: number) => {
     const response = await apiDeleteCustomerService(id);

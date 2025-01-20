@@ -9,7 +9,7 @@ export interface CustomerServiceDetail {
   labels?: string;
   personality: string;
 }
-interface CustomerServiceItem {
+export interface CustomerServiceItem {
   name: string;
   label?: string;
   personality: string;

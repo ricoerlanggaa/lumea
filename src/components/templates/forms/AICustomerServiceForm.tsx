@@ -51,7 +51,7 @@ export default function AICustomerServiceForm({
         message: `AI Customer Service berhasil ${action === 'update' ? 'diperbarui' : 'ditambahkan'}!`,
         placement: 'bottom-center',
       });
-      router.push('/login');
+      router.push('/product-setup/ai-customer-service');
     } else {
       showToast({
         variant: 'error',

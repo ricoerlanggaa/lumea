@@ -5,6 +5,7 @@ import type { SelectProps } from './Select.d';
 
 export default function Select<TInputValues extends FieldValues>({
   label,
+  placeholder = 'Select Option',
   items,
   className,
   inputKey,
@@ -26,6 +27,9 @@ export default function Select<TInputValues extends FieldValues>({
         </label>
       )}
       <select id={selectId} className={classes} {...(register && register(inputKey))} {...rest}>
+        <option value="" disabled>
+          {placeholder}
+        </option>
         {items &&
           items.map((item) => (
             <option key={item.key} value={item.value}>

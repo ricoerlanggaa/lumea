@@ -28,7 +28,7 @@ interface GenerateQRCodeResponse {
 }
 export async function generateQRCodeWhatsapp() {
   try {
-    const response = await apiClient.get('/whatsapp/qr');
+    const response = await apiClient.post('/whatsapp/qr', { id: '' });
     const { statusText, data: responseData } = response;
     const data = responseData as GenerateQRCodeResponse;
     return { status: true, message: statusText, data };

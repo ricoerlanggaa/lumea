@@ -5,17 +5,41 @@ import { Cancel01Icon, MetaIcon } from 'hugeicons-react';
 import { Button, Typography } from '@/components/atoms';
 import { QRCodeCanvas } from 'qrcode.react';
 import { generateQRCodeWhatsapp } from '@/actions/whatsapp';
+import { useRouter } from 'next/navigation';
 
 export default function ConnectWhatsappButton() {
   const modalId = useId();
-  const [qrCode, setQRCode] = useState<string | null>(null);
+  const router = useRouter();
+  const [generateId, setGenerateId] = useState('');
+  const [qrCode, setQRCode] = useState('');
+  let interval: ReturnType<typeof setInterval> | null = null;
+  const handleQRCodeWhatsapp = async (id: string) => {
+    const response = await generateQRCodeWhatsapp(id);
+    const { data } = response;
+    if (data?.data.isConnected && interval) {
+      const modal = document.getElementById(modalId) as HTMLDialogElement;
+      modal.close();
+      router.refresh();
+      clearInterval(interval);
+    }
+    if (data?.data.code) {
+      setQRCode(data?.data.code);
+    }
+  };
   const handleConnectWhatsapp = async () => {
     const modal = document.getElementById(modalId) as HTMLDialogElement;
     if (modal) modal.showModal();
-    const response = await generateQRCodeWhatsapp();
-    const { data } = response;
-    if (data?.data.code) {
-      setQRCode(data?.data.code);
+    try {
+      const response = await generateQRCodeWhatsapp(generateId);
+      const { data } = response;
+      if (data?.data) {
+        setQRCode(data.data.code);
+        setGenerateId(data.data.id);
+        interval = setInterval(() => handleQRCodeWhatsapp(data.data.id), 15000);
+      }
+      return data;
+    } catch (error) {
+      return error;
     }
   };
 

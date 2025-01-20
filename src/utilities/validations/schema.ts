@@ -30,10 +30,6 @@ export const csAIPersonalityValidation = Yup.string()
   .min(100, 'CS AI Personality must be at least 100 characters')
   .required('CS AI Personality is required');
 
-export const csAIValidation = Yup.string().required('Customer Service AI is required');
-
-export const noWhatsappValidation = Yup.string().required('Whatsapp Number is required');
-
-export const productKnowledgeValidation = Yup.string()
-  .min(100, 'Product Knowledge must be at least 100 characters')
-  .required('Product Knowledge is required');
+export const productKnowledgeDescriptionValidation = Yup.string()
+  .min(100, 'Description must be at least 100 characters')
+  .required('Description is required');

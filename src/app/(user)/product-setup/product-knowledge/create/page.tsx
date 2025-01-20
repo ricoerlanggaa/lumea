@@ -12,13 +12,13 @@ const breadcrumbsItems = [
 ];
 export default async function CreateProductKnowledge() {
   const customerServiceSelectList = await getCustomerServiceSelectList();
-  const customerServiceItems = customerServiceSelectList.data?.data.map((item) => ({
+  const customerServiceItems = customerServiceSelectList.data?.data?.map((item) => ({
     key: item.id,
     label: item.name,
     value: item.id,
   }));
   const whatsappSelectList = await getWhatsappSelectList();
-  const whatsappItems = whatsappSelectList.data?.data.map((item) => ({
+  const whatsappItems = whatsappSelectList.data?.data?.map((item) => ({
     key: item.id,
     label: formatPhoneNumber(item.number),
     value: item.id,

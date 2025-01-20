@@ -1,10 +1,13 @@
-import { getCustomerServiceSelectList } from '@/actions/customer-service';
-import { getProductKnowledgeDetail, ProductKnowledgeItem } from '@/actions/product-knowledge';
-import { getWhatsappSelectList } from '@/actions/whatsapp';
 import { Typography } from '@/components/atoms';
 import { Breadcrumbs } from '@/components/molecules';
 import { FormProductKnowledge } from '@/components/templates';
 import { formatPhoneNumber } from '@/utilities/formats/string';
+import {
+  apiGetCustomerServiceSelectList,
+  apiGetProductKnowledgeDetail,
+  apiGetWhatsappSelectList,
+} from '@/services';
+import type { ProductKnowledgeItem } from '@/types/services';
 
 const breadcrumbsItems = [
   { key: 1, label: 'Product Setup' },
@@ -17,21 +20,21 @@ export default async function EditProductKnowledge({
   params: Promise<{ id: number }>;
 }) {
   const { id } = await params;
-  const response = await getProductKnowledgeDetail(id);
+  const response = await apiGetProductKnowledgeDetail(id);
   const { data } = response;
   const productKnowledge: ProductKnowledgeItem = {
-    customerServiceId: data?.data.cs_id ?? '',
-    whatsappId: data?.data.number_id ?? '',
-    description: data?.data.description ?? '',
+    customerServiceId: data?.cs_id ?? 0,
+    whatsappId: data?.number_id ?? '',
+    description: data?.description ?? '',
   };
-  const customerServiceSelectList = await getCustomerServiceSelectList();
-  const customerServiceItems = customerServiceSelectList.data?.data?.map((item) => ({
-    key: item.id,
+  const customerServiceSelectList = await apiGetCustomerServiceSelectList();
+  const customerServiceItems = customerServiceSelectList.data?.map((item) => ({
+    key: String(item.id),
     label: item.name,
-    value: item.id,
+    value: String(item.id),
   }));
-  const whatsappSelectList = await getWhatsappSelectList();
-  const whatsappItems = whatsappSelectList.data?.data?.map((item) => ({
+  const whatsappSelectList = await apiGetWhatsappSelectList();
+  const whatsappItems = whatsappSelectList.data?.map((item) => ({
     key: item.id,
     label: formatPhoneNumber(item.number),
     value: item.id,
@@ -47,9 +50,9 @@ export default async function EditProductKnowledge({
           <hr className="mb-4" />
           <FormProductKnowledge
             action="update"
-            valueId={id}
+            id={id}
             value={productKnowledge}
-            customerServiceItems={customerServiceItems}
+            customerServiceItems={customerServiceItems ?? []}
             whatsappItems={whatsappItems}
           />
         </div>

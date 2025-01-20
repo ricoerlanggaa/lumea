@@ -4,12 +4,12 @@ import { useState } from 'react';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import Cookies from 'js-cookie';
-import { loginUser, type LoginUserDto } from '@/actions/auth';
 import { emailValidation, passwordValidation } from '@/utilities/validations/schema';
 import { Button, Input } from '@/components/atoms';
 import { useRouter } from 'next/navigation';
 import useToast from '@/hooks/useToast';
+import { apiUserLogin } from '@/services';
+import type { UserLogin } from '@/types/services';
 
 const loginValidationSchema = yup.object().shape({
   email: emailValidation,
@@ -21,25 +21,22 @@ export default function LoginForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginUserDto>({
+  } = useForm<UserLogin>({
     resolver: yupResolver(loginValidationSchema),
   });
   const router = useRouter();
   const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
-  const onSubmit: SubmitHandler<LoginUserDto> = async (user) => {
+  const onSubmit: SubmitHandler<UserLogin> = async (user) => {
     setLoading(true);
-    const response = await loginUser(user);
-    const { status, data } = response;
-    if (status && data?.accessToken && data?.refreshToken) {
-      Cookies.set('access_token', data.accessToken);
-      Cookies.set('refresh_token', data.refreshToken);
+    const response = await apiUserLogin(user);
+    if (response.status) {
       showToast({
         variant: 'success',
         message: 'Login berhasil!',
         placement: 'bottom-center',
       });
-      router.push('/product-setup/ai-customer-service');
+      router.refresh();
     } else {
       showToast({
         variant: 'error',

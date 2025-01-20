@@ -6,16 +6,13 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { productKnowledgeDescriptionValidation } from '@/utilities/validations/schema';
 import { Button, Select, TextArea } from '@/components/atoms';
-import {
-  createProductKnowledge,
-  updateProductKnowledge,
-  type ProductKnowledgeItem,
-} from '@/actions/product-knowledge';
 import useToast from '@/hooks/useToast';
 import { useRouter } from 'next/navigation';
+import { ProductKnowledgeItem } from '@/types/services';
+import { apiCreateProductKnowledge, apiUpdateProductKnowledge } from '@/services';
 
 const productKnowledgeValidationSchema = yup.object().shape({
-  customerServiceId: yup.string().required('Customer Service is required'),
+  customerServiceId: yup.number().required('Customer Service is required'),
   whatsappId: yup.string().required('Whatsapp Number is required'),
   description: productKnowledgeDescriptionValidation,
 });
@@ -23,12 +20,12 @@ const productKnowledgeValidationSchema = yup.object().shape({
 export default function ProductKnowledgeForm({
   action,
   value,
-  valueId,
+  id = 0,
   customerServiceItems,
   whatsappItems,
 }: {
   action?: 'create' | 'update';
-  valueId?: number;
+  id?: number;
   value?: ProductKnowledgeItem;
   customerServiceItems?: { key: string; label: string; value: string }[];
   whatsappItems?: { key: string; label: string; value: string }[];
@@ -41,7 +38,7 @@ export default function ProductKnowledgeForm({
     resolver: yupResolver(productKnowledgeValidationSchema),
   });
   const [productKnowledge, setProductKnowledge] = useState<ProductKnowledgeItem>({
-    customerServiceId: value?.customerServiceId ?? '',
+    customerServiceId: value?.customerServiceId ?? 0,
     whatsappId: value?.whatsappId ?? '',
     description: value?.description ?? '',
   });
@@ -52,8 +49,8 @@ export default function ProductKnowledgeForm({
     setLoading(true);
     const response =
       action === 'update'
-        ? await updateProductKnowledge(valueId ?? 0, data)
-        : await createProductKnowledge(data);
+        ? await apiUpdateProductKnowledge({ ...data, id })
+        : await apiCreateProductKnowledge(data);
     if (response.status) {
       showToast({
         variant: 'success',
@@ -81,7 +78,7 @@ export default function ProductKnowledgeForm({
         items={customerServiceItems}
         value={productKnowledge.customerServiceId}
         onChange={(e) =>
-          setProductKnowledge({ ...productKnowledge, customerServiceId: e.target.value })
+          setProductKnowledge({ ...productKnowledge, customerServiceId: +e.target.value })
         }
       />
       <Select
@@ -111,8 +108,8 @@ export default function ProductKnowledgeForm({
 }
 ProductKnowledgeForm.defaultProps = {
   action: 'create',
-  value: { customerServiceId: '', whatsappId: '', description: '' } as ProductKnowledgeItem,
-  valueId: 0,
+  value: {},
+  id: 0,
   customerServiceItems: [],
   whatsappItems: [],
 };

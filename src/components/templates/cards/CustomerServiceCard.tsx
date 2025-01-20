@@ -7,22 +7,20 @@ import {
   PlusSignIcon,
 } from 'hugeicons-react';
 import { Dropdown } from '@/components/molecules';
-import { deleteCustomerService } from '@/actions/customer-service';
 import { Avatar, Typography } from '@/components/atoms';
 import Link from 'next/link';
 import useToast from '@/hooks/useToast';
 import { useState } from 'react';
+import { CustomerServiceListResponse } from '@/types/services';
+import { apiDeleteCustomerService } from '@/services';
 
-type CustomerServiceItem = {
-  id: string;
-  name: string;
-  labels: string;
-};
-export default function CustomerServiceCard({ items }: { items: CustomerServiceItem[] }) {
+export default function CustomerServiceCard({ items }: { items: CustomerServiceListResponse }) {
   const { showToast } = useToast();
-  const [listCustomerService, setListCustomerService] = useState<CustomerServiceItem[]>(items);
-  const handleDeleteCustomerService = async (id: string) => {
-    const response = await deleteCustomerService(id);
+  const [listCustomerService, setListCustomerService] =
+    useState<CustomerServiceListResponse>(items);
+
+  const handleDeleteCustomerService = async (id: number) => {
+    const response = await apiDeleteCustomerService(id);
     if (response.status) {
       showToast({
         variant: 'success',

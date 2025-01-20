@@ -1,8 +1,9 @@
 'use client';
 
-import { connectWhatsapp, deleteWhatsapp, disconnectWhatsapp } from '@/actions/whatsapp';
 import { Dropdown } from '@/components/molecules';
 import useToast from '@/hooks/useToast';
+import { apiConnectWhatsapp, apiDeleteWhatsapp, apiDisconnectWhatsapp } from '@/services';
+import type { WhatsappItem, WhatsappList } from '@/types/services';
 import { classNames, formatPhoneNumber } from '@/utilities/formats/string';
 import {
   Cancel01Icon,
@@ -12,15 +13,9 @@ import {
 } from 'hugeicons-react';
 import { useState } from 'react';
 
-interface WhatsappItem {
-  id: string;
-  number: string;
-  isConnected: boolean;
-}
-
-export default function WhatsappTable({ items }: { items: WhatsappItem[] }) {
+export default function WhatsappTable({ items }: { items: WhatsappList }) {
   const { showToast } = useToast();
-  const [whatsappList, setWhatsappList] = useState<WhatsappItem[]>(items);
+  const [whatsappList, setWhatsappList] = useState<WhatsappList>(items);
 
   const handleAction = async (
     actionCallback: () => Promise<{ status: boolean; message?: string }>,
@@ -52,7 +47,7 @@ export default function WhatsappTable({ items }: { items: WhatsappItem[] }) {
           icon: <Cancel01Icon />,
           onClick: () =>
             handleAction(
-              () => disconnectWhatsapp(item.id),
+              () => apiDisconnectWhatsapp(item.id),
               'Nomor Whatsapp berhasil terputus!',
               () => {
                 setWhatsappList((prevItems) =>
@@ -69,7 +64,7 @@ export default function WhatsappTable({ items }: { items: WhatsappItem[] }) {
           icon: <Link04Icon />,
           onClick: () =>
             handleAction(
-              () => connectWhatsapp(item.id),
+              () => apiConnectWhatsapp(item.id),
               'Nomor Whatsapp berhasil terhubung!',
               () => {
                 setWhatsappList((prevItems) =>
@@ -86,7 +81,7 @@ export default function WhatsappTable({ items }: { items: WhatsappItem[] }) {
       icon: <Delete02Icon />,
       onClick: () =>
         handleAction(
-          () => deleteWhatsapp(item.id),
+          () => apiDeleteWhatsapp(item.id),
           'Nomor Whatsapp berhasil dihapus!',
           () => {
             setWhatsappList((prevItems) => prevItems.filter((prevItem) => prevItem.id !== item.id));

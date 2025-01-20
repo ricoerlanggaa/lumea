@@ -1,16 +1,15 @@
 import { Typography } from '@/components/atoms';
 import { Breadcrumbs } from '@/components/molecules';
-import { getCustomerServiceList } from '@/actions/customer-service';
 import { ButtonConnectWhatsapp, CardCustomerService, TableWhatsapp } from '@/components/templates';
-import { getWhatsappList } from '@/actions/whatsapp';
+import { apiGetCustomerServiceList, apiGetWhatsappList } from '@/services';
 
 const breadcrumbsItems = [
   { key: 1, label: 'Product Setup' },
   { key: 2, label: 'AI Customer Service' },
 ];
 export default async function AICustomerService() {
-  const { data: customerServices } = await getCustomerServiceList();
-  const { data: whatsappList } = await getWhatsappList();
+  const { data: customerServices } = await apiGetCustomerServiceList();
+  const { data: whatsappList } = await apiGetWhatsappList();
   return (
     <>
       <Breadcrumbs items={breadcrumbsItems} />
@@ -21,7 +20,7 @@ export default async function AICustomerService() {
               AI Customer Service
             </Typography>
             <hr className="mb-4" />
-            <CardCustomerService items={customerServices?.data ?? []} />
+            <CardCustomerService items={customerServices ?? []} />
           </div>
         </div>
         <div className="card bg-base-100">
@@ -31,9 +30,7 @@ export default async function AICustomerService() {
             </Typography>
             <hr className="mb-4" />
             <ButtonConnectWhatsapp />
-            {whatsappList?.data && whatsappList?.data.length > 0 && (
-              <TableWhatsapp items={whatsappList.data} />
-            )}
+            <TableWhatsapp items={whatsappList ?? []} />
           </div>
         </div>
       </div>

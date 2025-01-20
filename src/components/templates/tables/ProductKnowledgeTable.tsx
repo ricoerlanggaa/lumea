@@ -1,9 +1,10 @@
 'use client';
 
-import { deleteProductKnowledge, ProductKnowledgeList } from '@/actions/product-knowledge';
 import { Typography } from '@/components/atoms';
 import { Dropdown } from '@/components/molecules';
 import useToast from '@/hooks/useToast';
+import { apiDeleteProductKnowledge } from '@/services';
+import { ProductKnowledgeList } from '@/types/services';
 import { formatPhoneNumber } from '@/utilities/formats/string';
 import { Delete02Icon, MoreHorizontalCircle01Icon, PencilEdit02Icon } from 'hugeicons-react';
 import { useState } from 'react';
@@ -11,8 +12,8 @@ import { useState } from 'react';
 export default function ProductKnowledgeTable({ items }: { items: ProductKnowledgeList }) {
   const { showToast } = useToast();
   const [productKnowledgeList, setProductKnowledgeList] = useState<ProductKnowledgeList>(items);
-  const handleDeleteProductKnowledge = async (id: string) => {
-    const response = await deleteProductKnowledge(id);
+  const handleDeleteProductKnowledge = async (id: number) => {
+    const response = await apiDeleteProductKnowledge(id);
     if (response.status) {
       showToast({
         variant: 'success',

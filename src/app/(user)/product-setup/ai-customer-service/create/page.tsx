@@ -1,6 +1,6 @@
 import { Typography } from '@/components/atoms';
 import { Breadcrumbs } from '@/components/molecules';
-import { FormAICustomerService } from '@/components/templates';
+import { FormCustomerService } from '@/components/templates';
 
 const breadcrumbsItems = [
   { key: 1, label: 'Product Setup' },
@@ -17,7 +17,7 @@ export default function CreateAICustomerService() {
             AI Customer Service
           </Typography>
           <hr className="mb-4" />
-          <FormAICustomerService />
+          <FormCustomerService />
         </div>
       </div>
     </>

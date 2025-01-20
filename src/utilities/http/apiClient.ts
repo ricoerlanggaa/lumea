@@ -1,10 +1,13 @@
+'use server';
+
 import axios from 'axios';
 import { cookies } from 'next/headers';
 
-const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1`;
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const apiClient = axios.create({
   baseURL: BASE_URL,
+  withCredentials: true,
   timeout: 20000,
   headers: {
     'Content-Type': 'application/json',
@@ -32,14 +35,22 @@ apiClient.interceptors.response.use(
     const refreshToken = cookieStore.get('refresh_token');
     if (error.response?.status === 401 && refreshToken) {
       try {
-        const response = await axios.get(`${BASE_URL}/user/generate-access-token`, {
+        const response = await axios.get(`${BASE_URL}/v1/user/generate-access-token`, {
           headers: { Authorization: `Bearer ${refreshToken.value}` },
           timeout: 10000,
         });
         const { data } = response.data;
         if (data.access_token && data.refresh_token) {
-          cookieStore.set('access_token', data.access_token);
-          cookieStore.set('refresh_token', data.refresh_token);
+          cookieStore.set('access_token', data.access_token, {
+            maxAge: 60 * 60 * 24, // 1 day
+            httpOnly: true,
+            secure: true,
+          });
+          cookieStore.set('refresh_token', data.refresh_token, {
+            maxAge: 60 * 60 * 24 * 30, // 30 days
+            httpOnly: true,
+            secure: true,
+          });
           return apiClient(originalRequest);
         }
       } catch (refreshError) {

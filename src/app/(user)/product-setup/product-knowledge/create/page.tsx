@@ -1,8 +1,7 @@
-import { getCustomerServiceSelectList } from '@/actions/customer-service';
-import { getWhatsappSelectList } from '@/actions/whatsapp';
 import { Typography } from '@/components/atoms';
 import { Breadcrumbs } from '@/components/molecules';
 import { FormProductKnowledge } from '@/components/templates';
+import { apiGetCustomerServiceSelectList, apiGetWhatsappSelectList } from '@/services';
 import { formatPhoneNumber } from '@/utilities/formats/string';
 
 const breadcrumbsItems = [
@@ -11,14 +10,14 @@ const breadcrumbsItems = [
   { key: 3, label: 'Create' },
 ];
 export default async function CreateProductKnowledge() {
-  const customerServiceSelectList = await getCustomerServiceSelectList();
-  const customerServiceItems = customerServiceSelectList.data?.data?.map((item) => ({
-    key: item.id,
+  const customerServiceSelectList = await apiGetCustomerServiceSelectList();
+  const customerServiceItems = customerServiceSelectList.data?.map((item) => ({
+    key: String(item.id),
     label: item.name,
-    value: item.id,
+    value: String(item.id),
   }));
-  const whatsappSelectList = await getWhatsappSelectList();
-  const whatsappItems = whatsappSelectList.data?.data?.map((item) => ({
+  const whatsappSelectList = await apiGetWhatsappSelectList();
+  const whatsappItems = whatsappSelectList.data?.map((item) => ({
     key: item.id,
     label: formatPhoneNumber(item.number),
     value: item.id,
@@ -33,7 +32,7 @@ export default async function CreateProductKnowledge() {
           </Typography>
           <hr className="mb-4" />
           <FormProductKnowledge
-            customerServiceItems={customerServiceItems}
+            customerServiceItems={customerServiceItems ?? []}
             whatsappItems={whatsappItems}
           />
         </div>

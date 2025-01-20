@@ -1,7 +1,8 @@
-import { type CustomerServiceItem, getCustomerServiceDetail } from '@/actions/customer-service';
 import { Typography } from '@/components/atoms';
 import { Breadcrumbs } from '@/components/molecules';
-import { FormAICustomerService } from '@/components/templates';
+import { FormCustomerService } from '@/components/templates';
+import { apiGetCustomerServiceDetail } from '@/services';
+import type { CustomerServiceItem } from '@/types/services';
 
 const breadcrumbsItems = [
   { key: 1, label: 'Product Setup' },
@@ -11,15 +12,15 @@ const breadcrumbsItems = [
 export default async function EditAICustomerService({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: number }>;
 }) {
   const { id } = await params;
-  const response = await getCustomerServiceDetail(id);
-  const { data } = response;
+  const response = await apiGetCustomerServiceDetail(id);
+
   const customerService: CustomerServiceItem = {
-    csAIName: data?.data.name ?? '',
-    csAIPersonality: data?.data.personality ?? '',
-    label: data?.data.labels,
+    name: response.data?.name ?? '',
+    label: response.data?.labels,
+    personality: response.data?.personality ?? '',
   };
   return (
     <>
@@ -30,7 +31,7 @@ export default async function EditAICustomerService({
             Edit AI Customer Service
           </Typography>
           <hr className="mb-4" />
-          <FormAICustomerService action="update" value={customerService} />
+          <FormCustomerService id={id} action="update" value={customerService} />
         </div>
       </div>
     </>

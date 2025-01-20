@@ -1,7 +1,7 @@
-import { getProductKnowledgeList } from '@/actions/product-knowledge';
 import { Button, Typography } from '@/components/atoms';
 import { Breadcrumbs } from '@/components/molecules';
 import { TableProductKnowledge } from '@/components/templates';
+import { apiGetProductKnowledgeList } from '@/services';
 import { Add01Icon } from 'hugeicons-react';
 
 const breadcrumbsItems = [
@@ -9,7 +9,7 @@ const breadcrumbsItems = [
   { key: 2, label: 'Product Knowledge' },
 ];
 export default async function ProductKnowledge() {
-  const { data: productKnowledgeList } = await getProductKnowledgeList();
+  const { data: productKnowledgeList } = await apiGetProductKnowledgeList();
   return (
     <>
       <Breadcrumbs items={breadcrumbsItems} />
@@ -27,7 +27,7 @@ export default async function ProductKnowledge() {
             <Add01Icon size={18} className="mr-2" />
             Tambahkan Knowledge
           </Button>
-          <TableProductKnowledge items={productKnowledgeList?.data ?? []} />
+          <TableProductKnowledge items={productKnowledgeList ?? []} />
         </div>
       </div>
     </>

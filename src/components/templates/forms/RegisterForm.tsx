@@ -5,7 +5,6 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button, Input } from '@/components/atoms';
-import { type RegisterUserDto, registerUser } from '@/actions/auth';
 import {
   fullNameValidation,
   emailValidation,
@@ -15,6 +14,8 @@ import {
 } from '@/utilities/validations/schema';
 import { useRouter } from 'next/navigation';
 import useToast from '@/hooks/useToast';
+import { apiUserRegister } from '@/services';
+import type { UserRegister } from '@/types/services';
 
 const registerValidationSchema = yup.object().shape({
   fullName: fullNameValidation,
@@ -29,15 +30,15 @@ export default function RegisterForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterUserDto>({
+  } = useForm<UserRegister>({
     resolver: yupResolver(registerValidationSchema),
   });
   const router = useRouter();
   const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
-  const onSubmit: SubmitHandler<RegisterUserDto> = async (user) => {
+  const onSubmit: SubmitHandler<UserRegister> = async (data) => {
     setLoading(true);
-    const response = await registerUser(user);
+    const response = await apiUserRegister(data);
     if (response.status) {
       showToast({
         variant: 'success',

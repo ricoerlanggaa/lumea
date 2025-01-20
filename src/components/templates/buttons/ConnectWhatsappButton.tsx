@@ -4,22 +4,20 @@ import { useId, useState } from 'react';
 import { Cancel01Icon, MetaIcon } from 'hugeicons-react';
 import { Button, Typography } from '@/components/atoms';
 import { QRCodeCanvas } from 'qrcode.react';
-import { generateQRCodeWhatsapp } from '@/actions/whatsapp';
-import { useRouter } from 'next/navigation';
 import useToast from '@/hooks/useToast';
+import { apiGenerateCodeWhatsapp } from '@/services';
 
 export default function ConnectWhatsappButton() {
   const modalId = useId();
-  const router = useRouter();
   const { showToast } = useToast();
   const [qrCode, setQRCode] = useState('');
 
   let interval: ReturnType<typeof setInterval> | null = null;
 
-  const handleQRCodeWhatsapp = async (id: string) => {
-    const response = await generateQRCodeWhatsapp(id);
+  const refreshQRCodeWhatsapp = async (id: string) => {
+    const response = await apiGenerateCodeWhatsapp(id);
     const { data } = response;
-    if (data?.data.isConnected && interval) {
+    if (data?.isConnected && interval) {
       clearInterval(interval);
       showToast({
         variant: 'success',
@@ -28,25 +26,19 @@ export default function ConnectWhatsappButton() {
       });
       const modal = document.getElementById(modalId) as HTMLDialogElement;
       modal.close();
-      router.refresh();
+      window.location.reload();
     }
-    if (data?.data.code) {
-      setQRCode(data?.data.code);
+    if (data?.code) {
+      setQRCode(data?.code);
     }
   };
   const handleConnectWhatsapp = async () => {
     const modal = document.getElementById(modalId) as HTMLDialogElement;
     if (modal) modal.showModal();
-    try {
-      const response = await generateQRCodeWhatsapp('');
-      const { data } = response;
-      if (data?.data) {
-        setQRCode(data.data.code);
-        interval = setInterval(() => handleQRCodeWhatsapp(data.data.id), 15000);
-      }
-      return data;
-    } catch (error) {
-      return error;
+    const response = await apiGenerateCodeWhatsapp('');
+    if (response.data) {
+      setQRCode(response.data.code);
+      interval = setInterval(() => refreshQRCodeWhatsapp(response.data.id), 15000);
     }
   };
 

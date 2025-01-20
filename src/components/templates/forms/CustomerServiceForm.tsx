@@ -4,47 +4,51 @@ import { useState } from 'react';
 import * as yup from 'yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { csAINameValidation, csAIPersonalityValidation } from '@/utilities/validations/schema';
 import { Button, Input, TextArea } from '@/components/atoms';
-import {
-  createCustomerService,
-  updateCustomerService,
-  type CustomerServiceItem,
-} from '@/actions/customer-service';
 import { useRouter } from 'next/navigation';
 import useToast from '@/hooks/useToast';
+import { CustomerServiceItem } from '@/types/services';
+import {
+  customerServiceNameValidation,
+  customerServicePersonalityValidation,
+} from '@/utilities/validations/schema';
+import { apiCreateCustomerService, apiUpdateCustomerService } from '@/services';
 
-const csAiValidationSchema = yup.object().shape({
-  csAIName: csAINameValidation,
-  csAIPersonality: csAIPersonalityValidation,
+const customerServiceValidationSchema = yup.object().shape({
+  name: customerServiceNameValidation,
+  personality: customerServicePersonalityValidation,
 });
 
-export default function AICustomerServiceForm({
-  action = 'create',
+export default function CustomerServiceForm({
+  id = 0,
   value,
+  action,
 }: {
-  action?: 'create' | 'update';
+  id?: number;
   value?: CustomerServiceItem;
+  action?: 'create' | 'update';
 }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<CustomerServiceItem>({
-    resolver: yupResolver(csAiValidationSchema),
+    resolver: yupResolver(customerServiceValidationSchema),
   });
   const router = useRouter();
   const { showToast } = useToast();
   const [customerService, setCustomerService] = useState<CustomerServiceItem>({
-    csAIName: value?.csAIName ?? '',
-    csAIPersonality: value?.csAIPersonality ?? '',
+    name: value?.name ?? '',
     label: value?.label ?? '',
+    personality: value?.personality ?? '',
   });
   const [loading, setLoading] = useState(false);
   const onSubmit: SubmitHandler<CustomerServiceItem> = async (data) => {
     setLoading(true);
     const response =
-      action === 'update' ? await updateCustomerService(data) : await createCustomerService(data);
+      action === 'update'
+        ? await apiUpdateCustomerService({ ...data, id })
+        : await apiCreateCustomerService(data);
     if (response.status) {
       showToast({
         variant: 'success',
@@ -64,13 +68,13 @@ export default function AICustomerServiceForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Input
-        inputKey="csAIName"
+        inputKey="name"
         label="Nama Customer Service AI"
         placeholder="Masukkan Nama Customer Service AI Anda"
         register={register}
         errors={errors}
-        value={customerService.csAIName}
-        onChange={(e) => setCustomerService({ ...customerService, csAIName: e.target.value })}
+        value={customerService.name}
+        onChange={(e) => setCustomerService({ ...customerService, name: e.target.value })}
       />
       <Input
         inputKey="label"
@@ -82,15 +86,13 @@ export default function AICustomerServiceForm({
         onChange={(e) => setCustomerService({ ...customerService, label: e.target.value })}
       />
       <TextArea
-        inputKey="csAIPersonality"
+        inputKey="personality"
         label="CS Personality"
         className="h-32"
         register={register}
         errors={errors}
-        value={customerService.csAIPersonality}
-        onChange={(e) =>
-          setCustomerService({ ...customerService, csAIPersonality: e.target.value })
-        }
+        value={customerService.personality}
+        onChange={(e) => setCustomerService({ ...customerService, personality: e.target.value })}
       />
       <Button type="submit" color="black" width="wide" className="mt-2" disabled={loading}>
         {action === 'update' ? 'Update' : 'Simpan'}
@@ -98,7 +100,8 @@ export default function AICustomerServiceForm({
     </form>
   );
 }
-AICustomerServiceForm.defaultProps = {
+CustomerServiceForm.defaultProps = {
+  id: 0,
   action: 'create',
-  value: { csAIName: '', csAIPersonality: '', label: '' } as CustomerServiceItem,
+  value: { name: '', personality: '', label: '' } as CustomerServiceItem,
 };

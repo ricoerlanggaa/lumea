@@ -11,7 +11,7 @@ import {
   Menu02Icon,
   UserMultipleIcon,
 } from 'hugeicons-react';
-import { logout } from '@/actions/auth';
+import { apiUserLogout } from '@/services';
 
 export default function UserLayout({
   children,
@@ -42,7 +42,7 @@ export default function UserLayout({
       ],
     },
     { key: 3, label: 'Help', icon: <HelpCircleIcon /> },
-    { key: 4, label: 'Logout', icon: <Logout03Icon />, onClick: () => logout() },
+    { key: 4, label: 'Logout', icon: <Logout03Icon />, onClick: () => apiUserLogout() },
   ];
   return (
     <div className="drawer lg:drawer-open">

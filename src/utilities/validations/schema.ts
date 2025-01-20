@@ -22,11 +22,11 @@ export const confirmPasswordValidation = Yup.string()
   .oneOf([Yup.ref('password'), undefined], 'Passwords must match')
   .required('Confirm Password is required');
 
-export const csAINameValidation = Yup.string()
+export const customerServiceNameValidation = Yup.string()
   .min(3, 'Customer Service AI Name must be at least 3 characters')
   .required('Customer Service AI Name is required');
 
-export const csAIPersonalityValidation = Yup.string()
+export const customerServicePersonalityValidation = Yup.string()
   .min(100, 'CS AI Personality must be at least 100 characters')
   .required('CS AI Personality is required');
 

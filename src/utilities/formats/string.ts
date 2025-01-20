@@ -39,7 +39,8 @@ export function getInitials(value: string | undefined) {
     .join('');
 }
 
-export function formatPhoneNumber(phoneNumber: string): string {
+export function formatPhoneNumber(phoneNumber: string | undefined): string {
+  if (!phoneNumber) return '';
   let normalizedNumber = phoneNumber.trim();
 
   if (normalizedNumber.startsWith('0')) {

@@ -14,13 +14,12 @@ const breadcrumbsItems = [
 export default async function EditProductKnowledge({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: number }>;
 }) {
   const { id } = await params;
   const response = await getProductKnowledgeDetail(id);
   const { data } = response;
   const productKnowledge: ProductKnowledgeItem = {
-    id,
     customerServiceId: data?.data.cs_id ?? '',
     whatsappId: data?.data.number_id ?? '',
     description: data?.data.description ?? '',
@@ -48,6 +47,7 @@ export default async function EditProductKnowledge({
           <hr className="mb-4" />
           <FormProductKnowledge
             action="update"
+            valueId={id}
             value={productKnowledge}
             customerServiceItems={customerServiceItems}
             whatsappItems={whatsappItems}

@@ -32,7 +32,7 @@ interface ProductKnowledgeDetail {
   meta: { message: string; code: 200; status: string };
   data: { id: string; cs_id: string; number_id: string; description: string };
 }
-export async function getProductKnowledgeDetail(id: string) {
+export async function getProductKnowledgeDetail(id: number) {
   try {
     const response = await apiClient.get(`/knowledge/${id}`);
     const { statusText, data: responseData } = response;
@@ -62,7 +62,6 @@ export async function deleteProductKnowledge(id: string) {
   }
 }
 export interface ProductKnowledgeItem {
-  id: string;
   customerServiceId: string;
   whatsappId: string;
   description: string;
@@ -85,10 +84,10 @@ export async function createProductKnowledge(productKnowledge: ProductKnowledgeI
     };
   }
 }
-export async function updateProductKnowledge(productKnowledge: ProductKnowledgeItem) {
+export async function updateProductKnowledge(id: number, productKnowledge: ProductKnowledgeItem) {
   try {
     const response = await apiClient.put('/knowledge', {
-      id: +productKnowledge.id,
+      id,
       cs_id: +productKnowledge.customerServiceId,
       number_id: productKnowledge.whatsappId,
       description: productKnowledge.description,

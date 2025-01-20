@@ -23,10 +23,12 @@ const productKnowledgeValidationSchema = yup.object().shape({
 export default function ProductKnowledgeForm({
   action,
   value,
+  valueId,
   customerServiceItems,
   whatsappItems,
 }: {
   action?: 'create' | 'update';
+  valueId?: number;
   value?: ProductKnowledgeItem;
   customerServiceItems?: { key: string; label: string; value: string }[];
   whatsappItems?: { key: string; label: string; value: string }[];
@@ -50,7 +52,7 @@ export default function ProductKnowledgeForm({
     setLoading(true);
     const response =
       action === 'update'
-        ? await updateProductKnowledge({ ...data, id: value?.id })
+        ? await updateProductKnowledge(valueId ?? 0, data)
         : await createProductKnowledge(data);
     if (response.status) {
       showToast({
@@ -110,6 +112,7 @@ export default function ProductKnowledgeForm({
 ProductKnowledgeForm.defaultProps = {
   action: 'create',
   value: { customerServiceId: '', whatsappId: '', description: '' } as ProductKnowledgeItem,
+  valueId: 0,
   customerServiceItems: [],
   whatsappItems: [],
 };

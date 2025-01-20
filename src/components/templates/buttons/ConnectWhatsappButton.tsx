@@ -6,35 +6,41 @@ import { Button, Typography } from '@/components/atoms';
 import { QRCodeCanvas } from 'qrcode.react';
 import { generateQRCodeWhatsapp } from '@/actions/whatsapp';
 import { useRouter } from 'next/navigation';
+import useToast from '@/hooks/useToast';
 
 export default function ConnectWhatsappButton() {
   const modalId = useId();
   const router = useRouter();
-  const [generateId, setGenerateId] = useState('');
+  const { showToast } = useToast();
   const [qrCode, setQRCode] = useState('');
+
   let interval: ReturnType<typeof setInterval> | null = null;
+  const modal = document.getElementById(modalId) as HTMLDialogElement;
+
   const handleQRCodeWhatsapp = async (id: string) => {
     const response = await generateQRCodeWhatsapp(id);
     const { data } = response;
     if (data?.data.isConnected && interval) {
-      const modal = document.getElementById(modalId) as HTMLDialogElement;
+      clearInterval(interval);
+      showToast({
+        variant: 'success',
+        message: 'Nomor Whatsapp berhasil terhubung!',
+        placement: 'bottom-center',
+      });
       modal.close();
       router.refresh();
-      clearInterval(interval);
     }
     if (data?.data.code) {
       setQRCode(data?.data.code);
     }
   };
   const handleConnectWhatsapp = async () => {
-    const modal = document.getElementById(modalId) as HTMLDialogElement;
     if (modal) modal.showModal();
     try {
-      const response = await generateQRCodeWhatsapp(generateId);
+      const response = await generateQRCodeWhatsapp('');
       const { data } = response;
       if (data?.data) {
         setQRCode(data.data.code);
-        setGenerateId(data.data.id);
         interval = setInterval(() => handleQRCodeWhatsapp(data.data.id), 15000);
       }
       return data;

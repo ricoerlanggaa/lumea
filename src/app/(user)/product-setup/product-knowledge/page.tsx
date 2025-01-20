@@ -25,7 +25,7 @@ export default async function ProductKnowledge() {
             className="mr-auto mb-4"
           >
             <Add01Icon size={18} className="mr-2" />
-            Tambahkan Product
+            Tambahkan Knowledge
           </Button>
           <TableProductKnowledge items={productKnowledgeList?.data ?? []} />
         </div>

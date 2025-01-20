@@ -32,9 +32,9 @@ export default function ProductKnowledgeTable({ items }: { items: ProductKnowled
     <table className="table w-full">
       <thead>
         <tr className="bg-base-200">
-          <th className="border">Nama AI Customer Service</th>
+          <th className="border">AI Customer Service</th>
           <th className="border">Nomor Whatsapp</th>
-          <th className="border">Deskripsi</th>
+          <th className="border">Label</th>
           <th className="border text-center">Aksi</th>
         </tr>
       </thead>
@@ -44,12 +44,12 @@ export default function ProductKnowledgeTable({ items }: { items: ProductKnowled
             <td className="border">{item.cs_name}</td>
             <td className="border">
               <Typography as="span" className="line-clamp-1">
-                {formatPhoneNumber(item.number)}
+                {formatPhoneNumber(item.nomor)}
               </Typography>
             </td>
             <td className="border">
               <Typography as="span" className="line-clamp-1">
-                {item.description}
+                {item.label}
               </Typography>
             </td>
             <td className="border text-center">

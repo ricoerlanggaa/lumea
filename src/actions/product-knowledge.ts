@@ -5,11 +5,9 @@ import apiClient from '@/utilities/http/apiClient';
 
 export type ProductKnowledgeList = {
   id: string;
-  number_id: string;
-  cs_id: string;
   cs_name: string;
-  number: string;
-  description: string;
+  nomor: string;
+  label: string;
 }[];
 interface ProductKnowledgeListResponse {
   meta: { message: string; code: number; status: string };
@@ -64,7 +62,7 @@ export async function deleteProductKnowledge(id: string) {
   }
 }
 export interface ProductKnowledgeItem {
-  id?: string;
+  id: string;
   customerServiceId: string;
   whatsappId: string;
   description: string;
@@ -72,7 +70,7 @@ export interface ProductKnowledgeItem {
 export async function createProductKnowledge(productKnowledge: ProductKnowledgeItem) {
   try {
     const response = await apiClient.post('/knowledge', {
-      cs_id: productKnowledge.customerServiceId,
+      cs_id: +productKnowledge.customerServiceId,
       number_id: productKnowledge.whatsappId,
       description: productKnowledge.description,
     });
@@ -90,8 +88,8 @@ export async function createProductKnowledge(productKnowledge: ProductKnowledgeI
 export async function updateProductKnowledge(productKnowledge: ProductKnowledgeItem) {
   try {
     const response = await apiClient.put('/knowledge', {
-      id: productKnowledge.id,
-      cs_id: productKnowledge.customerServiceId,
+      id: +productKnowledge.id,
+      cs_id: +productKnowledge.customerServiceId,
       number_id: productKnowledge.whatsappId,
       description: productKnowledge.description,
     });

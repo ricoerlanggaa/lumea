@@ -1,4 +1,4 @@
-import { CustomerService, getDetailCustomerService } from '@/actions/customer-service';
+import { type CustomerServiceItem, getCustomerServiceDetail } from '@/actions/customer-service';
 import { Typography } from '@/components/atoms';
 import { Breadcrumbs } from '@/components/molecules';
 import { FormAICustomerService } from '@/components/templates';
@@ -14,9 +14,9 @@ export default async function EditAICustomerService({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const response = await getDetailCustomerService(id);
+  const response = await getCustomerServiceDetail(id);
   const { data } = response;
-  const customerService: CustomerService = {
+  const customerService: CustomerServiceItem = {
     csAIName: data?.data.name ?? '',
     csAIPersonality: data?.data.personality ?? '',
     label: data?.data.labels,

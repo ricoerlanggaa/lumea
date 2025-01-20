@@ -1,6 +1,6 @@
 'use client';
 
-import { connectWhatsapp, disconnectWhatsapp, removeWhatsapp } from '@/actions/whatsapp';
+import { connectWhatsapp, deleteWhatsapp, disconnectWhatsapp } from '@/actions/whatsapp';
 import { Dropdown } from '@/components/molecules';
 import useToast from '@/hooks/useToast';
 import { classNames, formatPhoneNumber } from '@/utilities/formats/string';
@@ -86,7 +86,7 @@ export default function WhatsappTable({ items }: { items: WhatsappItem[] }) {
       icon: <Delete02Icon />,
       onClick: () =>
         handleAction(
-          () => removeWhatsapp(item.id),
+          () => deleteWhatsapp(item.id),
           'Nomor Whatsapp berhasil dihapus!',
           () => {
             setWhatsappList((prevItems) => prevItems.filter((prevItem) => prevItem.id !== item.id));

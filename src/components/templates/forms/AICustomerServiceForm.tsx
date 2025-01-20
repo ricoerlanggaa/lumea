@@ -9,7 +9,7 @@ import { Button, Input, TextArea } from '@/components/atoms';
 import {
   createCustomerService,
   updateCustomerService,
-  type CustomerService,
+  type CustomerServiceItem,
 } from '@/actions/customer-service';
 import { useRouter } from 'next/navigation';
 import useToast from '@/hooks/useToast';
@@ -24,24 +24,24 @@ export default function AICustomerServiceForm({
   value,
 }: {
   action?: 'create' | 'update';
-  value?: CustomerService;
+  value?: CustomerServiceItem;
 }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CustomerService>({
+  } = useForm<CustomerServiceItem>({
     resolver: yupResolver(csAiValidationSchema),
   });
   const router = useRouter();
   const { showToast } = useToast();
-  const [customerService, setCustomerService] = useState<CustomerService>({
+  const [customerService, setCustomerService] = useState<CustomerServiceItem>({
     csAIName: value?.csAIName ?? '',
     csAIPersonality: value?.csAIPersonality ?? '',
     label: value?.label ?? '',
   });
   const [loading, setLoading] = useState(false);
-  const onSubmit: SubmitHandler<CustomerService> = async (data) => {
+  const onSubmit: SubmitHandler<CustomerServiceItem> = async (data) => {
     setLoading(true);
     const response =
       action === 'update' ? await updateCustomerService(data) : await createCustomerService(data);
@@ -100,5 +100,5 @@ export default function AICustomerServiceForm({
 }
 AICustomerServiceForm.defaultProps = {
   action: 'create',
-  value: { csAIName: '', csAIPersonality: '', label: '' } as CustomerService,
+  value: { csAIName: '', csAIPersonality: '', label: '' } as CustomerServiceItem,
 };

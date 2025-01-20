@@ -1,16 +1,16 @@
 import { Typography } from '@/components/atoms';
 import { Breadcrumbs } from '@/components/molecules';
-import { getListCustomerService } from '@/actions/customer-service';
+import { getCustomerServiceList } from '@/actions/customer-service';
 import { ButtonConnectWhatsapp, CardCustomerService, TableWhatsapp } from '@/components/templates';
-import { getListWhatsapp } from '@/actions/whatsapp';
+import { getWhatsappList } from '@/actions/whatsapp';
 
 const breadcrumbsItems = [
   { key: 1, label: 'Product Setup' },
   { key: 2, label: 'AI Customer Service' },
 ];
 export default async function AICustomerService() {
-  const { data: customerServices } = await getListCustomerService();
-  const { data: whatsappList } = await getListWhatsapp();
+  const { data: customerServices } = await getCustomerServiceList();
+  const { data: whatsappList } = await getWhatsappList();
   return (
     <>
       <Breadcrumbs items={breadcrumbsItems} />

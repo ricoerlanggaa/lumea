@@ -1,20 +1,23 @@
 'use client';
 
 import { useId, useState } from 'react';
-import { Cancel01Icon, MetaIcon } from 'hugeicons-react';
-import { Button, Typography } from '@/components/atoms';
-import { QRCodeCanvas } from 'qrcode.react';
+import { Cancel01Icon, MetaIcon, MoreVerticalCircle01Icon, Settings02Icon } from 'hugeicons-react';
+import { Button, QRCode, Typography } from '@/components/atoms';
 import useToast from '@/hooks/useToast';
 import { apiGetCodeWhatsapp } from '@/services';
+import { QRCodeStatus } from '@/types/components/atoms';
 
 export default function ButtonConnectWhatsapp() {
   const modalId = useId();
   const { showToast } = useToast();
+  const [qrCodeStatus, setQRCodeStatus] = useState<QRCodeStatus>('loading');
   const [qrCode, setQRCode] = useState('');
 
   let interval: ReturnType<typeof setInterval> | null = null;
+  let countInterval: number = 0;
 
   const revalidateCodeWhatsapp = async (id: string) => {
+    countInterval += 1;
     const response = await apiGetCodeWhatsapp(id);
     const { data } = response;
     if (data?.isConnected && interval) {
@@ -31,13 +34,19 @@ export default function ButtonConnectWhatsapp() {
     if (data?.code) {
       setQRCode(data?.code);
     }
+    if (countInterval >= 20 && interval) {
+      setQRCodeStatus('expired');
+      clearInterval(interval);
+    }
   };
   const handleConnectWhatsapp = async () => {
+    setQRCodeStatus('loading');
     const modal = document.getElementById(modalId) as HTMLDialogElement;
     if (modal) modal.showModal();
     const response = await apiGetCodeWhatsapp('');
     if (response.data) {
       setQRCode(response.data.code);
+      setQRCodeStatus('active');
       interval = setInterval(() => revalidateCodeWhatsapp(response.data.id), 15000);
     }
   };
@@ -59,29 +68,46 @@ export default function ButtonConnectWhatsapp() {
               className="absolute right-4 top-6"
               aria-label="close modal"
             >
-              <Cancel01Icon size={18} />
+              <Cancel01Icon size={20} />
             </Button>
           </form>
           <Typography as="h2" variant="h5" className="card-title mb-2">
             Integrasi Nomor Whatsapp
           </Typography>
           <hr className="mb-4" />
-          <ol className="list-decimal list-inside mb-4">
-            <li>Buka aplikasi WhatsApp Kamu.</li>
+          <ol className="list-decimal leading-loose list-inside mb-4">
+            <li>Buka WhatsApp di telepon Anda</li>
             <li>
-              Klik <b>3-dots</b> menu di pojok kanan atas.
+              Ketuk{' '}
+              <strong className="inline-flex items-baseline ">
+                Menu&nbsp;
+                <span className="bg-base-200 my-auto border rounded p-[1px]">
+                  <MoreVerticalCircle01Icon size={18} />
+                </span>
+              </strong>{' '}
+              di Android, atau{' '}
+              <strong className="inline-flex items-baseline ">
+                Pengaturan&nbsp;
+                <span className="bg-base-200 my-auto border rounded p-[1px]">
+                  <Settings02Icon size={20} />
+                </span>
+              </strong>{' '}
+              di iPhone
             </li>
             <li>
-              Pilih <b>Perangkat Tertaut</b>
+              Ketuk <strong>Perangkat tertaut</strong> lalu <strong>Tautkan perangkat</strong>
             </li>
-            <li>
-              Klik <b>Tautkan Perangkat</b>
-            </li>
+            <li>Arahkan telepon Anda di layar ini untuk memindai kode QR</li>
           </ol>
-          <Typography className="text-center mx-auto max-w-72 mb-4">
-            Scan QR di bawah ini menggunakan aplikasi WhatsApp kamu
-          </Typography>
-          {qrCode && <QRCodeCanvas value={qrCode} size={240} className="mx-auto mb-4" />}
+          <QRCode
+            value={qrCode}
+            size={264}
+            status={qrCodeStatus}
+            icon="/images/logo/whatsapp.svg"
+            iconSize={64}
+            className="mx-auto"
+            onRefresh={handleConnectWhatsapp}
+          />
         </div>
       </dialog>
     </>

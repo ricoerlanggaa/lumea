@@ -2,8 +2,6 @@
 
 import { useId, type ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
-import { Button } from '@/components/atoms';
-import { Menu } from '@/components/molecules';
 import {
   DashboardSquare01Icon,
   HelpCircleIcon,
@@ -11,6 +9,9 @@ import {
   Menu02Icon,
   UserMultipleIcon,
 } from 'hugeicons-react';
+import { Button } from '@/components/atoms';
+import { Menu } from '@/components/molecules';
+import type { MenuItem } from '@/types/components/molecules';
 import { apiUserLogout } from '@/services';
 
 export default function UserLayout({
@@ -20,8 +21,9 @@ export default function UserLayout({
 }>) {
   const toggleId = useId();
   const pathname = usePathname();
-  const menuItems = [
-    { key: 1, label: 'Dashboard', icon: <DashboardSquare01Icon />, disabled: true },
+
+  const menuItems: MenuItem[] = [
+    { key: 1, label: 'Dashboard', icon: <DashboardSquare01Icon />, status: 'disabled' },
     {
       key: 2,
       label: 'Product Setup',
@@ -31,13 +33,13 @@ export default function UserLayout({
           key: 21,
           label: 'AI Customer Service',
           href: '/product-setup/ai-customer-service',
-          active: pathname.includes('/product-setup/ai-customer-service'),
+          status: pathname.includes('/product-setup/ai-customer-service') ? 'active' : 'none',
         },
         {
           key: 22,
           label: 'Product Knowledge',
           href: '/product-setup/product-knowledge',
-          active: pathname.includes('/product-setup/product-knowledge'),
+          status: pathname.includes('/product-setup/product-knowledge') ? 'active' : 'none',
         },
       ],
     },

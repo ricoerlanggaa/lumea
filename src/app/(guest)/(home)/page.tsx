@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     'AI Customer Service, platform AI untuk bisnis, handle leads otomatis, chat AI hingga closing, Lumea AI',
 };
 
-export default function Home() {
+export default function HomePage() {
   return (
     <section
       className="hero h-[35rem] bg-auto bg-base-content bg-no-repeat bg-bottom"

@@ -1,16 +1,16 @@
 import { Typography } from '@/components/atoms';
-import { Breadcrumbs } from '@/components/molecules';
+import { Breadcrumb } from '@/components/molecules';
 import { FormCustomerService } from '@/components/templates';
 
-const breadcrumbsItems = [
+const breadcrumbItems = [
   { key: 1, label: 'Product Setup' },
   { key: 2, label: 'AI Customer Service', href: '/product-setup/ai-customer-service' },
   { key: 3, label: 'Create' },
 ];
-export default function CreateAICustomerService() {
+export default function CreateAICustomerServicePage() {
   return (
     <>
-      <Breadcrumbs items={breadcrumbsItems} />
+      <Breadcrumb items={breadcrumbItems} />
       <div className="card h-full overflow-y-auto bg-base-100">
         <div className="card-body">
           <Typography as="h1" variant="h4" className="card-title mb-2">

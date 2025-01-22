@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Typography } from '@/components/atoms';
-import { FormLogin } from '@/components/templates';
+import { FormUserLogin } from '@/components/templates';
 
 export const metadata: Metadata = {
   title: 'Login | Lumea AI',
@@ -10,14 +10,14 @@ export const metadata: Metadata = {
   keywords: 'login Lumea AI, customer service berbasis AI login, platform AI untuk leads',
 };
 
-export default function Login() {
+export default function LoginPage() {
   return (
     <div className="card w-full sm:w-4/5 md:w-3/4 lg:w-1/2">
       <div className="card-body gap-4">
         <Typography as="h1" variant="h2" weight="semibold">
           Masuk
         </Typography>
-        <FormLogin />
+        <FormUserLogin />
         <Typography className="text-center">
           Don&apos;t have an account?{' '}
           <Link href="/register" className="hover:underline">

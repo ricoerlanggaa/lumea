@@ -1,24 +1,26 @@
-export type CustomerServiceList = {
+export type GetCustomerServiceListResponse = {
   id: number;
   name: string;
   labels: string;
 }[];
-export interface CustomerServiceDetail {
+export interface GetCustomerServiceDetailResponse {
   id: number;
   name: string;
   labels?: string;
   personality: string;
 }
-export interface CustomerServiceItem {
+export interface CreateCustomerServiceDTO {
   name: string;
   label?: string;
   personality: string;
 }
-export type CreateCustomerService = CustomerServiceItem;
-export interface UpdateCustomerService extends CustomerServiceItem {
+export interface UpdateCustomerServiceDTO {
   id: number;
+  name: string;
+  label?: string;
+  personality: string;
 }
-export type CustomerServiceSelectList = {
+export type GetCustomerServiceSelectListResponse = {
   id: number;
   name: string;
 }[];

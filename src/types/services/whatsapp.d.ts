@@ -1,15 +1,14 @@
-export interface WhatsappItem {
+export type GetWhatsappListResponse = {
   id: string;
   number: string;
   isConnected: boolean;
-}
-export type WhatsappList = WhatsappItem[];
-export interface GenerateCodeWhatsapp {
+}[];
+export interface GetCodeWhatsappResponse {
   id: string;
   code: string;
   isConnected: boolean;
 }
-export type WhatsappSelectList = {
+export type GetWhatsappSelectListResponse = {
   id: string;
   number: string;
 }[];

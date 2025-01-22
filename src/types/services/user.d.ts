@@ -1,15 +1,20 @@
-export interface UserRegister {
-  fullName: string;
+export interface UserRegisterDTO {
+  name: string;
   email: string;
-  phoneNumber: string;
+  phone_number: string;
   password: string;
-  confirmPassword: string;
+  confirm_password: string;
 }
-export interface UserLogin {
+export interface UserLoginDTO {
   email: string;
   password: string;
 }
-export interface UserAuthToken {
+export interface UserLoginResponse {
   access_token: string;
   refresh_token: string;
+}
+export interface GetUserProfileResponse {
+  name: string;
+  email: string;
+  phone_number: string;
 }

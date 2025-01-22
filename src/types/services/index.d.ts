@@ -1,10 +1,10 @@
 import type { AxiosError } from 'axios';
 
-export interface ClientResponse<T> {
+export interface MetaResponse<T> {
   meta?: { message: string; code: number; status: string };
   data: T;
 }
-export type ErrorClientResponse<T> = AxiosError<ClientResponse<T>>;
+export type MetaResponseError<T> = AxiosError<MetaResponse<T>>;
 
 export * from './customerService';
 export * from './productKnowledge';

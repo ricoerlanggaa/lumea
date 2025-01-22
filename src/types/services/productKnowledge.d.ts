@@ -1,23 +1,26 @@
-export type ProductKnowledgeList = {
+export type GetProductKnowledgeListResponse = {
   id: number;
   nomor: string;
-  cs_name: number;
-  label: number;
-  description: string;
+  cs_name: string;
+  label: string;
 }[];
-export interface ProductKnowledgeDetail {
+export interface GetProductKnowledgeDetailResponse {
   id: number;
   cs_id: number;
   number_id: string;
+  label: string;
   description: string;
 }
-export interface ProductKnowledgeItem {
-  customerServiceId: number;
-  whatsappId: string;
-  label?: string;
+export interface CreateProductKnowledgeDTO {
+  cs_id: number;
+  number_id: string;
+  label: string;
   description: string;
 }
-export type CreateProductKnowledge = ProductKnowledgeItem;
-export interface UpdateProductKnowledge extends ProductKnowledgeItem {
+export interface UpdateProductKnowledgeDTO {
   id: number;
+  cs_id: number;
+  number_id: string;
+  label: string;
+  description: string;
 }

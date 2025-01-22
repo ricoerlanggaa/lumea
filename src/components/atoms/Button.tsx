@@ -20,7 +20,7 @@ const widthClasses: Record<ButtonWidth, string> = {
   block: 'btn-block',
 };
 const shapeClasses: Record<ButtonShape, string> = {
-  none: '',
+  default: '',
   circle: 'btn-circle',
   square: 'btn-square',
 };
@@ -47,7 +47,7 @@ export default function Button({
   color = 'primary',
   size = 'md',
   width = 'default',
-  shape = 'none',
+  shape = 'default',
   disabled = false,
   href,
   className,
@@ -62,7 +62,7 @@ export default function Button({
     widthClasses[width],
     shapeClasses[shape],
     isGradientButton && variant === 'outlined' && 'btn-outline-gradient',
-    disabled && 'btn-disabled text-base-content',
+    disabled && 'btn-disabled border-none text-base-content',
     className,
   );
   const textGradientClasses = classNames(!disabled && 'text-gradient');

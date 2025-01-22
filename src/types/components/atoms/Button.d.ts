@@ -11,7 +11,7 @@ export type ButtonColor =
   | 'white';
 export type ButtonVariant = 'solid' | 'outlined' | 'ghost';
 export type ButtonSize = 'sm' | 'md' | 'lg';
-export type ButtonShape = 'none' | 'square' | 'circle';
+export type ButtonShape = 'default' | 'square' | 'circle';
 export type ButtonWidth = 'default' | 'wide' | 'block';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLElement> {

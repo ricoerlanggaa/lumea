@@ -4,8 +4,8 @@ export type AvatarShape = 'square' | 'circle' | 'squircle' | 'hexagon' | 'triang
 export type AvatarSize = 'sm' | 'md' | 'lg';
 
 export interface AvatarProps extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
-  imageSrc?: string;
-  altText?: string;
+  src?: string;
+  alt?: string;
   shape?: AvatarShape;
   size?: AvatarSize;
 }

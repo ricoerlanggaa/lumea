@@ -64,7 +64,7 @@ export default function CardCustomerService({ items = [] }: CardCustomerServiceP
           >
             <MoreVerticalCircle01Icon size={18} />
           </DropdownMenu>
-          <Avatar altText={item.name} size="lg" className="mb-2" />
+          <Avatar alt={item.name} size="lg" className="mb-2" />
           <Typography variant="body-small" weight="semibold" className="line-clamp-1">
             {item.name}
           </Typography>

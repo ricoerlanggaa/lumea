@@ -19,29 +19,34 @@ const textSizeClasses: Record<AvatarSize, string> = {
   md: 'text-2xl',
   lg: 'text-3xl',
 };
+const imageSize: Record<AvatarSize, number> = {
+  sm: 40,
+  md: 64,
+  lg: 80,
+};
 
 export default function Avatar({
   shape = 'circle',
   size = 'md',
-  altText = 'Avatar',
-  imageSrc,
+  alt,
+  src,
   className,
   ...rest
 }: AvatarProps) {
-  const avatarClasses = classNames('avatar', !imageSrc && 'placeholder');
-  const childClasses = classNames(
+  const avatarClasses = classNames('avatar', !src && 'placeholder');
+  const contentClasses = classNames(
     shapeClasses[shape],
     sizeClasses[size],
-    !imageSrc && 'bg-neutral text-neutral-content',
+    !src && 'bg-neutral text-neutral-content',
     className,
   );
   return (
     <div className={avatarClasses}>
-      <div className={childClasses} {...rest}>
-        {imageSrc ? (
-          <Image src={imageSrc} alt={altText} />
+      <div className={contentClasses} {...rest}>
+        {src ? (
+          <Image src={src} alt={alt ?? 'avatar'} width={imageSize[size]} height={imageSize[size]} />
         ) : (
-          <span className={textSizeClasses[size]}>{getInitials(altText)}</span>
+          <span className={textSizeClasses[size]}>{getInitials(alt)}</span>
         )}
       </div>
     </div>

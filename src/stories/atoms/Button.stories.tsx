@@ -4,7 +4,6 @@ import { Button } from '@/components/atoms';
 const meta: Meta<typeof Button> = {
   title: 'Atoms/Button',
   component: Button,
-  tags: ['autodocs'],
   argTypes: {
     type: {
       control: { type: 'radio' },
@@ -64,7 +63,7 @@ const meta: Meta<typeof Button> = {
 
 export default meta;
 
-const Template: StoryObj<typeof Button> = {
+const ButtonDefault: StoryObj<typeof Button> = {
   args: {
     type: 'button',
     variant: 'solid',
@@ -77,4 +76,4 @@ const Template: StoryObj<typeof Button> = {
   },
 };
 
-export const Default = Template;
+export const Default = ButtonDefault;

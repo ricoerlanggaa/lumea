@@ -2,10 +2,11 @@
 
 import { useId, useState } from 'react';
 import { Cancel01Icon, MetaIcon, MoreVerticalCircle01Icon, Settings02Icon } from 'hugeicons-react';
-import { Button, QRCode, Typography } from '@/components/atoms';
+import { Button, Typography } from '@/components/atoms';
+import { QRCode } from '@/components/molecules';
+import type { QRCodeStatus } from '@/types/components/molecules';
 import useToast from '@/hooks/useToast';
 import { apiGetCodeWhatsapp } from '@/services';
-import { QRCodeStatus } from '@/types/components/atoms';
 
 export default function ButtonConnectWhatsapp() {
   const modalId = useId();

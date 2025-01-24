@@ -1,12 +1,12 @@
 'use client';
 
 import { QRCodeCanvas } from 'qrcode.react';
-import type { QRCodeProps } from '@/types/components/atoms';
 import { RefreshIcon } from 'hugeicons-react';
 import { classNames } from '@/utilities/formats/string';
+import { QRCodeProps } from '@/types/components/molecules';
 
 export default function QRCode({
-  value = '',
+  value,
   size = 160,
   errorLevel = 'M',
   icon,
@@ -45,7 +45,7 @@ export default function QRCode({
         </div>
       )}
       <QRCodeCanvas
-        value={value}
+        value={value ?? ''}
         size={size}
         level={errorLevel}
         imageSettings={imageSettings}

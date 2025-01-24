@@ -26,11 +26,11 @@ const meta: Meta<typeof Alert> = {
 
 export default meta;
 
-const AvatarDefault: StoryObj<typeof Alert> = {
+const AlertDefault: StoryObj<typeof Alert> = {
   args: {
     variant: 'success',
     message: 'Something big is coming!',
   },
 };
 
-export const Default = AvatarDefault;
+export const Default = AlertDefault;

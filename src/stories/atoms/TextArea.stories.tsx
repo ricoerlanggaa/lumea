@@ -30,7 +30,7 @@ const meta: Meta<typeof TextArea> = {
 
 export default meta;
 
-const InputDefault: StoryObj<typeof TextArea> = {
+const TextAreaDefault: StoryObj<typeof TextArea> = {
   args: {
     placeholder: 'Here is a sample placeholder',
     disabled: false,
@@ -38,4 +38,4 @@ const InputDefault: StoryObj<typeof TextArea> = {
   },
 };
 
-export const Default = InputDefault;
+export const Default = TextAreaDefault;

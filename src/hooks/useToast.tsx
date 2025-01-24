@@ -24,7 +24,7 @@ export default function useToast() {
     };
   }, []);
 
-  const showToast = useCallback(({ variant, message, duration = 3000 }: ToastConfig) => {
+  const showToast = useCallback(({ variant, message, duration }: ToastConfig) => {
     if (!toastContainerRef.current) return;
 
     const toastElement = document.createElement('div');
@@ -38,7 +38,7 @@ export default function useToast() {
     root.render(<Alert variant={variant} message={message} onClose={handleClose} />);
     toastContainerRef.current.appendChild(toastElement);
 
-    if (duration > 0) {
+    if (duration) {
       setTimeout(() => {
         handleClose();
       }, duration);

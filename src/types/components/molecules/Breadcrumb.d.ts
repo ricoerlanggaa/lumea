@@ -5,5 +5,5 @@ export interface BreadcrumbItem {
   href?: string;
 }
 export interface BreadcrumbProps extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
-  items: BreadcrumbItem[];
+  items?: BreadcrumbItem[];
 }

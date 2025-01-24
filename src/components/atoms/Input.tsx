@@ -11,6 +11,7 @@ export default function Input<T extends FieldValues>({
   suffix,
   className,
   inputKey,
+  disabled = false,
   register,
   errors,
   ...rest
@@ -38,9 +39,11 @@ export default function Input<T extends FieldValues>({
           id={inputId}
           type={type}
           placeholder={placeholder}
+          disabled={disabled}
           className="grow"
           aria-invalid={hasError}
           aria-describedby={hasError ? `${inputId}-error` : undefined}
+          aria-disabled={disabled}
           {...(register && inputKey && register(inputKey))}
           {...rest}
         />

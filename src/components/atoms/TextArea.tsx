@@ -8,6 +8,7 @@ export default function TextArea<T extends FieldValues>({
   placeholder,
   className,
   inputKey,
+  disabled = false,
   register,
   errors,
   ...rest
@@ -29,12 +30,20 @@ export default function TextArea<T extends FieldValues>({
         id={textareaId}
         className={classes}
         placeholder={placeholder}
-        {...(register && register(inputKey))}
+        disabled={disabled}
+        aria-invalid={hasError}
+        aria-describedby={hasError ? `${textareaId}-error` : undefined}
+        aria-disabled={disabled}
+        {...(register && inputKey && register(inputKey))}
         {...rest}
       />
-      <label htmlFor={textareaId} className="label">
-        {hasError && <span className="label-text-alt text-error">{errorMessages?.message}</span>}
-      </label>
+      {hasError && (
+        <label htmlFor={textareaId} className="label py-[2px]">
+          <span id={`${textareaId}-error`} className="label-text-alt text-error">
+            {errorMessages?.message}
+          </span>
+        </label>
+      )}
     </div>
   );
 }

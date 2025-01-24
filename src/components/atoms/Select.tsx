@@ -9,6 +9,7 @@ export default function Select<T extends FieldValues>({
   options,
   className,
   inputKey,
+  disabled = false,
   value,
   register,
   errors,
@@ -31,8 +32,10 @@ export default function Select<T extends FieldValues>({
         id={selectId}
         className={selectClasses}
         value={value || ''}
+        disabled={disabled}
         aria-invalid={hasError}
         aria-describedby={hasError ? `${selectId}-error` : undefined}
+        aria-disabled={disabled}
         {...(register && inputKey && register(inputKey))}
         {...rest}
       >

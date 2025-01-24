@@ -5,6 +5,6 @@ export interface TextAreaProps<T extends FieldValues>
   extends Partial<UseFormReturn<T>>,
     TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
-  inputKey: Path<T>;
+  inputKey?: Path<T>;
   errors?: Partial<DeepMap<T, FieldError>>;
 }

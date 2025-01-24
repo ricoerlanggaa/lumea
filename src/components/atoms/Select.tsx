@@ -3,17 +3,17 @@ import type { FieldError, FieldValues } from 'react-hook-form';
 import { classNames } from '@/utilities/formats/string';
 import type { SelectProps } from '@/types/components/atoms';
 
-export default function Select<TSelectValues extends FieldValues>({
+export default function Select<T extends FieldValues>({
   label,
-  placeholder = 'Select Option',
-  items,
+  placeholder,
+  options,
   className,
   inputKey,
   value,
   register,
   errors,
   ...rest
-}: SelectProps<TSelectValues>) {
+}: SelectProps<T>) {
   const selectId = useId();
   const errorMessages = errors
     ? (errors[inputKey as keyof typeof errors] as FieldError | undefined)
@@ -31,22 +31,29 @@ export default function Select<TSelectValues extends FieldValues>({
         id={selectId}
         className={selectClasses}
         value={value || ''}
-        {...(register && register(inputKey))}
+        aria-invalid={hasError}
+        aria-describedby={hasError ? `${selectId}-error` : undefined}
+        {...(register && inputKey && register(inputKey))}
         {...rest}
       >
-        <option value="" disabled>
-          {placeholder}
-        </option>
-        {items &&
-          items.map((item) => (
-            <option key={item.key} value={item.value}>
-              {item.label}
-            </option>
-          ))}
+        {placeholder && (
+          <option value="" disabled>
+            {placeholder}
+          </option>
+        )}
+        {options?.map((item) => (
+          <option key={item.value} value={item.value}>
+            {item.label}
+          </option>
+        ))}
       </select>
-      <label htmlFor={selectId} className="label">
-        {hasError && <span className="label-text-alt text-error">{errorMessages?.message}</span>}
-      </label>
+      {hasError && (
+        <label htmlFor={selectId} className="label py-[2px]">
+          <span id={`${selectId}-error`} className="label-text-alt text-error">
+            {errorMessages?.message}
+          </span>
+        </label>
+      )}
     </div>
   );
 }

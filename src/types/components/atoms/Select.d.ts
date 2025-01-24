@@ -2,9 +2,8 @@ import type { SelectHTMLAttributes } from 'react';
 import type { DeepMap, FieldError, FieldValues, Path, UseFormReturn } from 'react-hook-form';
 
 export interface SelectOption {
-  key: number | string;
-  label: string;
-  value: string;
+  label: string | number;
+  value: string | number;
 }
 
 export interface SelectProps<T extends FieldValues>
@@ -12,7 +11,7 @@ export interface SelectProps<T extends FieldValues>
     SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
   placeholder?: string;
-  items?: SelectOption[];
-  inputKey: Path<T>;
+  options?: SelectOption[];
+  inputKey?: Path<T>;
   errors?: Partial<DeepMap<T, FieldError>>;
 }

@@ -43,14 +43,12 @@ export default function FormUserLogin({ value }: FormUserLoginProps) {
       showToast({
         variant: 'success',
         message: 'Login berhasil!',
-        placement: 'bottom-center',
       });
       router.refresh();
     } else {
       showToast({
         variant: 'error',
         message: response.message || 'Something went wrong!',
-        placement: 'bottom-center',
       });
     }
     setLoading(false);

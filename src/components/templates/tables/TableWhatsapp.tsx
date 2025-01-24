@@ -29,13 +29,11 @@ export default function TableWhatsapp({ items = [] }: TableWhatsappProps) {
       showToast({
         variant: 'success',
         message: successMessage,
-        placement: 'bottom-center',
       });
     } else {
       showToast({
         variant: 'error',
         message: response.message || 'Something went wrong!',
-        placement: 'bottom-center',
       });
     }
   };

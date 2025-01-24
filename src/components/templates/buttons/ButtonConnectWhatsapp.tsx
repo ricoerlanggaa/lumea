@@ -25,7 +25,6 @@ export default function ButtonConnectWhatsapp() {
       showToast({
         variant: 'success',
         message: 'Nomor Whatsapp berhasil terhubung!',
-        placement: 'bottom-center',
       });
       const modal = document.getElementById(modalId) as HTMLDialogElement;
       modal.close();

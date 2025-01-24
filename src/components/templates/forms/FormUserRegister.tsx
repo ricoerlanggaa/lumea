@@ -58,14 +58,12 @@ export default function FormUserRegister({ value }: FormUserRegisterProps) {
       showToast({
         variant: 'success',
         message: 'Registrasi berhasil!',
-        placement: 'bottom-center',
       });
       router.push('/login');
     } else {
       showToast({
         variant: 'error',
         message: response.message || 'Something went wrong!',
-        placement: 'bottom-center',
       });
     }
     setLoading(false);

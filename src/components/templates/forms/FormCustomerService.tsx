@@ -54,14 +54,12 @@ export default function FormCustomerService({
       showToast({
         variant: 'success',
         message: `AI Customer Service berhasil ${action === 'update' ? 'diperbarui' : 'ditambahkan'}!`,
-        placement: 'bottom-center',
       });
       router.push('/product-setup/ai-customer-service');
     } else {
       showToast({
         variant: 'error',
         message: response.message || 'Something went wrong!',
-        placement: 'bottom-center',
       });
     }
     setLoading(false);

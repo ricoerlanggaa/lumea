@@ -24,14 +24,12 @@ export default function CardCustomerService({ items = [] }: CardCustomerServiceP
       showToast({
         variant: 'success',
         message: 'Customer Service berhasil dihapus!',
-        placement: 'bottom-center',
       });
       setCustomerServiceList((prevItems) => prevItems.filter((item) => item.id !== id));
     } else {
       showToast({
         variant: 'error',
         message: response.message || 'Something went wrong!',
-        placement: 'bottom-center',
       });
     }
   };

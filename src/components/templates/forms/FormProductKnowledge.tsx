@@ -71,14 +71,12 @@ export default function FormProductKnowledge({
       showToast({
         variant: 'success',
         message: `Product Knowledge berhasil ${action === 'update' ? 'diperbarui' : 'ditambahkan'}!`,
-        placement: 'bottom-center',
       });
       router.push('/product-setup/product-knowledge');
     } else {
       showToast({
         variant: 'error',
         message: response.message || 'Something went wrong!',
-        placement: 'bottom-center',
       });
     }
     setLoading(false);
@@ -119,7 +117,7 @@ export default function FormProductKnowledge({
         inputKey="customerServiceId"
         register={register}
         errors={errors}
-        items={customerServiceOptions}
+        options={customerServiceOptions}
         value={productKnowledge.customerServiceId}
         onChange={(e) =>
           setProductKnowledge({ ...productKnowledge, customerServiceId: +e.target.value })
@@ -131,7 +129,7 @@ export default function FormProductKnowledge({
         inputKey="whatsappId"
         register={register}
         errors={errors}
-        items={whatsappOptions}
+        options={whatsappOptions}
         value={productKnowledge.whatsappId}
         onChange={(e) => setProductKnowledge({ ...productKnowledge, whatsappId: e.target.value })}
       />

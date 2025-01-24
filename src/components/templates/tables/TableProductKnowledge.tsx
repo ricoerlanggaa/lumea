@@ -24,14 +24,12 @@ export default function TableProductKnowledge({ items = [] }: TableProductKnowle
       showToast({
         variant: 'success',
         message: 'Product Knowledge berhasil dihapus!',
-        placement: 'bottom-center',
       });
       setProductKnowledgeList((prevItems) => prevItems.filter((item) => item.id !== id));
     } else {
       showToast({
         variant: 'error',
         message: response.message || 'Something went wrong!',
-        placement: 'bottom-center',
       });
     }
   };

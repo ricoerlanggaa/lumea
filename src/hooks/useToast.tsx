@@ -1,42 +1,48 @@
-import { useCallback } from 'react';
+import { Alert } from '@/components/atoms';
+import { AlertVariant } from '@/types/components/atoms';
 import { createRoot } from 'react-dom/client';
-import { Toast } from '@/components/molecules';
-import type { ToastVariant, ToastPlacement } from '@/components/molecules/toast/Toast.d';
+import { useEffect, useRef, useCallback } from 'react';
 
 interface ToastConfig {
+  variant: AlertVariant;
   message: string;
-  variant?: ToastVariant;
-  placement?: ToastPlacement;
   duration?: number;
 }
 
 export default function useToast() {
-  const showToast = useCallback((config: ToastConfig) => {
-    const { message, variant = 'success', placement = 'bottom-center', duration = 3000 } = config;
+  const toastContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
     const toastContainer = document.createElement('div');
+    toastContainer.className = 'toast toast-bottom toast-center';
     document.body.appendChild(toastContainer);
+    toastContainerRef.current = toastContainer;
 
-    const root = createRoot(toastContainer);
-    root.render(
-      <Toast
-        message={message}
-        variant={variant}
-        placement={placement}
-        onClose={() => {
-          if (toastContainer.parentNode) {
-            root.unmount();
-            document.body.removeChild(toastContainer);
-          }
-        }}
-      />,
-    );
+    return () => {
+      toastContainerRef.current?.remove();
+      toastContainerRef.current = null;
+    };
+  }, []);
 
-    setTimeout(() => {
-      if (toastContainer.parentNode) {
-        root.unmount();
-        document.body.removeChild(toastContainer);
-      }
-    }, duration);
+  const showToast = useCallback(({ variant, message, duration = 3000 }: ToastConfig) => {
+    if (!toastContainerRef.current) return;
+
+    const toastElement = document.createElement('div');
+    const root = createRoot(toastElement);
+
+    const handleClose = () => {
+      root.unmount();
+      toastElement.remove();
+    };
+
+    root.render(<Alert variant={variant} message={message} onClose={handleClose} />);
+    toastContainerRef.current.appendChild(toastElement);
+
+    if (duration > 0) {
+      setTimeout(() => {
+        handleClose();
+      }, duration);
+    }
   }, []);
 
   return { showToast };

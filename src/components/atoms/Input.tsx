@@ -7,8 +7,8 @@ export default function Input<T extends FieldValues>({
   type = 'text',
   label,
   placeholder,
-  prependIcon,
-  appendIcon,
+  prefix,
+  suffix,
   className,
   inputKey,
   register,
@@ -33,20 +33,26 @@ export default function Input<T extends FieldValues>({
         </label>
       )}
       <label className={inputClasses}>
-        {prependIcon}
+        {prefix}
         <input
           id={inputId}
           type={type}
           placeholder={placeholder}
           className="grow"
-          {...(register && register(inputKey))}
+          aria-invalid={hasError}
+          aria-describedby={hasError ? `${inputId}-error` : undefined}
+          {...(register && inputKey && register(inputKey))}
           {...rest}
         />
-        {appendIcon}
+        {suffix}
       </label>
-      <label htmlFor={inputId} className="label py-[2px]">
-        {hasError && <span className="label-text-alt text-error">{errorMessages?.message}</span>}
-      </label>
+      {hasError && (
+        <label htmlFor={inputId} className="label py-[2px]">
+          <span id={`${inputId}-error`} className="label-text-alt text-error">
+            {errorMessages?.message}
+          </span>
+        </label>
+      )}
     </div>
   );
 }

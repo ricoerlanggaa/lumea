@@ -18,7 +18,7 @@ export default async function EditAICustomerServicePage({
   const response = await apiGetCustomerServiceDetail(id);
   const customerService: FormCustomerServiceValues = {
     name: response.data?.name ?? '',
-    label: response.data?.labels,
+    label: response.data?.labels ?? '',
     personality: response.data?.personality ?? '',
   };
   return (

@@ -19,6 +19,7 @@ export default async function EditProductKnowledgePage({
   const productKnowledge: FormProductKnowledgeValues = {
     customerServiceId: response.data?.cs_id ?? 0,
     whatsappId: response.data?.number_id ?? '',
+    label: response.data?.label ?? '',
     description: response.data?.description ?? '',
   };
   return (

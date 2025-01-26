@@ -3,46 +3,29 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Input } from '@/components/atoms';
 import type { FormUserRegisterProps, FormUserRegisterValues } from '@/types/components/templates';
-import {
-  fullNameValidation,
-  emailValidation,
-  phoneNumberValidation,
-  passwordValidation,
-  confirmPasswordValidation,
-} from '@/utilities/validations/schema';
 import useToast from '@/hooks/useToast';
 import { apiUserRegister } from '@/services';
+import { ajvResolver } from '@hookform/resolvers/ajv';
+import { userRegisterSchema } from '@/utilities/validations/schema';
 
-const registerValidationSchema = yup.object().shape({
-  fullName: fullNameValidation,
-  email: emailValidation,
-  phoneNumber: phoneNumberValidation,
-  password: passwordValidation,
-  confirmPassword: confirmPasswordValidation,
-});
-
-export default function FormUserRegister({ value }: FormUserRegisterProps) {
+export default function FormUserRegister({
+  value = { fullName: '', phoneNumber: '', email: '', password: '', confirmPassword: '' },
+}: FormUserRegisterProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormUserRegisterValues>({
-    resolver: yupResolver(registerValidationSchema),
+    resolver: ajvResolver(userRegisterSchema),
+    mode: 'onSubmit',
+    defaultValues: value,
   });
   const router = useRouter();
   const { showToast } = useToast();
 
-  const [user, setUser] = useState<FormUserRegisterValues>({
-    fullName: value?.fullName ?? '',
-    phoneNumber: value?.phoneNumber ?? '',
-    email: value?.email ?? '',
-    password: value?.password ?? '',
-    confirmPassword: value?.confirmPassword ?? '',
-  });
+  const [state, setState] = useState<FormUserRegisterValues>(value);
   const [loading, setLoading] = useState(false);
 
   const onSubmit: SubmitHandler<FormUserRegisterValues> = async (data) => {
@@ -77,8 +60,8 @@ export default function FormUserRegister({ value }: FormUserRegisterProps) {
         inputKey="fullName"
         register={register}
         errors={errors}
-        value={user.fullName}
-        onChange={(e) => setUser({ ...user, fullName: e.target.value })}
+        value={state.fullName}
+        onChange={(e) => setState({ ...state, fullName: e.target.value })}
       />
       <Input
         type="email"
@@ -87,8 +70,8 @@ export default function FormUserRegister({ value }: FormUserRegisterProps) {
         inputKey="email"
         register={register}
         errors={errors}
-        value={user.email}
-        onChange={(e) => setUser({ ...user, email: e.target.value })}
+        value={state.email}
+        onChange={(e) => setState({ ...state, email: e.target.value })}
       />
       <Input
         type="tel"
@@ -97,8 +80,8 @@ export default function FormUserRegister({ value }: FormUserRegisterProps) {
         inputKey="phoneNumber"
         register={register}
         errors={errors}
-        value={user.phoneNumber}
-        onChange={(e) => setUser({ ...user, phoneNumber: e.target.value })}
+        value={state.phoneNumber}
+        onChange={(e) => setState({ ...state, phoneNumber: e.target.value })}
       />
       <Input
         type="password"
@@ -107,8 +90,8 @@ export default function FormUserRegister({ value }: FormUserRegisterProps) {
         inputKey="password"
         register={register}
         errors={errors}
-        value={user.password}
-        onChange={(e) => setUser({ ...user, password: e.target.value })}
+        value={state.password}
+        onChange={(e) => setState({ ...state, password: e.target.value })}
       />
       <Input
         type="password"
@@ -117,8 +100,8 @@ export default function FormUserRegister({ value }: FormUserRegisterProps) {
         inputKey="confirmPassword"
         register={register}
         errors={errors}
-        value={user.confirmPassword}
-        onChange={(e) => setUser({ ...user, confirmPassword: e.target.value })}
+        value={state.confirmPassword}
+        onChange={(e) => setState({ ...state, confirmPassword: e.target.value })}
       />
       <Button type="submit" color="primary" className="mt-4" disabled={loading} width="block">
         Daftar

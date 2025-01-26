@@ -3,8 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Select, TextArea } from '@/components/atoms';
 import type { SelectOption } from '@/types/components/atoms';
 import type {
@@ -12,23 +10,18 @@ import type {
   FormProductKnowledgeValues,
 } from '@/types/components/templates';
 import useToast from '@/hooks/useToast';
-import { productKnowledgeDescriptionValidation } from '@/utilities/validations/schema';
 import {
   apiCreateProductKnowledge,
   apiGetCustomerServiceSelectList,
   apiGetWhatsappSelectList,
   apiUpdateProductKnowledge,
 } from '@/services';
-
-const productKnowledgeValidationSchema = yup.object().shape({
-  customerServiceId: yup.number().required('Customer Service is required'),
-  whatsappId: yup.string().required('Whatsapp Number is required'),
-  description: productKnowledgeDescriptionValidation,
-});
+import { ajvResolver } from '@hookform/resolvers/ajv';
+import { productKnowledgeSchema } from '@/utilities/validations/schema';
 
 export default function FormProductKnowledge({
   action,
-  value,
+  value = { customerServiceId: 0, whatsappId: '', label: '', description: '' },
   itemId = 0,
 }: FormProductKnowledgeProps) {
   const {
@@ -36,16 +29,14 @@ export default function FormProductKnowledge({
     handleSubmit,
     formState: { errors },
   } = useForm<FormProductKnowledgeValues>({
-    resolver: yupResolver(productKnowledgeValidationSchema),
+    resolver: ajvResolver(productKnowledgeSchema),
+    mode: 'onSubmit',
+    defaultValues: value,
   });
   const router = useRouter();
   const { showToast } = useToast();
 
-  const [productKnowledge, setProductKnowledge] = useState<FormProductKnowledgeValues>({
-    customerServiceId: value?.customerServiceId ?? 0,
-    whatsappId: value?.whatsappId ?? '',
-    description: value?.description ?? '',
-  });
+  const [state, setState] = useState<FormProductKnowledgeValues>(value);
   const [loading, setLoading] = useState(false);
   const [customerServiceOptions, setCustomerServiceOptions] = useState<SelectOption[]>();
   const [whatsappOptions, setWhatsappOptions] = useState<SelectOption[]>();
@@ -55,14 +46,14 @@ export default function FormProductKnowledge({
     const response =
       action === 'update'
         ? await apiUpdateProductKnowledge({
-            id: itemId,
+            id: +itemId,
             cs_id: data.customerServiceId,
             number_id: data.whatsappId,
             label: data.label ?? '',
             description: data.description,
           })
         : await apiCreateProductKnowledge({
-            cs_id: data.customerServiceId,
+            cs_id: +data.customerServiceId,
             number_id: data.whatsappId,
             label: data.label ?? '',
             description: data.description,
@@ -112,16 +103,14 @@ export default function FormProductKnowledge({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Select
-        label="AI Customer Service"
-        placeholder="Pilih AI Customer Service"
+        label="Customer Service"
+        placeholder="Pilih Customer Service"
         inputKey="customerServiceId"
         register={register}
         errors={errors}
         options={customerServiceOptions}
-        value={productKnowledge.customerServiceId}
-        onChange={(e) =>
-          setProductKnowledge({ ...productKnowledge, customerServiceId: +e.target.value })
-        }
+        value={state.customerServiceId}
+        onChange={(e) => setState({ ...state, customerServiceId: +e.target.value })}
       />
       <Select
         label="Nomor Whatsapp"
@@ -130,8 +119,8 @@ export default function FormProductKnowledge({
         register={register}
         errors={errors}
         options={whatsappOptions}
-        value={productKnowledge.whatsappId}
-        onChange={(e) => setProductKnowledge({ ...productKnowledge, whatsappId: e.target.value })}
+        value={state.whatsappId}
+        onChange={(e) => setState({ ...state, whatsappId: e.target.value })}
       />
       <TextArea
         inputKey="description"
@@ -139,8 +128,8 @@ export default function FormProductKnowledge({
         rows={5}
         register={register}
         errors={errors}
-        value={productKnowledge.description}
-        onChange={(e) => setProductKnowledge({ ...productKnowledge, description: e.target.value })}
+        value={state.description}
+        onChange={(e) => setState({ ...state, description: e.target.value })}
       />
       <Button type="submit" color="black" className="mt-2" disabled={loading} width="wide">
         {action === 'update' ? 'Update' : 'Simpan'}

@@ -6,12 +6,16 @@ import type {
   FormUserRegisterValues,
 } from '@/types/components/templates';
 
+const emailRegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const phoneRegExp = /^(\+62|62|0)(8[1-9][0-9]{6,9})$/;
+
 export const userLoginSchema: JSONSchemaType<FormUserLoginValues> = {
   type: 'object',
   properties: {
     email: {
       type: 'string',
       minLength: 1,
+      pattern: emailRegExp.source,
       errorMessage: 'Enter a valid email address.',
     },
     password: {
@@ -22,7 +26,7 @@ export const userLoginSchema: JSONSchemaType<FormUserLoginValues> = {
   },
   required: ['email', 'password'],
   additionalProperties: false,
-};
+} as const;
 
 export const userRegisterSchema: JSONSchemaType<FormUserRegisterValues> = {
   type: 'object',
@@ -34,13 +38,14 @@ export const userRegisterSchema: JSONSchemaType<FormUserRegisterValues> = {
     },
     phoneNumber: {
       type: 'string',
-      minLength: 10,
-      maxLength: 15,
+      minLength: 1,
+      pattern: phoneRegExp.source,
       errorMessage: 'Enter a valid phone number.',
     },
     email: {
       type: 'string',
       minLength: 1,
+      pattern: emailRegExp.source,
       errorMessage: 'Enter a valid email address.',
     },
     password: {
@@ -50,13 +55,19 @@ export const userRegisterSchema: JSONSchemaType<FormUserRegisterValues> = {
     },
     confirmPassword: {
       type: 'string',
-      minLength: 6,
-      errorMessage: 'Confirm password must match password.',
+      minLength: 1,
+      const: {
+        $data: '1/password',
+      } as unknown as string,
+      errorMessage: {
+        minLength: 'Confirm password is required.',
+        const: 'Confirm password must match password.',
+      },
     },
   },
   required: ['fullName', 'phoneNumber', 'email', 'password', 'confirmPassword'],
   additionalProperties: false,
-};
+} as const;
 
 export const customerServiceSchema: JSONSchemaType<FormCustomerServiceValues> = {
   type: 'object',
@@ -77,7 +88,8 @@ export const customerServiceSchema: JSONSchemaType<FormCustomerServiceValues> = 
   },
   required: ['name', 'personality'],
   additionalProperties: false,
-};
+} as const;
+
 export const productKnowledgeSchema: JSONSchemaType<FormProductKnowledgeValues> = {
   type: 'object',
   properties: {
@@ -89,7 +101,7 @@ export const productKnowledgeSchema: JSONSchemaType<FormProductKnowledgeValues> 
     whatsappId: {
       type: 'string',
       minLength: 1,
-      errorMessage: 'Whatsapp is required.',
+      errorMessage: 'Whatsapp number is required.',
     },
     label: {
       type: 'string',
@@ -102,4 +114,4 @@ export const productKnowledgeSchema: JSONSchemaType<FormProductKnowledgeValues> 
   },
   required: ['customerServiceId', 'whatsappId', 'description'],
   additionalProperties: false,
-};
+} as const;

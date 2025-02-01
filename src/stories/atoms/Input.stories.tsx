@@ -48,6 +48,16 @@ const meta: Meta<typeof Input> = {
       description: 'Placeholder of input',
       table: { type: { summary: 'string' } },
     },
+    helperText: {
+      control: { type: 'text' },
+      description: 'Used to provide context about input field',
+      table: { type: { summary: 'string' } },
+    },
+    hasError: {
+      control: { type: 'boolean' },
+      table: { type: { summary: 'boolean' } },
+      description: 'Set validation error',
+    },
     disabled: {
       control: { type: 'boolean' },
       table: { type: { summary: 'boolean' } },
@@ -76,6 +86,8 @@ const InputDefault: StoryObj<typeof Input> = {
   args: {
     type: 'text',
     placeholder: 'Here is a sample placeholder',
+    helperText: 'Some important helper text',
+    hasError: true,
     disabled: false,
   },
 };

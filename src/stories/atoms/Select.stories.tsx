@@ -27,6 +27,16 @@ const meta: Meta<typeof Select> = {
       description: 'Placeholder of select',
       table: { type: { summary: 'string' } },
     },
+    helperText: {
+      control: { type: 'text' },
+      description: 'Used to provide context about input field',
+      table: { type: { summary: 'string' } },
+    },
+    hasError: {
+      control: { type: 'boolean' },
+      table: { type: { summary: 'boolean' } },
+      description: 'Set validation error',
+    },
     disabled: {
       control: { type: 'boolean' },
       table: { type: { summary: 'boolean' } },
@@ -41,6 +51,8 @@ const SelectDefault: StoryObj<typeof Select> = {
   args: {
     options: selectOptions,
     placeholder: 'Select option',
+    helperText: 'Some important helper text',
+    hasError: true,
     disabled: false,
   },
 };

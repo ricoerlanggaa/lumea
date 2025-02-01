@@ -1,26 +1,21 @@
 import { useId } from 'react';
-import type { FieldError, FieldValues } from 'react-hook-form';
 import { classNames } from '@/utilities/formats/string';
 import type { SelectProps } from '@/types/components/atoms';
 
-export default function Select<T extends FieldValues>({
+export default function Select({
   label,
   placeholder,
   options,
   className,
-  inputKey,
-  disabled = false,
+  hasError,
+  helperText,
+  disabled,
   value,
-  register,
-  errors,
   ...rest
-}: SelectProps<T>) {
+}: SelectProps) {
   const selectId = useId();
-  const errorMessages = errors
-    ? (errors[inputKey as keyof typeof errors] as FieldError | undefined)
-    : undefined;
-  const hasError = !!(errors && errorMessages);
   const selectClasses = classNames('select select-bordered', hasError && 'select-error', className);
+  const helperTextClasses = classNames('label-text-alt', hasError && 'text-error');
   return (
     <div className="form-control">
       {label && (
@@ -34,9 +29,8 @@ export default function Select<T extends FieldValues>({
         value={value || ''}
         disabled={disabled}
         aria-invalid={hasError}
-        aria-describedby={hasError ? `${selectId}-error` : undefined}
+        aria-describedby={helperText ? `${selectId}-helperText` : undefined}
         aria-disabled={disabled}
-        {...(register && inputKey && register(inputKey))}
         {...rest}
       >
         {placeholder && (
@@ -50,10 +44,10 @@ export default function Select<T extends FieldValues>({
           </option>
         ))}
       </select>
-      {hasError && (
+      {helperText && (
         <label htmlFor={selectId} className="label py-[2px]">
-          <span id={`${selectId}-error`} className="label-text-alt text-error">
-            {errorMessages?.message}
+          <span id={`${selectId}-helperText`} className={helperTextClasses}>
+            {helperText}
           </span>
         </label>
       )}

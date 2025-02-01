@@ -1,17 +1,15 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button, Input, TextArea } from '@/components/atoms';
 import type {
   FormCustomerServiceProps,
   FormCustomerServiceValues,
 } from '@/types/components/templates';
+import useForm from '@/hooks/useForm';
 import useToast from '@/hooks/useToast';
-import { apiCreateCustomerService, apiUpdateCustomerService } from '@/services';
-import { ajvResolver } from '@hookform/resolvers/ajv';
 import { customerServiceSchema } from '@/utilities/validations/schema';
+import { apiCreateCustomerService, apiUpdateCustomerService } from '@/services';
 
 export default function FormCustomerService({
   itemId = 0,
@@ -20,21 +18,15 @@ export default function FormCustomerService({
 }: FormCustomerServiceProps) {
   const {
     register,
+    formState: { errors, isLoading },
     handleSubmit,
-    formState: { errors },
-  } = useForm<FormCustomerServiceValues>({
-    resolver: ajvResolver(customerServiceSchema),
-    mode: 'onSubmit',
+  } = useForm(customerServiceSchema, {
     defaultValues: value,
   });
   const router = useRouter();
   const { showToast } = useToast();
 
-  const [state, setState] = useState<FormCustomerServiceValues>(value);
-  const [loading, setLoading] = useState(false);
-
-  const onSubmit: SubmitHandler<FormCustomerServiceValues> = async (data) => {
-    setLoading(true);
+  const onSubmit = async (data: FormCustomerServiceValues) => {
     const response =
       action === 'update'
         ? await apiUpdateCustomerService({ ...data, id: +itemId })
@@ -51,39 +43,32 @@ export default function FormCustomerService({
         message: response.message || 'Something went wrong!',
       });
     }
-    setLoading(false);
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Input
-        inputKey="name"
         label="Nama"
         placeholder="Masukkan Nama Customer Service Anda"
-        register={register}
-        errors={errors}
-        value={state.name}
-        onChange={(e) => setState({ ...state, name: e.target.value })}
+        hasError={!!errors.name}
+        helperText={errors.name}
+        {...register('name')}
       />
       <Input
-        inputKey="label"
         label="Label (Opsional)"
         placeholder="Masukkan Label Customer Service Anda"
-        register={register}
-        errors={errors}
-        value={state.label}
-        onChange={(e) => setState({ ...state, label: e.target.value })}
+        hasError={!!errors.label}
+        helperText={errors.label}
+        {...register('label')}
       />
       <TextArea
-        inputKey="personality"
         label="Personality"
         placeholder="Masukkan Personality Customer Service Anda"
         rows={5}
-        register={register}
-        errors={errors}
-        value={state.personality}
-        onChange={(e) => setState({ ...state, personality: e.target.value })}
+        hasError={!!errors.personality}
+        helperText={errors.personality}
+        {...register('personality')}
       />
-      <Button type="submit" color="black" width="wide" className="mt-2" disabled={loading}>
+      <Button type="submit" color="black" shape="wide" className="mt-2" disabled={isLoading}>
         {action === 'update' ? 'Update' : 'Simpan'}
       </Button>
     </form>

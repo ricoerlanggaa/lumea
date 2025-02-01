@@ -2,22 +2,21 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button, Select, TextArea } from '@/components/atoms';
 import type { SelectOption } from '@/types/components/atoms';
 import type {
   FormProductKnowledgeProps,
   FormProductKnowledgeValues,
 } from '@/types/components/templates';
+import useForm from '@/hooks/useForm';
 import useToast from '@/hooks/useToast';
+import { productKnowledgeSchema } from '@/utilities/validations/schema';
 import {
   apiCreateProductKnowledge,
   apiGetCustomerServiceSelectList,
   apiGetWhatsappSelectList,
   apiUpdateProductKnowledge,
 } from '@/services';
-import { ajvResolver } from '@hookform/resolvers/ajv';
-import { productKnowledgeSchema } from '@/utilities/validations/schema';
 
 export default function FormProductKnowledge({
   action,
@@ -26,23 +25,16 @@ export default function FormProductKnowledge({
 }: FormProductKnowledgeProps) {
   const {
     register,
+    formState: { errors, isLoading },
     handleSubmit,
-    formState: { errors },
-  } = useForm<FormProductKnowledgeValues>({
-    resolver: ajvResolver(productKnowledgeSchema),
-    mode: 'onSubmit',
-    defaultValues: value,
-  });
+  } = useForm(productKnowledgeSchema, { defaultValues: value });
   const router = useRouter();
   const { showToast } = useToast();
 
-  const [state, setState] = useState<FormProductKnowledgeValues>(value);
-  const [loading, setLoading] = useState(false);
   const [customerServiceOptions, setCustomerServiceOptions] = useState<SelectOption[]>();
   const [whatsappOptions, setWhatsappOptions] = useState<SelectOption[]>();
 
-  const onSubmit: SubmitHandler<FormProductKnowledgeValues> = async (data) => {
-    setLoading(true);
+  const onSubmit = async (data: FormProductKnowledgeValues) => {
     const response =
       action === 'update'
         ? await apiUpdateProductKnowledge({
@@ -70,7 +62,6 @@ export default function FormProductKnowledge({
         message: response.message || 'Something went wrong!',
       });
     }
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -105,33 +96,27 @@ export default function FormProductKnowledge({
       <Select
         label="Customer Service"
         placeholder="Pilih Customer Service"
-        inputKey="customerServiceId"
-        register={register}
-        errors={errors}
         options={customerServiceOptions}
-        value={state.customerServiceId}
-        onChange={(e) => setState({ ...state, customerServiceId: +e.target.value })}
+        hasError={!!errors.customerServiceId}
+        helperText={errors.customerServiceId}
+        {...register('customerServiceId')}
       />
       <Select
         label="Nomor Whatsapp"
         placeholder="Pilih Nomor Whatsapp"
-        inputKey="whatsappId"
-        register={register}
-        errors={errors}
         options={whatsappOptions}
-        value={state.whatsappId}
-        onChange={(e) => setState({ ...state, whatsappId: e.target.value })}
+        hasError={!!errors.whatsappId}
+        helperText={errors.whatsappId}
+        {...register('whatsappId')}
       />
       <TextArea
-        inputKey="description"
         label="Product Knowledge"
         rows={5}
-        register={register}
-        errors={errors}
-        value={state.description}
-        onChange={(e) => setState({ ...state, description: e.target.value })}
+        hasError={!!errors.description}
+        helperText={errors.description}
+        {...register('description')}
       />
-      <Button type="submit" color="black" className="mt-2" disabled={loading} width="wide">
+      <Button type="submit" color="black" className="mt-2" disabled={isLoading} shape="wide">
         {action === 'update' ? 'Update' : 'Simpan'}
       </Button>
     </form>

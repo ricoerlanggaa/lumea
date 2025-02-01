@@ -1,33 +1,23 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button, Input } from '@/components/atoms';
 import type { FormUserLoginProps, FormUserLoginValues } from '@/types/components/templates';
+import useForm from '@/hooks/useForm';
 import useToast from '@/hooks/useToast';
-import { apiUserLogin } from '@/services';
-import { ajvResolver } from '@hookform/resolvers/ajv';
 import { userLoginSchema } from '@/utilities/validations/schema';
+import { apiUserLogin } from '@/services';
 
 export default function FormUserLogin({ value = { email: '', password: '' } }: FormUserLoginProps) {
   const {
     register,
+    formState: { errors, isLoading },
     handleSubmit,
-    formState: { errors },
-  } = useForm<FormUserLoginValues>({
-    resolver: ajvResolver(userLoginSchema),
-    mode: 'onSubmit',
-    defaultValues: value,
-  });
+  } = useForm<FormUserLoginValues>(userLoginSchema, { defaultValues: value });
   const router = useRouter();
   const { showToast } = useToast();
 
-  const [state, setState] = useState<FormUserLoginValues>(value);
-  const [loading, setLoading] = useState(false);
-
-  const onSubmit: SubmitHandler<FormUserLoginValues> = async (data) => {
-    setLoading(true);
+  const onSubmit = async (data: FormUserLoginValues) => {
     const response = await apiUserLogin({
       email: data.email,
       password: data.password,
@@ -44,7 +34,6 @@ export default function FormUserLogin({ value = { email: '', password: '' } }: F
         message: response.message || 'Something went wrong!',
       });
     }
-    setLoading(false);
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -52,23 +41,19 @@ export default function FormUserLogin({ value = { email: '', password: '' } }: F
         type="email"
         label="Email"
         placeholder="Masukkan Email Anda"
-        inputKey="email"
-        register={register}
-        errors={errors}
-        value={state.email}
-        onChange={(e) => setState({ ...state, email: e.target.value })}
+        hasError={!!errors.email}
+        helperText={errors.email}
+        {...register('email')}
       />
       <Input
         type="password"
         label="Password"
         placeholder="Masukkan Password Anda"
-        inputKey="password"
-        register={register}
-        errors={errors}
-        value={state.password}
-        onChange={(e) => setState({ ...state, password: e.target.value })}
+        hasError={!!errors.password}
+        helperText={errors.password}
+        {...register('password')}
       />
-      <Button type="submit" color="primary" className="mt-4" disabled={loading} width="block">
+      <Button type="submit" color="primary" className="mt-4" disabled={isLoading} shape="block">
         Masuk
       </Button>
     </form>

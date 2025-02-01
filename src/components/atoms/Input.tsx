@@ -1,31 +1,26 @@
 import { useId } from 'react';
-import type { FieldError, FieldValues } from 'react-hook-form';
 import { classNames } from '@/utilities/formats/string';
 import type { InputProps } from '@/types/components/atoms';
 
-export default function Input<T extends FieldValues>({
+export default function Input({
   type = 'text',
   label,
   placeholder,
   prefix,
   suffix,
   className,
-  inputKey,
-  disabled = false,
-  register,
-  errors,
+  hasError,
+  helperText,
+  disabled,
   ...rest
-}: InputProps<T>) {
+}: InputProps) {
   const inputId = useId();
-  const errorMessages = errors
-    ? (errors[inputKey as keyof typeof errors] as FieldError | undefined)
-    : undefined;
-  const hasError = !!(errors && errorMessages);
   const inputClasses = classNames(
     'input input-bordered flex items-center gap-2',
     hasError && 'input-error',
     className,
   );
+  const helperTextClasses = classNames('label-text-alt', hasError && 'text-error');
   return (
     <div className="form-control">
       {label && (
@@ -42,17 +37,16 @@ export default function Input<T extends FieldValues>({
           disabled={disabled}
           className="grow"
           aria-invalid={hasError}
-          aria-describedby={hasError ? `${inputId}-error` : undefined}
+          aria-describedby={helperText ? `${inputId}-helperText` : undefined}
           aria-disabled={disabled}
-          {...(register && inputKey && register(inputKey))}
           {...rest}
         />
         {suffix}
       </label>
-      {hasError && (
+      {helperText && (
         <label htmlFor={inputId} className="label py-[2px]">
-          <span id={`${inputId}-error`} className="label-text-alt text-error">
-            {errorMessages?.message}
+          <span id={`${inputId}-helperText`} className={helperTextClasses}>
+            {helperText}
           </span>
         </label>
       )}

@@ -1,24 +1,19 @@
 import { useId } from 'react';
-import type { FieldError, FieldValues } from 'react-hook-form';
 import { classNames } from '@/utilities/formats/string';
 import type { TextAreaProps } from '@/types/components/atoms';
 
-export default function TextArea<T extends FieldValues>({
+export default function TextArea({
   label,
   placeholder,
+  hasError,
+  helperText,
   className,
-  inputKey,
-  disabled = false,
-  register,
-  errors,
+  disabled,
   ...rest
-}: TextAreaProps<T>) {
+}: TextAreaProps) {
   const textareaId = useId();
-  const errorMessages = errors
-    ? (errors[inputKey as keyof typeof errors] as FieldError | undefined)
-    : undefined;
-  const hasError = !!(errors && errorMessages);
   const classes = classNames('textarea textarea-bordered', hasError && 'textarea-error', className);
+  const helperTextClasses = classNames('label-text-alt', hasError && 'text-error');
   return (
     <div className="form-control">
       {label && (
@@ -32,15 +27,14 @@ export default function TextArea<T extends FieldValues>({
         placeholder={placeholder}
         disabled={disabled}
         aria-invalid={hasError}
-        aria-describedby={hasError ? `${textareaId}-error` : undefined}
+        aria-describedby={helperText ? `${textareaId}-helperText` : undefined}
         aria-disabled={disabled}
-        {...(register && inputKey && register(inputKey))}
         {...rest}
       />
-      {hasError && (
+      {helperText && (
         <label htmlFor={textareaId} className="label py-[2px]">
-          <span id={`${textareaId}-error`} className="label-text-alt text-error">
-            {errorMessages?.message}
+          <span id={`${textareaId}-helperText`} className={helperTextClasses}>
+            {helperText}
           </span>
         </label>
       )}

@@ -11,14 +11,12 @@ export type ButtonColor =
   | 'white';
 export type ButtonVariant = 'solid' | 'outlined' | 'ghost';
 export type ButtonSize = 'sm' | 'md' | 'lg';
-export type ButtonShape = 'default' | 'square' | 'circle';
-export type ButtonWidth = 'default' | 'wide' | 'block';
+export type ButtonShape = 'none' | 'square' | 'circle' | 'wide' | 'block';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLElement> {
   color?: ButtonColor;
   size?: ButtonSize;
   variant?: ButtonVariant;
-  width?: ButtonWidth;
   shape?: ButtonShape;
   href?: string;
 }

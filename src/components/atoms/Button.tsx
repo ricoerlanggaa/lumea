@@ -6,7 +6,6 @@ import type {
   ButtonShape,
   ButtonSize,
   ButtonVariant,
-  ButtonWidth,
 } from '@/types/components/atoms';
 
 const variantClasses: Record<ButtonVariant, string> = {
@@ -14,15 +13,12 @@ const variantClasses: Record<ButtonVariant, string> = {
   outlined: 'btn btn-outline border-2',
   ghost: 'btn btn-ghost',
 };
-const widthClasses: Record<ButtonWidth, string> = {
-  default: '',
-  wide: 'btn-wide',
-  block: 'btn-block',
-};
 const shapeClasses: Record<ButtonShape, string> = {
-  default: '',
+  none: '',
   circle: 'btn-circle',
   square: 'btn-square',
+  wide: 'btn-wide',
+  block: 'btn-block',
 };
 const colorClasses: Record<ButtonColor, string> = {
   primary: 'btn-primary',
@@ -42,13 +38,12 @@ const sizeClasses: Record<ButtonSize, string> = {
 
 export default function Button({
   type = 'button',
-  children = 'Button',
   variant = 'solid',
   color = 'primary',
   size = 'md',
-  width = 'default',
-  shape = 'default',
-  disabled = false,
+  shape = 'none',
+  children,
+  disabled,
   href,
   className,
   ...rest
@@ -59,7 +54,6 @@ export default function Button({
     variantClasses[variant],
     colorClasses[color],
     sizeClasses[size],
-    widthClasses[width],
     shapeClasses[shape],
     isGradientButton && variant === 'outlined' && 'btn-outline-gradient',
     disabled && 'btn-disabled border-none text-base-content',

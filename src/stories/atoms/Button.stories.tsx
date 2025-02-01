@@ -31,16 +31,10 @@ const meta: Meta<typeof Button> = {
       table: { type: { summary: 'sm | md | lg' } },
       description: 'Set the size of button',
     },
-    width: {
-      control: { type: 'select' },
-      options: ['default', 'wide', 'block'],
-      table: { type: { summary: 'default | wide | block' } },
-      description: 'Set the size of button',
-    },
     shape: {
       control: { type: 'select' },
-      options: ['default', 'circle', 'square'],
-      table: { type: { summary: 'default | circle | square' } },
+      options: ['none', 'circle', 'square', 'wide', 'block'],
+      table: { type: { summary: 'none | circle | square | wide | block' } },
       description: 'Can be used to set button shape',
     },
     disabled: {
@@ -69,8 +63,7 @@ const ButtonDefault: StoryObj<typeof Button> = {
     variant: 'solid',
     color: 'primary',
     size: 'md',
-    width: 'default',
-    shape: 'default',
+    shape: 'none',
     disabled: false,
     children: 'Button',
   },

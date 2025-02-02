@@ -1,0 +1,70 @@
+name: development
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build App
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+
+      - name: Verify App Build
+        run: ls -la .next
+
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+
+      - name: Deploy App to Netlify
+        run: netlify deploy --build --prod --message "Deploy App ${GITHUB_REF_NAME}"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_APP_SITE_ID }}
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+
+  build-storybook:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+  
+      - name: Build Storybook
+        run: npm run build-storybook-docs
+  
+      - name: Verify Storybook Build
+        run: ls -la storybook-static
+  
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+
+      - name: Deploy Storybook to Netlify
+        run: netlify deploy --prod --dir=storybook-static --message "Deploy Storybook ${GITHUB_REF_NAME}"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_STORYBOOK_SITE_ID }}

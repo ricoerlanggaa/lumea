@@ -2,7 +2,8 @@
   "root": true,
   "env": {
     "node": true,
-    "browser": true
+    "browser": true,
+    "jest/globals": true
   },
   "extends": [
     "eslint:recommended",
@@ -13,7 +14,7 @@
     "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "import"],
+  "plugins": ["@typescript-eslint", "import", "jest"],
   "settings": {
     "import/parsers": {
       "@typescript-eslint/parser": [".ts", ".tsx"]
@@ -41,6 +42,11 @@
         "ts": "never",
         "tsx": "never"
       }
-    ]
+    ],
+    "jest/no-disabled-tests": "warn",
+    "jest/no-focused-tests": "error",
+    "jest/no-identical-title": "error",
+    "jest/prefer-to-have-length": "warn",
+    "jest/valid-expect": "error"
   }
 }

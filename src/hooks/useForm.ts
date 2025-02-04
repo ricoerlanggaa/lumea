@@ -1,10 +1,12 @@
-import { ChangeEvent, FormEvent, useCallback, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useCallback, useMemo, useState } from 'react';
 import Ajv, { JSONSchemaType } from 'ajv';
 import ajvErrors from 'ajv-errors';
 
 type FormState<T> = {
+  values: T;
   errors: Partial<Record<keyof T, string>>;
   isLoading: boolean;
+  isSubmitted: boolean;
 };
 
 const ajv = new Ajv({ allErrors: true, $data: true });
@@ -15,18 +17,19 @@ export default function useForm<T extends object>(
   options?: { defaultValues?: T },
 ) {
   const defaultValues = options?.defaultValues ?? ({} as T);
-  const formDataRef = useRef<T>(defaultValues);
   const [formState, setFormState] = useState<FormState<T>>({
+    values: defaultValues,
     errors: {},
     isLoading: false,
+    isSubmitted: false,
   });
-  const validate = useRef(ajv.compile(schema));
 
   const validateForm = useCallback(() => {
-    const isValid = validate.current(formDataRef.current);
+    const validate = ajv.compile(schema);
+    const valid = validate(formState.values);
 
-    if (!isValid) {
-      const errors = validate.current.errors?.reduce<Partial<Record<keyof T, string>>>(
+    if (!valid) {
+      const errors = validate.errors?.reduce<Partial<Record<keyof T, string>>>(
         (acc, err) => {
           const field = err.instancePath.slice(1) as keyof T;
           if (!acc[field]) {
@@ -43,24 +46,31 @@ export default function useForm<T extends object>(
 
     setFormState((prev) => ({ ...prev, errors: {} }));
     return true;
-  }, []);
+  }, [formState.values, schema]);
 
   const handleChange = useCallback(
     (name: keyof T) =>
       (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        formDataRef.current = { ...formDataRef.current, [name]: e.target.value };
-        validateForm();
+        const { value } = e.target;
+        setFormState((prev) => {
+          const updatedValues = { ...prev.values, [name]: value };
+          return { ...prev, values: updatedValues };
+        });
+
+        if (formState.isSubmitted) {
+          validateForm();
+        }
       },
-    [validateForm],
+    [formState.isSubmitted, validateForm],
   );
 
   const register = useMemo(
     () => (name: keyof T) => ({
       name,
-      value: formDataRef.current[name] ?? '',
+      value: formState.values[name] ?? '',
       onChange: handleChange(name),
     }),
-    [handleChange],
+    [handleChange, formState.values],
   );
 
   const handleSubmit = useCallback(
@@ -68,10 +78,12 @@ export default function useForm<T extends object>(
     (action: (data: T) => Promise<void> | void) => {
       return async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setFormState((prev) => ({ ...prev, isSubmitted: true }));
         try {
           setFormState((prev) => ({ ...prev, isLoading: true }));
-          if (validateForm()) {
-            await action(formDataRef.current);
+          const isValid = validateForm();
+          if (isValid) {
+            await action(formState.values);
             return true;
           }
           return false;
@@ -80,7 +92,7 @@ export default function useForm<T extends object>(
         }
       };
     },
-    [validateForm],
+    [formState.values, validateForm],
   );
 
   return { register, formState, handleSubmit };

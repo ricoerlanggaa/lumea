@@ -23,9 +23,9 @@ const meta: Meta<typeof QRCode> = {
     },
     status: {
       control: { type: 'select' },
-      options: ['active', 'expired', 'loading'],
+      options: ['active', 'expired', 'pending', 'connected'],
       description: 'QRCode status',
-      table: { type: { summary: 'active | expired | loading' } },
+      table: { type: { summary: 'active | expired | pending | connected' } },
     },
     icon: {
       control: { type: 'text' },

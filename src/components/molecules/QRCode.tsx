@@ -1,7 +1,7 @@
 'use client';
 
 import { QRCodeCanvas } from 'qrcode.react';
-import { RefreshIcon } from 'hugeicons-react';
+import { CheckmarkCircle02Icon, RefreshIcon } from 'hugeicons-react';
 import { classNames } from '@/utilities/formats/string';
 import { QRCodeProps } from '@/types/components/molecules';
 
@@ -27,7 +27,10 @@ export default function QRCode({
           className="absolute top-0 left-0 w-full flex flex-col items-center justify-center rounded-lg h-full z-10"
           style={{ backgroundColor: 'rgba(255,255,255,0.96)' }}
         >
-          {status === 'expired' ? (
+          {status === 'pending' && (
+            <div className="w-1/3 h-1/3 rounded-full animate-spin border-[6px] border-[darkgrey] border-solid border-t-transparent" />
+          )}
+          {status === 'expired' && (
             <div className="text-center">
               <p>QR code expired</p>
               <button
@@ -39,8 +42,12 @@ export default function QRCode({
                 Refresh
               </button>
             </div>
-          ) : (
-            <div className="w-1/3 h-1/3 rounded-full animate-spin border-[6px] border-[darkgrey] border-solid border-t-transparent" />
+          )}
+          {status === 'connected' && (
+            <span className="inline-flex items-center">
+              <CheckmarkCircle02Icon size={20} className="text-success mr-1" />
+              Connected
+            </span>
           )}
         </div>
       )}

@@ -52,6 +52,13 @@ export default function useForm<T extends object>(
     setFormState((prev) => ({ ...prev, values: value }));
   }, []);
 
+  const resetValues = useCallback(() => {
+    setFormState((prev) => ({
+      ...prev,
+      values: {} as T,
+    }));
+  }, []);
+
   const handleChange = useCallback(
     (name: keyof T) =>
       (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -99,5 +106,5 @@ export default function useForm<T extends object>(
     [formState.values, validateForm],
   );
 
-  return { register, formState, setValues, handleSubmit };
+  return { register, formState, setValues, resetValues, handleSubmit };
 }

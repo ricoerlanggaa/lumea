@@ -1,8 +1,6 @@
 import { Typography } from '@/components/atoms';
 import { Breadcrumb } from '@/components/molecules';
 import { FormCustomerService } from '@/components/templates';
-import { FormCustomerServiceValues } from '@/types/components/templates';
-import { apiGetCustomerServiceDetail } from '@/services';
 
 const breadcrumbItems = [
   { key: 1, label: 'Product Setup' },
@@ -15,12 +13,6 @@ export default async function EditAICustomerServicePage({
   params: Promise<{ id: number }>;
 }) {
   const { id } = await params;
-  const response = await apiGetCustomerServiceDetail(id);
-  const customerService: FormCustomerServiceValues = {
-    name: response.data?.name ?? '',
-    label: response.data?.labels ?? '',
-    personality: response.data?.personality ?? '',
-  };
   return (
     <>
       <Breadcrumb items={breadcrumbItems} />
@@ -30,7 +22,7 @@ export default async function EditAICustomerServicePage({
             Edit AI Customer Service
           </Typography>
           <hr className="mb-4" />
-          <FormCustomerService itemId={id} action="update" value={customerService} />
+          <FormCustomerService itemId={id} action="update" />
         </div>
       </div>
     </>

@@ -1,20 +1,14 @@
 import { Typography } from '@/components/atoms';
 import { Breadcrumb } from '@/components/molecules';
 import { ButtonConnectWhatsapp, CardCustomerService, TableWhatsapp } from '@/components/templates';
-import type { CardCustomerServiceItem, TableWhatsappItem } from '@/types/components/templates';
-import { apiGetCustomerServiceList, apiGetWhatsappList } from '@/services';
+import type { TableWhatsappItem } from '@/types/components/templates';
+import { apiGetWhatsappList } from '@/services';
 
 const breadcrumbItems = [
   { key: 1, label: 'Product Setup' },
   { key: 2, label: 'AI Customer Service' },
 ];
 export default async function AICustomerServicePage() {
-  const customerServiceList = await apiGetCustomerServiceList();
-  const customerServiceItems: CardCustomerServiceItem[] = customerServiceList.data.map((item) => ({
-    id: item.id,
-    name: item.name,
-    label: item.labels,
-  }));
   const whatsappList = await apiGetWhatsappList();
   const whatsappItems: TableWhatsappItem[] = whatsappList.data.map((item) => ({
     id: item.id,
@@ -31,7 +25,7 @@ export default async function AICustomerServicePage() {
               AI Customer Service
             </Typography>
             <hr className="mb-4" />
-            <CardCustomerService items={customerServiceItems} />
+            <CardCustomerService />
           </div>
         </div>
         <div className="card bg-base-100">

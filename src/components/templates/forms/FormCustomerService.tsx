@@ -1,49 +1,83 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { Button, Input, TextArea } from '@/components/atoms';
 import type {
   FormCustomerServiceProps,
   FormCustomerServiceValues,
 } from '@/types/components/templates';
 import useForm from '@/hooks/useForm';
-import useToast from '@/hooks/useToast';
 import { customerServiceSchema } from '@/utilities/validations/schema';
-import { apiCreateCustomerService, apiUpdateCustomerService } from '@/services';
+import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
+import {
+  createItem,
+  fetchItem,
+  itemState,
+  isLoadingState,
+  updateItem,
+} from '@/store/customerServiceSlice';
+import { useCallback, useEffect } from 'react';
+import useToast from '@/hooks/useToast';
+import { useRouter } from 'next/navigation';
 
-export default function FormCustomerService({
-  itemId = 0,
-  value = { name: '', label: '', personality: '' },
-  action,
-}: FormCustomerServiceProps) {
+export default function FormCustomerService({ itemId = 0, action }: FormCustomerServiceProps) {
+  const dispatch = useAppDispatch();
+  const item = useAppSelector(itemState);
+  const isLoading = useAppSelector(isLoadingState);
+
   const {
     register,
-    formState: { errors, isLoading },
+    formState: { errors },
+    setValues,
+    resetValues,
     handleSubmit,
-  } = useForm(customerServiceSchema, {
-    defaultValues: value,
-  });
-  const router = useRouter();
+  } = useForm(customerServiceSchema);
   const { showToast } = useToast();
+  const router = useRouter();
+
+  const fetchDetail = useCallback(() => {
+    if (itemId) {
+      dispatch(fetchItem(itemId));
+    }
+  }, [dispatch, itemId]);
+
+  useEffect(() => {
+    fetchDetail();
+  }, [fetchDetail]);
+
+  useEffect(() => {
+    if (action === 'update' && item) {
+      setValues({
+        name: item.name,
+        label: item.label,
+        personality: item.personality,
+      });
+    } else {
+      resetValues();
+    }
+  }, [action, item, resetValues, setValues]);
 
   const onSubmit = async (data: FormCustomerServiceValues) => {
-    const response =
-      action === 'update'
-        ? await apiUpdateCustomerService({ ...data, id: +itemId })
-        : await apiCreateCustomerService(data);
-    if (response.status) {
+    try {
+      if (action === 'update') {
+        await dispatch(updateItem({ ...data, id: itemId })).unwrap();
+      } else {
+        await dispatch(createItem(data)).unwrap();
+      }
       showToast({
         variant: 'success',
-        message: `AI Customer Service berhasil ${action === 'update' ? 'diperbarui' : 'ditambahkan'}!`,
+        message: `Customer service berhasil ${action === 'update' ? 'diperbarui' : 'ditambahkan'}!`,
+        duration: 3000,
       });
       router.push('/product-setup/ai-customer-service');
-    } else {
+    } catch (error) {
       showToast({
         variant: 'error',
-        message: response.message || 'Something went wrong!',
+        message: String(error),
+        duration: 3000,
       });
     }
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Input

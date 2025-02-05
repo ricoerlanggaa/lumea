@@ -1,8 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
+import customerServiceReducer from './customerServiceSlice';
 
 export const makeStore = () => {
   return configureStore({
-    reducer: {},
+    reducer: {
+      customerService: customerServiceReducer,
+    },
   });
 };
 

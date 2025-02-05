@@ -42,9 +42,9 @@ export async function apiGetCustomerServiceDetail(id: number) {
 export async function apiCreateCustomerService(payload: CreateCustomerServiceDTO) {
   try {
     const response = await apiClient.post('/v1/customer-service', payload);
-    const responseData = response.data as MetaResponse<null>;
+    const responseData = response.data as MetaResponse<{ id: number }>;
     const message = responseData.meta?.message || response.statusText;
-    return { status: true, message, data: null };
+    return { status: true, message, data: responseData.data ?? null };
   } catch (error) {
     const err = error as MetaResponseError<null>;
     const errorResponse = err.response?.data;

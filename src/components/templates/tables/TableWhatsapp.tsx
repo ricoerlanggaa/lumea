@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import {
   Cancel01Icon,
   Delete02Icon,
@@ -8,86 +7,76 @@ import {
   MoreHorizontalCircle01Icon,
 } from 'hugeicons-react';
 import { DropdownMenu } from '@/components/molecules';
-import type { TableWhatsappItem, TableWhatsappProps } from '@/types/components/templates';
 import useToast from '@/hooks/useToast';
 import { classNames, formatPhoneNumber } from '@/utilities/formats/string';
-import { apiConnectWhatsapp, apiDeleteWhatsapp, apiDisconnectWhatsapp } from '@/services';
+import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
+import {
+  connectNumber,
+  deleteNumber,
+  disconnectNumber,
+  fetchList,
+  listState,
+} from '@/store/whatsappSlice';
+import { useEffect } from 'react';
 
-export default function TableWhatsapp({ items = [] }: TableWhatsappProps) {
+export default function TableWhatsapp() {
+  const dispatch = useAppDispatch();
+  const list = useAppSelector(listState);
+
   const { showToast } = useToast();
 
-  const [whatsappList, setWhatsappList] = useState<TableWhatsappItem[]>(items);
-
-  const handleAction = async (
-    actionCallback: () => Promise<{ status: boolean; message?: string }>,
-    successMessage: string,
-    onSuccess: () => void,
-  ) => {
-    const response = await actionCallback();
-    if (response.status) {
-      onSuccess();
+  const handleConnect = async (id: string) => {
+    try {
+      await dispatch(connectNumber(id)).unwrap();
       showToast({
         variant: 'success',
-        message: successMessage,
+        message: 'Nomor whatsapp berhasil terhubung!',
+        duration: 3000,
       });
-    } else {
+    } catch (error) {
       showToast({
         variant: 'error',
-        message: response.message || 'Something went wrong!',
+        message: String(error),
+        duration: 3000,
+      });
+    }
+  };
+  const handleDisconnect = async (id: string) => {
+    try {
+      await dispatch(disconnectNumber(id)).unwrap();
+      showToast({
+        variant: 'success',
+        message: 'Nomor whatsapp berhasil terputus!',
+        duration: 3000,
+      });
+    } catch (error) {
+      showToast({
+        variant: 'error',
+        message: String(error),
+        duration: 3000,
+      });
+    }
+  };
+  const handleDelete = async (id: string) => {
+    try {
+      await dispatch(deleteNumber(id)).unwrap();
+      showToast({
+        variant: 'success',
+        message: 'Nomor whatsapp berhasil dihapus!',
+        duration: 3000,
+      });
+    } catch (error) {
+      showToast({
+        variant: 'error',
+        message: String(error),
+        duration: 3000,
       });
     }
   };
 
-  const generateMenuItems = (item: TableWhatsappItem) => [
-    item.status === 'connected'
-      ? {
-          key: 1,
-          label: 'Disconnect',
-          icon: <Cancel01Icon />,
-          onClick: () =>
-            handleAction(
-              () => apiDisconnectWhatsapp(item.id),
-              'Nomor Whatsapp berhasil terputus!',
-              () => {
-                setWhatsappList((prevItems) =>
-                  prevItems.map((prevItem) =>
-                    prevItem.id === item.id ? { ...prevItem, isConnected: false } : prevItem,
-                  ),
-                );
-              },
-            ),
-        }
-      : {
-          key: 1,
-          label: 'Connect',
-          icon: <Link04Icon />,
-          onClick: () =>
-            handleAction(
-              () => apiConnectWhatsapp(item.id),
-              'Nomor Whatsapp berhasil terhubung!',
-              () => {
-                setWhatsappList((prevItems) =>
-                  prevItems.map((prevItem) =>
-                    prevItem.id === item.id ? { ...prevItem, isConnected: true } : prevItem,
-                  ),
-                );
-              },
-            ),
-        },
-    {
-      key: 2,
-      label: 'Hapus',
-      icon: <Delete02Icon />,
-      onClick: () =>
-        handleAction(
-          () => apiDeleteWhatsapp(item.id),
-          'Nomor Whatsapp berhasil dihapus!',
-          () => {
-            setWhatsappList((prevItems) => prevItems.filter((prevItem) => prevItem.id !== item.id));
-          },
-        ),
-    },
-  ];
+  useEffect(() => {
+    dispatch(fetchList());
+  }, [dispatch]);
 
   return (
     <table className="table w-full">
@@ -99,7 +88,7 @@ export default function TableWhatsapp({ items = [] }: TableWhatsappProps) {
         </tr>
       </thead>
       <tbody>
-        {whatsappList.map((item) => (
+        {list.map((item) => (
           <tr key={item.id}>
             <td className="border">
               <span className="line-clamp-1">{formatPhoneNumber(item.number)}</span>
@@ -115,7 +104,25 @@ export default function TableWhatsapp({ items = [] }: TableWhatsappProps) {
               </div>
             </td>
             <td className="border text-center">
-              <DropdownMenu placement="bottom-end" items={generateMenuItems(item)} size="sm">
+              <DropdownMenu
+                placement="bottom-end"
+                items={[
+                  {
+                    key: `edit-${Math.random()}`,
+                    label: item.status ? 'Disconnect' : 'Connect',
+                    icon: item.status ? <Cancel01Icon /> : <Link04Icon />,
+                    onClick: () =>
+                      item.status ? handleDisconnect(item.id) : handleConnect(item.id),
+                  },
+                  {
+                    key: `delete-${Math.random()}`,
+                    label: 'Delete',
+                    icon: <Delete02Icon />,
+                    onClick: () => handleDelete(item.id),
+                  },
+                ]}
+                size="sm"
+              >
                 <MoreHorizontalCircle01Icon size={16} />
               </DropdownMenu>
             </td>

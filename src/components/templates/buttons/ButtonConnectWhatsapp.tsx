@@ -1,55 +1,50 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useEffect, useId } from 'react';
 import { Cancel01Icon, MetaIcon, MoreVerticalCircle01Icon, Settings02Icon } from 'hugeicons-react';
 import { Button, Typography } from '@/components/atoms';
 import { QRCode } from '@/components/molecules';
-import type { QRCodeStatus } from '@/types/components/molecules';
 import useToast from '@/hooks/useToast';
-import { apiGetCodeWhatsapp } from '@/services';
+import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
+import { codeState, codeStatusState, fetchList, generateCode } from '@/store/whatsappSlice';
 
 export default function ButtonConnectWhatsapp() {
+  const dispatch = useAppDispatch();
+  const code = useAppSelector(codeState);
+  const codeStatus = useAppSelector(codeStatusState);
+
   const modalId = useId();
   const { showToast } = useToast();
-  const [qrCodeStatus, setQRCodeStatus] = useState<QRCodeStatus>('loading');
-  const [qrCode, setQRCode] = useState('');
 
-  let interval: ReturnType<typeof setInterval> | null = null;
-  let countInterval: number = 0;
-
-  const revalidateCodeWhatsapp = async (id: string) => {
-    countInterval += 1;
-    const response = await apiGetCodeWhatsapp(id);
-    const { data } = response;
-    if (data?.isConnected && interval) {
-      clearInterval(interval);
+  const handleGenerateCode = async () => {
+    try {
+      await dispatch(generateCode()).unwrap();
+    } catch (error) {
       showToast({
-        variant: 'success',
-        message: 'Nomor Whatsapp berhasil terhubung!',
+        variant: 'error',
+        message: String(error),
+        duration: 3000,
       });
-      const modal = document.getElementById(modalId) as HTMLDialogElement;
-      modal.close();
-      window.location.reload();
-    }
-    if (data?.code) {
-      setQRCode(data?.code);
-    }
-    if (countInterval >= 20 && interval) {
-      setQRCodeStatus('expired');
-      clearInterval(interval);
     }
   };
-  const handleConnectWhatsapp = async () => {
-    setQRCodeStatus('loading');
+  const handleConnectWhatsapp = () => {
     const modal = document.getElementById(modalId) as HTMLDialogElement;
     if (modal) modal.showModal();
-    const response = await apiGetCodeWhatsapp('');
-    if (response.data) {
-      setQRCode(response.data.code);
-      setQRCodeStatus('active');
-      interval = setInterval(() => revalidateCodeWhatsapp(response.data.id), 15000);
-    }
+    handleGenerateCode();
   };
+
+  useEffect(() => {
+    if (codeStatus === 'expired') {
+      const modal = document.getElementById(modalId) as HTMLDialogElement;
+      if (modal) modal.close();
+      showToast({
+        variant: 'success',
+        message: 'Nomor anda berhasil terhubung!',
+        duration: 3000,
+      });
+      dispatch(fetchList());
+    }
+  }, [codeStatus, dispatch, modalId, showToast]);
 
   return (
     <>
@@ -100,13 +95,13 @@ export default function ButtonConnectWhatsapp() {
             <li>Arahkan telepon Anda di layar ini untuk memindai kode QR</li>
           </ol>
           <QRCode
-            value={qrCode}
+            value={code}
             size={264}
-            status={qrCodeStatus}
+            status={codeStatus}
             icon="/images/logo/whatsapp.svg"
             iconSize={64}
             className="mx-auto"
-            onRefresh={handleConnectWhatsapp}
+            onRefresh={handleGenerateCode}
           />
         </div>
       </dialog>

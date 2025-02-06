@@ -1,3 +1,5 @@
+'use client';
+
 import { ChangeEvent, FormEvent, useCallback, useMemo, useState } from 'react';
 import Ajv, { JSONSchemaType } from 'ajv';
 import ajvErrors from 'ajv-errors';

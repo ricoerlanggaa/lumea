@@ -10,7 +10,7 @@ import {
   apiGetWhatsappSelectList,
 } from '@/services';
 
-const TOTAL_REFRESHED_CODE = 2;
+const TOTAL_REFRESHED_CODE = 20;
 
 const initialState: WhatsappState = {
   list: [],

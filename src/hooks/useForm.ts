@@ -84,7 +84,7 @@ export default function useForm<T extends object>(
     [handleChange, formState.values],
   );
 
-  const handleSubmit = useCallback(
+  const submitHandler = useCallback(
     // eslint-disable-next-line no-unused-vars
     (action: (data: T) => Promise<void> | void) => {
       return async (e: FormEvent<HTMLFormElement>) => {
@@ -106,5 +106,5 @@ export default function useForm<T extends object>(
     [formState.values, validateForm],
   );
 
-  return { register, formState, setValues, resetValues, handleSubmit };
+  return { register, formState, setValues, resetValues, submitHandler };
 }

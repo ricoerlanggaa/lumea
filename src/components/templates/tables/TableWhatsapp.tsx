@@ -108,14 +108,14 @@ export default function TableWhatsapp() {
                 placement="bottom-end"
                 items={[
                   {
-                    key: `edit-${Math.random()}`,
+                    key: `edit-${item.id}`,
                     label: item.status ? 'Disconnect' : 'Connect',
                     icon: item.status ? <Cancel01Icon /> : <Link04Icon />,
                     onClick: () =>
                       item.status ? handleDisconnect(item.id) : handleConnect(item.id),
                   },
                   {
-                    key: `delete-${Math.random()}`,
+                    key: `delete-${item.id}`,
                     label: 'Delete',
                     icon: <Delete02Icon />,
                     onClick: () => handleDelete(item.id),

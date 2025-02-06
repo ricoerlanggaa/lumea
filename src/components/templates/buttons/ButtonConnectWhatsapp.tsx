@@ -34,7 +34,7 @@ export default function ButtonConnectWhatsapp() {
   };
 
   useEffect(() => {
-    if (codeStatus === 'expired') {
+    if (codeStatus === 'connected') {
       const modal = document.getElementById(modalId) as HTMLDialogElement;
       if (modal) modal.close();
       showToast({
@@ -48,7 +48,7 @@ export default function ButtonConnectWhatsapp() {
 
   return (
     <>
-      <Button color="black" className="mr-auto mb-4" onClick={handleConnectWhatsapp}>
+      <Button color="black" className="mr-auto mb-4" onClick={() => handleConnectWhatsapp()}>
         <MetaIcon className="mr-2" /> Hubungkan Nomor
       </Button>
       <dialog id={modalId} className="modal">
@@ -101,7 +101,7 @@ export default function ButtonConnectWhatsapp() {
             icon="/images/logo/whatsapp.svg"
             iconSize={64}
             className="mx-auto"
-            onRefresh={handleGenerateCode}
+            onRefresh={() => handleGenerateCode()}
           />
         </div>
       </dialog>

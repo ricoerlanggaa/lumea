@@ -4,9 +4,8 @@ export interface FormCustomerServiceValues {
   personality: string;
 }
 export interface FormCustomerServiceProps {
-  action?: 'create' | 'update';
+  action: 'create' | 'update';
   itemId?: number;
-  value?: FormCustomerServiceValues;
 }
 export interface FormProductKnowledgeValues {
   customerServiceId: number;
@@ -15,16 +14,12 @@ export interface FormProductKnowledgeValues {
   description: string;
 }
 export interface FormProductKnowledgeProps {
-  action?: 'create' | 'update';
+  action: 'create' | 'update';
   itemId?: number;
-  value?: FormProductKnowledgeValues;
 }
 export interface FormUserLoginValues {
   email: string;
   password: string;
-}
-export interface FormUserLoginProps {
-  value?: FormUserLoginValues;
 }
 export interface FormUserRegisterValues {
   fullName: string;
@@ -32,7 +27,4 @@ export interface FormUserRegisterValues {
   email: string;
   password: string;
   confirmPassword: string;
-}
-export interface FormUserRegisterProps {
-  value?: FormUserRegisterValues;
 }

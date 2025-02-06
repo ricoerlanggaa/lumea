@@ -9,17 +9,8 @@ export interface CustomerServiceItem {
   label: string;
   personality: string;
 }
-export interface CustomerServiceCreate {
-  name: string;
-  label: string;
-  personality: string;
-}
-export interface CustomerServiceUpdate {
-  id: number;
-  name: string;
-  label: string;
-  personality: string;
-}
+export type CustomerServiceCreate = Omit<CustomerServiceItem, 'id'>;
+export type CustomerServiceUpdate = CustomerServiceItem;
 export type CustomerServiceSelectOptions = {
   key: number;
   label: string;

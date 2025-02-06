@@ -2,20 +2,18 @@
 
 import { useRouter } from 'next/navigation';
 import { Button, Input } from '@/components/atoms';
-import type { FormUserRegisterProps, FormUserRegisterValues } from '@/types/components/templates';
+import type { FormUserRegisterValues } from '@/types/components/templates';
 import useForm from '@/hooks/useForm';
 import useToast from '@/hooks/useToast';
 import { userRegisterSchema } from '@/utilities/validations/schema';
 import { apiUserRegister } from '@/services';
 
-export default function FormUserRegister({
-  value = { fullName: '', phoneNumber: '', email: '', password: '', confirmPassword: '' },
-}: FormUserRegisterProps) {
+export default function FormUserRegister() {
   const {
     register,
     formState: { errors, isLoading },
-    handleSubmit,
-  } = useForm(userRegisterSchema, { defaultValues: value });
+    submitHandler,
+  } = useForm(userRegisterSchema);
   const router = useRouter();
   const { showToast } = useToast();
 
@@ -41,7 +39,7 @@ export default function FormUserRegister({
     }
   };
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={submitHandler(onSubmit)}>
       <Input
         type="text"
         label="Nama Lengkap"

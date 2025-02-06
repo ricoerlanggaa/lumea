@@ -1,114 +1,100 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '@/store';
 import {
-  apiCreateCustomerService,
-  apiDeleteCustomerService,
-  apiGetCustomerServiceDetail,
-  apiGetCustomerServiceList,
-  apiGetCustomerServiceSelectList,
-  apiUpdateCustomerService,
+  apiCreateProductKnowledge,
+  apiDeleteProductKnowledge,
+  apiGetProductKnowledgeDetail,
+  apiGetProductKnowledgeList,
+  apiUpdateProductKnowledge,
 } from '@/services';
 import {
-  CustomerServiceCreate,
-  CustomerServiceItem,
-  CustomerServiceList,
-  CustomerServiceSelectOptions,
-  CustomerServiceState,
-  CustomerServiceUpdate,
+  ProductKnowledgeCreate,
+  ProductKnowledgeItem,
+  ProductKnowledgeList,
+  ProductKnowledgeState,
+  ProductKnowledgeUpdate,
 } from '@/types/store';
 
-const initialState: CustomerServiceState = {
+const initialState: ProductKnowledgeState = {
   list: [],
   item: {
     id: 0,
-    name: '',
+    customerServiceId: 0,
+    whatsappId: '',
     label: '',
-    personality: '',
+    description: '',
   },
-  selectOptions: [],
   isLoading: false,
 };
 
 export const fetchList = createAsyncThunk(
-  'customerService/fetchList',
+  'productKnowledge/fetchList',
   async (_, { rejectWithValue }) => {
-    const response = await apiGetCustomerServiceList();
+    const response = await apiGetProductKnowledgeList();
     if (!response.status) {
       return rejectWithValue(response.message);
     }
-    const result: CustomerServiceList = response.data.map((item) => ({
+    const result: ProductKnowledgeList = response.data.map((item) => ({
       id: item.id,
-      label: item.labels,
-      name: item.name,
-    }));
-    return result;
-  },
-);
-export const fetchSelectOptions = createAsyncThunk(
-  'customerService/fetchSelectOptions',
-  async (_, { rejectWithValue }) => {
-    const response = await apiGetCustomerServiceSelectList();
-    if (!response.status) {
-      return rejectWithValue(response.message);
-    }
-    const result: CustomerServiceSelectOptions = response.data.map((item) => ({
-      key: item.id,
-      label: item.name,
-      value: item.id,
+      customerServiceName: item.cs_name,
+      whatsappNumber: item.nomor,
+      label: item.label,
     }));
     return result;
   },
 );
 export const fetchItem = createAsyncThunk(
-  'customerService/fetchItem',
+  'productKnowledge/fetchItem',
   async (id: number, { rejectWithValue }) => {
-    const response = await apiGetCustomerServiceDetail(id);
+    const response = await apiGetProductKnowledgeDetail(id);
     if (!response.status) {
       return rejectWithValue(response.message);
     }
-    const result: CustomerServiceItem = {
+    const result: ProductKnowledgeItem = {
       id: response.data?.id ?? 0,
-      name: response.data?.labels ?? '',
-      label: response.data?.labels ?? '',
-      personality: response.data?.personality ?? '',
+      customerServiceId: response.data?.cs_id ?? 0,
+      whatsappId: response.data?.number_id ?? '',
+      label: response.data?.label ?? '',
+      description: response.data?.description ?? '',
     };
     return result;
   },
 );
 export const createItem = createAsyncThunk(
-  'customerService/createItem',
-  async (item: CustomerServiceCreate, { rejectWithValue }) => {
-    const response = await apiCreateCustomerService({
-      name: item.name,
-      label: item.label,
-      personality: item.personality,
+  'productKnowledge/createItem',
+  async (data: ProductKnowledgeCreate, { rejectWithValue }) => {
+    const response = await apiCreateProductKnowledge({
+      cs_id: data.customerServiceId,
+      number_id: data.whatsappId,
+      label: data.label,
+      description: data.description,
     });
     if (!response.status) {
       return rejectWithValue(response.message);
     }
-    const result = { ...item, id: response.data?.id ?? 0 };
-    return result;
+    return data;
   },
 );
 export const updateItem = createAsyncThunk(
-  'customerService/updateItem',
-  async (item: CustomerServiceUpdate, { rejectWithValue }) => {
-    const response = await apiUpdateCustomerService({
-      id: +item.id,
-      name: item.name,
-      label: item.label,
-      personality: item.personality,
+  'productKnowledge/updateItem',
+  async (data: ProductKnowledgeUpdate, { rejectWithValue }) => {
+    const response = await apiUpdateProductKnowledge({
+      id: data.id,
+      cs_id: data.customerServiceId,
+      number_id: data.whatsappId,
+      label: data.label,
+      description: data.description,
     });
     if (!response.status) {
       return rejectWithValue(response.message);
     }
-    return item;
+    return data;
   },
 );
 export const deleteItem = createAsyncThunk(
-  'customerService/deleteItem',
+  'productKnowledge/deleteItem',
   async (id: number, { rejectWithValue }) => {
-    const response = await apiDeleteCustomerService(id);
+    const response = await apiDeleteProductKnowledge(id);
     if (!response.status) {
       return rejectWithValue(response.message);
     }
@@ -116,8 +102,8 @@ export const deleteItem = createAsyncThunk(
   },
 );
 
-const customerServiceSlice = createSlice({
-  name: 'customerService',
+const productKnowledgeSlice = createSlice({
+  name: 'productKnowledge',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -132,19 +118,6 @@ const customerServiceSlice = createSlice({
         data.isLoading = false;
       })
       .addCase(fetchList.rejected, (state) => {
-        const data = state;
-        data.isLoading = false;
-      })
-      .addCase(fetchSelectOptions.pending, (state) => {
-        const data = state;
-        data.isLoading = true;
-      })
-      .addCase(fetchSelectOptions.fulfilled, (state, action) => {
-        const data = state;
-        data.selectOptions = action.payload;
-        data.isLoading = false;
-      })
-      .addCase(fetchSelectOptions.rejected, (state) => {
         const data = state;
         data.isLoading = false;
       })
@@ -191,7 +164,6 @@ const customerServiceSlice = createSlice({
       })
       .addCase(deleteItem.fulfilled, (state, action) => {
         const data = state;
-
         data.list = data.list.filter((item) => item.id !== action.payload.id);
         data.isLoading = false;
       })
@@ -202,9 +174,8 @@ const customerServiceSlice = createSlice({
   },
 });
 
-export const listState = (state: RootState) => state.customerService.list;
-export const selectOptionsState = (state: RootState) => state.customerService.selectOptions;
-export const itemState = (state: RootState) => state.customerService.item;
-export const isLoadingState = (state: RootState) => state.customerService.isLoading;
+export const listState = (state: RootState) => state.productKnowledge.list;
+export const itemState = (state: RootState) => state.productKnowledge.item;
+export const isLoadingState = (state: RootState) => state.productKnowledge.isLoading;
 
-export default customerServiceSlice.reducer;
+export default productKnowledgeSlice.reducer;

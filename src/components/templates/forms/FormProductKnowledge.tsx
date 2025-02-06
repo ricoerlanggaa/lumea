@@ -1,98 +1,100 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Select, TextArea } from '@/components/atoms';
-import type { SelectOption } from '@/types/components/atoms';
+import { Button, Input, Select, TextArea } from '@/components/atoms';
 import type {
   FormProductKnowledgeProps,
   FormProductKnowledgeValues,
 } from '@/types/components/templates';
 import useForm from '@/hooks/useForm';
 import useToast from '@/hooks/useToast';
-import { productKnowledgeSchema } from '@/utilities/validations/schema';
+import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
 import {
-  apiCreateProductKnowledge,
-  apiGetCustomerServiceSelectList,
-  apiGetWhatsappSelectList,
-  apiUpdateProductKnowledge,
-} from '@/services';
+  createItem,
+  fetchItem,
+  fetchList,
+  isLoadingState,
+  itemState,
+  updateItem,
+} from '@/store/productKnowledgeSlice';
+import {
+  selectOptionsState as whatsappSelectOptions,
+  fetchSelectOptions as fetchWhatsappSelectOptions,
+} from '@/store/whatsappSlice';
+import {
+  selectOptionsState as customerServiceSelectOptions,
+  fetchSelectOptions as fetchCustomerServiceSelectOptions,
+} from '@/store/customerServiceSlice';
+import { productKnowledgeSchema } from '@/utilities/validations/schema';
 
-export default function FormProductKnowledge({
-  action,
-  value = { customerServiceId: 0, whatsappId: '', label: '', description: '' },
-  itemId = 0,
-}: FormProductKnowledgeProps) {
+export default function FormProductKnowledge({ action, itemId = 0 }: FormProductKnowledgeProps) {
+  const dispatch = useAppDispatch();
+  const item = useAppSelector(itemState);
+  const whatsappOptions = useAppSelector(whatsappSelectOptions);
+  const customerServiceOptions = useAppSelector(customerServiceSelectOptions);
+  const isLoading = useAppSelector(isLoadingState);
+
   const {
     register,
-    formState: { errors, isLoading },
-    handleSubmit,
-  } = useForm(productKnowledgeSchema, { defaultValues: value });
+    formState: { errors },
+    setValues,
+    resetValues,
+    submitHandler,
+  } = useForm(productKnowledgeSchema);
   const router = useRouter();
   const { showToast } = useToast();
 
-  const [customerServiceOptions, setCustomerServiceOptions] = useState<SelectOption[]>();
-  const [whatsappOptions, setWhatsappOptions] = useState<SelectOption[]>();
-
-  const onSubmit = async (data: FormProductKnowledgeValues) => {
-    const response =
-      action === 'update'
-        ? await apiUpdateProductKnowledge({
-            id: +itemId,
-            cs_id: data.customerServiceId,
-            number_id: data.whatsappId,
-            label: data.label ?? '',
-            description: data.description,
-          })
-        : await apiCreateProductKnowledge({
-            cs_id: +data.customerServiceId,
-            number_id: data.whatsappId,
-            label: data.label ?? '',
-            description: data.description,
-          });
-    if (response.status) {
+  const handleSubmit = async (data: FormProductKnowledgeValues) => {
+    try {
+      if (action === 'update') {
+        await dispatch(updateItem({ ...data, id: itemId })).unwrap();
+      } else {
+        await dispatch(createItem(data)).unwrap();
+      }
       showToast({
         variant: 'success',
-        message: `Product Knowledge berhasil ${action === 'update' ? 'diperbarui' : 'ditambahkan'}!`,
+        message: `Customer service berhasil ${action === 'update' ? 'diperbarui' : 'ditambahkan'}!`,
+        duration: 3000,
       });
-      router.push('/product-setup/product-knowledge');
-    } else {
+      dispatch(fetchList());
+      router.push('/product-setup/ai-customer-service');
+    } catch (error) {
       showToast({
         variant: 'error',
-        message: response.message || 'Something went wrong!',
+        message: String(error),
+        duration: 3000,
       });
     }
   };
+  const fetchDetail = useCallback(() => {
+    if (itemId) dispatch(fetchItem(itemId));
+  }, [dispatch, itemId]);
 
   useEffect(() => {
-    async function getCustomerServiceOptions() {
-      const response = await apiGetCustomerServiceSelectList();
-      if (response.data) {
-        const options = response.data.map((item) => ({
-          key: item.id,
-          label: item.name,
-          value: String(item.id),
-        }));
-        setCustomerServiceOptions(options);
-      }
-    }
-    getCustomerServiceOptions();
+    fetchDetail();
+  }, [fetchDetail]);
 
-    async function getWhatsappOptions() {
-      const response = await apiGetWhatsappSelectList();
-      if (response.data) {
-        const options = response.data.map((item) => ({
-          key: item.id,
-          label: item.number,
-          value: item.id,
-        }));
-        setWhatsappOptions(options);
-      }
+  useEffect(() => {
+    dispatch(fetchCustomerServiceSelectOptions());
+    dispatch(fetchWhatsappSelectOptions());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (action === 'update' && item) {
+      setValues({
+        customerServiceId: item.customerServiceId,
+        whatsappId: item.whatsappId,
+        label: item.label,
+        description: item.description,
+      });
+    } else {
+      resetValues();
     }
-    getWhatsappOptions();
-  }, []);
+  }, [action, item, resetValues, setValues]);
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={submitHandler(handleSubmit)}>
       <Select
         label="Customer Service"
         placeholder="Pilih Customer Service"
@@ -109,8 +111,16 @@ export default function FormProductKnowledge({
         helperText={errors.whatsappId}
         {...register('whatsappId')}
       />
+      <Input
+        label="Label (Opsional)"
+        placeholder="Masukkan Label Product Anda"
+        hasError={!!errors.label}
+        helperText={errors.label}
+        {...register('label')}
+      />
       <TextArea
-        label="Product Knowledge"
+        label="Deskripsi"
+        placeholder="Masukkan Deskripsi Product Anda"
         rows={5}
         hasError={!!errors.description}
         helperText={errors.description}

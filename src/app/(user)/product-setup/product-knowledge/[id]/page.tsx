@@ -1,8 +1,6 @@
 import { Typography } from '@/components/atoms';
 import { Breadcrumb } from '@/components/molecules';
 import { FormProductKnowledge } from '@/components/templates';
-import type { FormProductKnowledgeValues } from '@/types/components/templates';
-import { apiGetProductKnowledgeDetail } from '@/services';
 
 const breadcrumbItems = [
   { key: 1, label: 'Product Setup' },
@@ -15,13 +13,6 @@ export default async function EditProductKnowledgePage({
   params: Promise<{ id: number }>;
 }) {
   const { id } = await params;
-  const response = await apiGetProductKnowledgeDetail(id);
-  const productKnowledge: FormProductKnowledgeValues = {
-    customerServiceId: response.data?.cs_id ?? 0,
-    whatsappId: response.data?.number_id ?? '',
-    label: response.data?.label ?? '',
-    description: response.data?.description ?? '',
-  };
   return (
     <>
       <Breadcrumb items={breadcrumbItems} />
@@ -31,7 +22,7 @@ export default async function EditProductKnowledgePage({
             Edit Product Knowledge
           </Typography>
           <hr className="mb-4" />
-          <FormProductKnowledge action="update" itemId={id} value={productKnowledge} />
+          <FormProductKnowledge action="update" itemId={id} />
         </div>
       </div>
     </>

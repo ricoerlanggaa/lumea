@@ -2,18 +2,18 @@
 
 import { useRouter } from 'next/navigation';
 import { Button, Input } from '@/components/atoms';
-import type { FormUserLoginProps, FormUserLoginValues } from '@/types/components/templates';
+import type { FormUserLoginValues } from '@/types/components/templates';
 import useForm from '@/hooks/useForm';
 import useToast from '@/hooks/useToast';
 import { userLoginSchema } from '@/utilities/validations/schema';
 import { apiUserLogin } from '@/services';
 
-export default function FormUserLogin({ value = { email: '', password: '' } }: FormUserLoginProps) {
+export default function FormUserLogin() {
   const {
     register,
     formState: { errors, isLoading },
-    handleSubmit,
-  } = useForm<FormUserLoginValues>(userLoginSchema, { defaultValues: value });
+    submitHandler,
+  } = useForm<FormUserLoginValues>(userLoginSchema);
   const router = useRouter();
   const { showToast } = useToast();
 
@@ -36,7 +36,7 @@ export default function FormUserLogin({ value = { email: '', password: '' } }: F
     }
   };
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={submitHandler(onSubmit)}>
       <Input
         type="email"
         label="Email"

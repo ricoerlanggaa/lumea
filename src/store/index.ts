@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import customerServiceReducer from './customerServiceSlice';
+import productKnowledgeReducer from './productKnowledgeSlice';
 import whatsappReducer from './whatsappSlice';
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       customerService: customerServiceReducer,
+      productKnowledge: productKnowledgeReducer,
       whatsapp: whatsappReducer,
     },
   });

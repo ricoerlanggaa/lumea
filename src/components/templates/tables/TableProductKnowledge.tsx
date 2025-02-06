@@ -1,50 +1,53 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { Delete02Icon, MoreHorizontalCircle01Icon, PencilEdit02Icon } from 'hugeicons-react';
 import { Typography } from '@/components/atoms';
 import { DropdownMenu } from '@/components/molecules';
-import type {
-  TableProductKnowledgeItem,
-  TableProductKnowledgeProps,
-} from '@/types/components/templates';
 import useToast from '@/hooks/useToast';
+import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
+import { deleteItem, fetchList, listState } from '@/store/productKnowledgeSlice';
 import { formatPhoneNumber } from '@/utilities/formats/string';
-import { apiDeleteProductKnowledge } from '@/services';
 
-export default function TableProductKnowledge({ items = [] }: TableProductKnowledgeProps) {
+export default function TableProductKnowledge() {
+  const dispatch = useAppDispatch();
+  const list = useAppSelector(listState);
+
   const { showToast } = useToast();
 
-  const [productKnowledgeList, setProductKnowledgeList] =
-    useState<TableProductKnowledgeItem[]>(items);
-
-  const handleDeleteProductKnowledge = async (id: number) => {
-    const response = await apiDeleteProductKnowledge(id);
-    if (response.status) {
+  const handleDelete = async (id: number) => {
+    try {
+      await dispatch(deleteItem(id)).unwrap();
       showToast({
         variant: 'success',
         message: 'Product Knowledge berhasil dihapus!',
+        duration: 3000,
       });
-      setProductKnowledgeList((prevItems) => prevItems.filter((item) => item.id !== id));
-    } else {
+    } catch (error) {
       showToast({
         variant: 'error',
-        message: response.message || 'Something went wrong!',
+        message: String(error),
+        duration: 3000,
       });
     }
   };
+
+  useEffect(() => {
+    dispatch(fetchList());
+  }, [dispatch]);
+
   return (
     <table className="table w-full">
       <thead>
         <tr className="bg-base-200">
-          <th className="border">AI Customer Service</th>
+          <th className="border">Customer Service</th>
           <th className="border">Nomor Whatsapp</th>
           <th className="border">Label</th>
           <th className="border text-center">Aksi</th>
         </tr>
       </thead>
       <tbody>
-        {productKnowledgeList?.map((item) => (
+        {list.map((item) => (
           <tr key={item.id}>
             <td className="border">{item.customerServiceName}</td>
             <td className="border">
@@ -71,7 +74,7 @@ export default function TableProductKnowledge({ items = [] }: TableProductKnowle
                     key: `delete-${item.id}`,
                     label: 'Hapus',
                     icon: <Delete02Icon />,
-                    onClick: () => handleDeleteProductKnowledge(item.id),
+                    onClick: () => handleDelete(item.id),
                   },
                 ]}
                 size="sm"

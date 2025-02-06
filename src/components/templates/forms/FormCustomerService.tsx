@@ -14,6 +14,7 @@ import {
   itemState,
   isLoadingState,
   updateItem,
+  fetchList,
 } from '@/store/customerServiceSlice';
 import { useCallback, useEffect } from 'react';
 import useToast from '@/hooks/useToast';
@@ -29,7 +30,7 @@ export default function FormCustomerService({ itemId = 0, action }: FormCustomer
     formState: { errors },
     setValues,
     resetValues,
-    handleSubmit,
+    submitHandler,
   } = useForm(customerServiceSchema);
   const { showToast } = useToast();
   const router = useRouter();
@@ -68,6 +69,7 @@ export default function FormCustomerService({ itemId = 0, action }: FormCustomer
         message: `Customer service berhasil ${action === 'update' ? 'diperbarui' : 'ditambahkan'}!`,
         duration: 3000,
       });
+      dispatch(fetchList());
       router.push('/product-setup/ai-customer-service');
     } catch (error) {
       showToast({
@@ -79,7 +81,7 @@ export default function FormCustomerService({ itemId = 0, action }: FormCustomer
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={submitHandler(onSubmit)}>
       <Input
         label="Nama"
         placeholder="Masukkan Nama Customer Service Anda"

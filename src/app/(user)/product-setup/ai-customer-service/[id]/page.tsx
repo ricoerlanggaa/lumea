@@ -1,5 +1,5 @@
-import { Typography } from '@/components/atoms';
 import { Breadcrumb } from '@/components/molecules';
+import { Card } from '@/components/organism';
 import { FormCustomerService } from '@/components/templates';
 
 const breadcrumbItems = [
@@ -16,15 +16,9 @@ export default async function EditAICustomerServicePage({
   return (
     <>
       <Breadcrumb items={breadcrumbItems} />
-      <div className="card h-full overflow-y-auto bg-base-100">
-        <div className="card-body">
-          <Typography as="h1" variant="h4" className="card-title mb-2">
-            Edit AI Customer Service
-          </Typography>
-          <hr className="mb-4" />
-          <FormCustomerService itemId={id} action="update" />
-        </div>
-      </div>
+      <Card title="Edit AI Customer Service" className="h-full overflow-y-auto">
+        <FormCustomerService itemId={id} action="update" />
+      </Card>
     </>
   );
 }

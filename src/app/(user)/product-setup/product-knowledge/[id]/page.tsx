@@ -1,5 +1,5 @@
-import { Typography } from '@/components/atoms';
 import { Breadcrumb } from '@/components/molecules';
+import { Card } from '@/components/organism';
 import { FormProductKnowledge } from '@/components/templates';
 
 const breadcrumbItems = [
@@ -16,15 +16,9 @@ export default async function EditProductKnowledgePage({
   return (
     <>
       <Breadcrumb items={breadcrumbItems} />
-      <div className="card h-full overflow-y-auto bg-base-100">
-        <div className="card-body">
-          <Typography as="h1" variant="h4" className="card-title mb-2">
-            Edit Product Knowledge
-          </Typography>
-          <hr className="mb-4" />
-          <FormProductKnowledge action="update" itemId={id} />
-        </div>
-      </div>
+      <Card title="Edit Product Knowledge" className="h-full overflow-y-auto">
+        <FormProductKnowledge action="update" itemId={id} />
+      </Card>
     </>
   );
 }

@@ -81,7 +81,7 @@ export default function CardCustomerService() {
       ))}
       <Link
         href="/product-setup/ai-customer-service/create"
-        className="card h-40 max-w-36 bg-base-200 border-primary hover:cursor-pointer items-center border-2 border-dashed"
+        className=" flex flex-col items-center h-40 max-w-36 bg-base-200 rounded-2xl border-2 border-primary border-dashed hover:cursor-pointer"
         aria-label="create ai customer service"
       >
         <PlusSignIcon size={42} className="my-auto" />

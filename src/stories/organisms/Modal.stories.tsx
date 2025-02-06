@@ -16,6 +16,11 @@ const meta: Meta<typeof Modal> = {
       table: { type: { summary: 'string' } },
       description: 'The modal dialog title',
     },
+    children: {
+      control: { type: 'text' },
+      table: { type: { summary: 'ReactNode' } },
+      description: 'The modal dialog content',
+    },
   },
 };
 
@@ -26,6 +31,7 @@ export const Default: Story = {
   args: {
     id: 'storybook-modal',
     title: 'Example Modal',
+    children: 'This is a sample modal content.',
   },
   render: (args) => {
     const { isOpen, openModal } = useModal(args.id);
@@ -34,9 +40,7 @@ export const Default: Story = {
         <button type="button" onClick={openModal} className="btn btn-primary">
           Open Modal
         </button>
-        <Modal open={isOpen} {...args}>
-          <p>This is a sample modal content.</p>
-        </Modal>
+        <Modal open={isOpen} {...args} />
       </>
     );
   },
@@ -53,7 +57,7 @@ export default function Example() {
     <>
       <button type="button" onClick={openModal} className="btn btn-primary">Open Modal</button>
       <Modal id="storybook-modal" title="Example Modal" open={isOpen}>
-        <p>This is a sample modal content.</p>
+        This is a sample modal content.
       </Modal>
     </>
   );

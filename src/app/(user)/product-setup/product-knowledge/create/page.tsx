@@ -17,7 +17,7 @@ export default async function CreateProductKnowledgePage() {
             Product Knowledge
           </Typography>
           <hr className="mb-4" />
-          <FormProductKnowledge />
+          <FormProductKnowledge action="create" />
         </div>
       </div>
     </>

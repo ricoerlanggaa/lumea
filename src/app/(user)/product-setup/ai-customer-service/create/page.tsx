@@ -17,7 +17,7 @@ export default function CreateAICustomerServicePage() {
             AI Customer Service
           </Typography>
           <hr className="mb-4" />
-          <FormCustomerService />
+          <FormCustomerService action="create" />
         </div>
       </div>
     </>

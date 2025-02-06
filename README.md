@@ -9,6 +9,7 @@ Lumea is built with the following technologies:
 - **[Next.js](https://nextjs.org)** - A React framework for fast and efficient rendering.
 - **[TypeScript](https://www.typescriptlang.org)** - A superset of JavaScript for safer development.
 - **[Tailwind CSS](https://tailwindcss.com)** - A utility-first CSS framework.
+- **[Docker](https://www.docker.com)** - Containerization for easier deployment.
 - **[Jest](https://jestjs.io)** - A JavaScript testing framework.
 - **[Redux Toolkit](https://redux-toolkit.js.org)** - State management for a structured application.
 - **[Axios](https://axios-http.com)** - An HTTP client for API communication.
@@ -42,6 +43,21 @@ Access the application at [http://localhost:3000](http://localhost:3000).
 ```sh
 $ npm run build
 $ npm start
+```
+
+### Running with Docker
+
+Ensure you have **Docker** and **Docker Compose** installed.
+
+```sh
+# Build and start the container
+$ docker-compose up --build
+```
+Access the application at [http://localhost:3000](http://localhost:3000).
+
+To stop the container:
+```sh
+$ docker-compose down
 ```
 
 ## 🧪 Testing

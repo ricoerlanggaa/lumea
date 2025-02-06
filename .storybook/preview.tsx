@@ -24,6 +24,10 @@ const preview: Preview = {
     ),
   ],
   parameters: {
+    backgrounds: {
+      values: [{ name: 'lumea-light', value: '#F3F4F6' }],
+      default: 'lumea-light',
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,

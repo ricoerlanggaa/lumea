@@ -11,14 +11,17 @@ type FormState<T> = {
   isSubmitted: boolean;
 };
 
-const ajv = new Ajv({ allErrors: true, $data: true });
+const ajv = new Ajv({ allErrors: true, strict: false, $data: true });
 ajvErrors(ajv);
 
 export default function useForm<T extends object>(
   schema: JSONSchemaType<T>,
   options?: { defaultValues?: T },
 ) {
-  const defaultValues = options?.defaultValues ?? ({} as T);
+  const defaultValues = useMemo(
+    () => options?.defaultValues ?? ({} as T),
+    [options?.defaultValues],
+  );
   const [formState, setFormState] = useState<FormState<T>>({
     values: defaultValues,
     errors: {},
@@ -30,11 +33,14 @@ export default function useForm<T extends object>(
     const validate = ajv.compile(schema);
     const valid = validate(formState.values);
 
-    if (!valid) {
-      const errors = validate.errors?.reduce<Partial<Record<keyof T, string>>>(
+    if (!valid && validate.errors) {
+      const errors = validate.errors.reduce<Partial<Record<keyof T, string>>>(
         (acc, err) => {
-          const field = err.instancePath.slice(1) as keyof T;
-          if (!acc[field]) {
+          const field = (err.instancePath.slice(1) ||
+            err.params?.errors?.[0].params.missingProperty ||
+            err.params?.missingProperty) as keyof T;
+
+          if (field && !acc[field]) {
             acc[field] = err.message || 'Invalid value';
           }
           return acc;
@@ -42,7 +48,7 @@ export default function useForm<T extends object>(
         {} as Partial<Record<keyof T, string>>,
       );
 
-      setFormState((prev) => ({ ...prev, errors: errors || {} }));
+      setFormState((prev) => ({ ...prev, errors }));
       return false;
     }
 
@@ -57,9 +63,14 @@ export default function useForm<T extends object>(
   const resetValues = useCallback(() => {
     setFormState((prev) => ({
       ...prev,
-      values: {} as T,
+      values: Object.fromEntries(
+        Object.entries(defaultValues).map(([key, value]) => {
+          if (typeof value === 'number') return [key, 0];
+          return [key, ''];
+        }),
+      ) as T,
     }));
-  }, []);
+  }, [defaultValues]);
 
   const handleChange = useCallback(
     (name: keyof T) =>

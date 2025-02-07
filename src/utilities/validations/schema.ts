@@ -26,6 +26,12 @@ export const userLoginSchema: JSONSchemaType<FormUserLoginValues> = {
   },
   required: ['email', 'password'],
   additionalProperties: false,
+  errorMessage: {
+    required: {
+      email: 'Email is required',
+      password: 'Password is required',
+    },
+  },
 } as const;
 
 export const userRegisterSchema: JSONSchemaType<FormUserRegisterValues> = {
@@ -59,14 +65,20 @@ export const userRegisterSchema: JSONSchemaType<FormUserRegisterValues> = {
       const: {
         $data: '1/password',
       } as unknown as string,
-      errorMessage: {
-        minLength: 'Confirm password is required.',
-        const: 'Confirm password must match password.',
-      },
+      errorMessage: 'Confirm password must match password.',
     },
   },
   required: ['fullName', 'phoneNumber', 'email', 'password', 'confirmPassword'],
   additionalProperties: false,
+  errorMessage: {
+    required: {
+      fullName: 'Full name is required',
+      phoneNumber: 'Phone number is required',
+      email: 'Email is required',
+      password: 'Password is required',
+      confirmPassword: 'Confirm password is required',
+    },
+  },
 } as const;
 
 export const customerServiceSchema: JSONSchemaType<FormCustomerServiceValues> = {
@@ -74,8 +86,6 @@ export const customerServiceSchema: JSONSchemaType<FormCustomerServiceValues> = 
   properties: {
     name: {
       type: 'string',
-      minLength: 3,
-      errorMessage: 'Name should have at least 3 characters.',
     },
     label: {
       type: 'string',
@@ -88,6 +98,12 @@ export const customerServiceSchema: JSONSchemaType<FormCustomerServiceValues> = 
   },
   required: ['name', 'personality'],
   additionalProperties: false,
+  errorMessage: {
+    required: {
+      name: 'Name is required',
+      personality: 'Personality is required',
+    },
+  },
 } as const;
 
 export const productKnowledgeSchema: JSONSchemaType<FormProductKnowledgeValues> = {
@@ -95,13 +111,9 @@ export const productKnowledgeSchema: JSONSchemaType<FormProductKnowledgeValues> 
   properties: {
     customerServiceId: {
       type: 'number',
-      minLength: 1,
-      errorMessage: 'Customer service is required.',
     },
     whatsappId: {
       type: 'string',
-      minLength: 1,
-      errorMessage: 'Whatsapp number is required.',
     },
     label: {
       type: 'string',
@@ -109,9 +121,16 @@ export const productKnowledgeSchema: JSONSchemaType<FormProductKnowledgeValues> 
     description: {
       type: 'string',
       minLength: 100,
-      errorMessage: 'Personality should have at least 100 characters.',
+      errorMessage: 'Description should have at least 100 characters.',
     },
   },
   required: ['customerServiceId', 'whatsappId', 'description'],
   additionalProperties: false,
+  errorMessage: {
+    required: {
+      customerServiceId: 'Customer service is required',
+      whatsappId: 'Whatsapp number is required',
+      description: 'Description is required',
+    },
+  },
 } as const;

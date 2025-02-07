@@ -149,14 +149,9 @@ const whatsappSlice = createSlice({
         const data = state;
         data.isLoading = false;
       })
-      .addCase(refreshCode.pending, (state) => {
-        const data = state;
-        data.codeStatus = 'pending';
-      })
       .addCase(refreshCode.fulfilled, (state, action) => {
         const data = state;
         if (data.remainingExpiredCode > 0 && !action.payload.isConnected) {
-          data.codeStatus = 'active';
           data.code = action.payload.code;
           data.remainingExpiredCode -= 1;
         } else if (action.payload.isConnected) {

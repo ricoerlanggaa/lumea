@@ -16,7 +16,7 @@ export default function QRCode({
   onRefresh,
   ...rest
 }: QRCodeProps) {
-  const qrCodeClasses = classNames('relative border-2 rounded-lg w-fit p-2', className);
+  const qrCodeClasses = classNames('relative border-2 rounded-lg w-fit bg-white p-2', className);
   const imageSettings = icon
     ? { excavate: false, width: iconSize, height: iconSize, src: icon }
     : undefined;
@@ -38,7 +38,7 @@ export default function QRCode({
                 className="btn btn-sm btn-info btn-link pl-0"
                 onClick={onRefresh}
               >
-                <RefreshIcon size={14} />
+                <RefreshIcon size={16} />
                 Refresh
               </button>
             </div>

@@ -16,6 +16,7 @@ export default function Select({
   const selectId = useId();
   const selectClasses = classNames('select select-bordered', hasError && 'select-error', className);
   const helperTextClasses = classNames('label-text-alt', hasError && 'text-error');
+  const computedPlaceholder = placeholder ?? (typeof value === 'number' ? 0 : '');
   return (
     <div className="form-control">
       {label && (
@@ -26,16 +27,16 @@ export default function Select({
       <select
         id={selectId}
         className={selectClasses}
-        value={value || ''}
+        value={value}
         disabled={disabled}
         aria-invalid={hasError}
         aria-describedby={helperText ? `${selectId}-helperText` : undefined}
         aria-disabled={disabled}
         {...rest}
       >
-        {placeholder && (
+        {computedPlaceholder !== undefined && (
           <option value="" disabled>
-            {placeholder}
+            {computedPlaceholder}
           </option>
         )}
         {options?.map((item) => (

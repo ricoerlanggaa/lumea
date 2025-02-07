@@ -18,8 +18,8 @@ export default async function ProductKnowledgePage() {
           href="/product-setup/product-knowledge/create"
           className="mr-auto mb-4"
         >
-          <Add01Icon size={18} className="mr-2" />
-          Tambahkan Knowledge
+          <Add01Icon size={20} className="mr-1" />
+          Tambah Knowledge
         </Button>
         <TableProductKnowledge />
       </Card>

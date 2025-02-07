@@ -46,7 +46,7 @@ export default function CardCustomerService() {
       {list.map((item) => (
         <div
           key={item.id}
-          className="relative grid place-items-center py-4 h-40 max-w-36 bg-base-200 border-2 border-primary rounded-2xl"
+          className="relative grid place-items-center py-4 h-40 max-w-36 bg-base-200 border border-primary rounded-xl"
         >
           <DropdownMenu
             bgColor="secondary"
@@ -68,7 +68,7 @@ export default function CardCustomerService() {
             size="sm"
             className="absolute top-2 right-1"
           >
-            <MoreVerticalCircle01Icon size={18} />
+            <MoreVerticalCircle01Icon size={20} />
           </DropdownMenu>
           <Avatar alt={item.name} size="lg" className="mb-2" />
           <Typography variant="body-small" weight="semibold" className="line-clamp-1">
@@ -81,7 +81,7 @@ export default function CardCustomerService() {
       ))}
       <Link
         href="/product-setup/ai-customer-service/create"
-        className=" flex flex-col items-center h-40 max-w-36 bg-base-200 rounded-2xl border-2 border-primary border-dashed hover:cursor-pointer"
+        className=" flex flex-col items-center h-40 max-w-36 bg-base-200 rounded-xl border-2 border-primary border-dashed hover:cursor-pointer"
         aria-label="create ai customer service"
       >
         <PlusSignIcon size={42} className="my-auto" />

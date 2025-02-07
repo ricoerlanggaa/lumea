@@ -2,8 +2,9 @@
 
 import { useEffect } from 'react';
 import { Delete02Icon, MoreHorizontalCircle01Icon, PencilEdit02Icon } from 'hugeicons-react';
-import { Typography } from '@/components/atoms';
 import { DropdownMenu } from '@/components/molecules';
+import { Table } from '@/components/organism';
+import type { TableColumns } from '@/types/components/organisms';
 import useToast from '@/hooks/useToast';
 import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
 import { deleteItem, fetchList, listState } from '@/store/productKnowledgeSlice';
@@ -31,60 +32,45 @@ export default function TableProductKnowledge() {
       });
     }
   };
+  const action = (id: number) => (
+    <DropdownMenu
+      placement="bottom-end"
+      items={[
+        {
+          key: `edit-${id}`,
+          label: 'Edit',
+          href: `/product-setup/product-knowledge/${id}`,
+          icon: <PencilEdit02Icon />,
+        },
+        {
+          key: `delete-${id}`,
+          label: 'Hapus',
+          icon: <Delete02Icon />,
+          onClick: () => handleDelete(id),
+        },
+      ]}
+      size="sm"
+    >
+      <MoreHorizontalCircle01Icon size={16} />
+    </DropdownMenu>
+  );
+  const columns: TableColumns<string> = [
+    { key: 'customerServiceName', label: 'Customer Service' },
+    { key: 'whatsappNumber', label: 'Nomor Whatsapp' },
+    { key: 'label', label: 'Label' },
+    { key: 'action', label: 'Aksi', align: 'center' },
+  ];
+  const items = list.map((item) => ({
+    key: item.id,
+    customerServiceName: item.customerServiceName,
+    whatsappNumber: formatPhoneNumber(item.whatsappNumber),
+    label: item.label,
+    action: action(item.id),
+  }));
 
   useEffect(() => {
     dispatch(fetchList());
   }, [dispatch]);
 
-  return (
-    <table className="table w-full">
-      <thead>
-        <tr className="bg-base-200">
-          <th className="border">Customer Service</th>
-          <th className="border">Nomor Whatsapp</th>
-          <th className="border">Label</th>
-          <th className="border text-center">Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        {list.map((item) => (
-          <tr key={item.id}>
-            <td className="border">{item.customerServiceName}</td>
-            <td className="border">
-              <Typography as="span" className="line-clamp-1">
-                {formatPhoneNumber(item.whatsappNumber)}
-              </Typography>
-            </td>
-            <td className="border">
-              <Typography as="span" className="line-clamp-1">
-                {item.label}
-              </Typography>
-            </td>
-            <td className="border text-center">
-              <DropdownMenu
-                placement="bottom-end"
-                items={[
-                  {
-                    key: `edit-${item.id}`,
-                    label: 'Edit',
-                    href: `/product-setup/product-knowledge/${item.id}`,
-                    icon: <PencilEdit02Icon />,
-                  },
-                  {
-                    key: `delete-${item.id}`,
-                    label: 'Hapus',
-                    icon: <Delete02Icon />,
-                    onClick: () => handleDelete(item.id),
-                  },
-                ]}
-                size="sm"
-              >
-                <MoreHorizontalCircle01Icon size={16} />
-              </DropdownMenu>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
+  return <Table columns={columns} items={items} />;
 }

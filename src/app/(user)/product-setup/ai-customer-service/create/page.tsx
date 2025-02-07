@@ -11,7 +11,7 @@ export default function CreateAICustomerServicePage() {
   return (
     <>
       <Breadcrumb items={breadcrumbItems} />
-      <Card title="AI Customer Service">
+      <Card title="AI Customer Service" className="h-full overflow-y-auto">
         <FormCustomerService action="create" />
       </Card>
     </>

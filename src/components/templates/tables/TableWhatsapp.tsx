@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import {
   Cancel01Icon,
   Delete02Icon,
@@ -7,8 +8,10 @@ import {
   MoreHorizontalCircle01Icon,
 } from 'hugeicons-react';
 import { DropdownMenu } from '@/components/molecules';
+import { TableColumns } from '@/types/components/organisms';
+import { Table } from '@/components/organism';
 import useToast from '@/hooks/useToast';
-import { classNames, formatPhoneNumber } from '@/utilities/formats/string';
+import { formatPhoneNumber } from '@/utilities/formats/string';
 import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
 import {
   connectNumber,
@@ -17,7 +20,7 @@ import {
   fetchList,
   listState,
 } from '@/store/whatsappSlice';
-import { useEffect } from 'react';
+import { Badge } from '@/components/atoms';
 
 export default function TableWhatsapp() {
   const dispatch = useAppDispatch();
@@ -73,62 +76,47 @@ export default function TableWhatsapp() {
       });
     }
   };
+  const action = (id: string, type: 'connect' | 'disconnect') => (
+    <DropdownMenu
+      placement="bottom-end"
+      items={[
+        {
+          key: `edit-${id}`,
+          label: type === 'connect' ? 'Connect' : 'Disconnect',
+          icon: type === 'connect' ? <Link04Icon /> : <Cancel01Icon />,
+          onClick: () => (type === 'connect' ? handleConnect(id) : handleDisconnect(id)),
+        },
+        {
+          key: `delete-${id}`,
+          label: 'Delete',
+          icon: <Delete02Icon />,
+          onClick: () => handleDelete(id),
+        },
+      ]}
+      size="sm"
+    >
+      <MoreHorizontalCircle01Icon size={16} />
+    </DropdownMenu>
+  );
+  const columns: TableColumns<string> = [
+    { key: 'whatsappNumber', label: 'Nomor Whatsapp' },
+    { key: 'status', label: 'Status' },
+    { key: 'action', label: 'Aksi', align: 'center' },
+  ];
+  const items = list.map((item) => ({
+    key: item.id,
+    whatsappNumber: formatPhoneNumber(item.number),
+    status: (
+      <Badge color={item.status === 'connected' ? 'success' : 'error'} outline>
+        {item.status}
+      </Badge>
+    ),
+    action: action(item.id, item.status === 'connected' ? 'disconnect' : 'connect'),
+  }));
 
   useEffect(() => {
     dispatch(fetchList());
   }, [dispatch]);
 
-  return (
-    <table className="table w-full">
-      <thead>
-        <tr className="bg-base-200">
-          <th className="border">Nomor Whatsapp</th>
-          <th className="border">Status</th>
-          <th className="border text-center">Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        {list.map((item) => (
-          <tr key={item.id}>
-            <td className="border">
-              <span className="line-clamp-1">{formatPhoneNumber(item.number)}</span>
-            </td>
-            <td className="border">
-              <div
-                className={classNames(
-                  'badge badge-outline capitalize',
-                  item.status === 'connected' ? 'badge-success' : 'badge-error',
-                )}
-              >
-                {item.status}
-              </div>
-            </td>
-            <td className="border text-center">
-              <DropdownMenu
-                placement="bottom-end"
-                items={[
-                  {
-                    key: `edit-${item.id}`,
-                    label: item.status ? 'Disconnect' : 'Connect',
-                    icon: item.status ? <Cancel01Icon /> : <Link04Icon />,
-                    onClick: () =>
-                      item.status ? handleDisconnect(item.id) : handleConnect(item.id),
-                  },
-                  {
-                    key: `delete-${item.id}`,
-                    label: 'Delete',
-                    icon: <Delete02Icon />,
-                    onClick: () => handleDelete(item.id),
-                  },
-                ]}
-                size="sm"
-              >
-                <MoreHorizontalCircle01Icon size={16} />
-              </DropdownMenu>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
+  return <Table columns={columns} items={items} />;
 }

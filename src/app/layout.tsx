@@ -27,14 +27,12 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <StoreProvider>
-      <ToastProvider>
-        <html lang="id" data-theme="lumea-light">
-          <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-            {children}
-          </body>
-        </html>
-      </ToastProvider>
-    </StoreProvider>
+    <html lang="id" data-theme="light">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <StoreProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </StoreProvider>
+      </body>
+    </html>
   );
 }

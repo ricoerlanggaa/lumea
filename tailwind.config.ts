@@ -1,43 +1,21 @@
 import type { Config } from 'tailwindcss';
 import daisyui from 'daisyui';
-import { light } from 'daisyui/src/theming/themes';
+import { breakpoints, light } from '@/utilities/themes';
 
 export default {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
-    extend: {},
+    screens: {
+      sm: `${breakpoints.sm}`,
+      md: `${breakpoints.md}`,
+      lg: `${breakpoints.lg}`,
+      xl: `${breakpoints.xl}`,
+      '2xl': `${breakpoints['2xl']}`,
+    },
   },
   plugins: [daisyui],
   daisyui: {
     logs: false,
-    themes: [
-      {
-        'lumea-light': {
-          ...light,
-          primary: '#171717',
-          secondary: '#FFFFFF',
-          info: '#2563EB',
-          success: '#15803D',
-          warning: '#F59E0B',
-          error: '#DC2626',
-          accent: '#9333EA',
-          neutral: '#2B3440',
-
-          'primary-content': '#FFFFFF',
-          'secondary-content': '#171717',
-          'info-content': '#FFFFFF',
-          'success-content': '#FFFFFF',
-          'warning-content': '#FFFFFF',
-          'error-content': '#FFFFFF',
-          'accent-content': '#FFFFFF',
-          'neutral-content': '#D7DDE4',
-
-          'base-100': '#FFFFFF',
-          'base-200': '#F3F4F6',
-          'base-300': '#E5E7EB',
-          'base-content': '#171717',
-        },
-      },
-    ],
+    themes: [light],
   },
 } satisfies Config;

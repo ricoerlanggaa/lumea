@@ -6,7 +6,7 @@ import type {
   FormCustomerServiceValues,
 } from '@/types/components/templates';
 import useForm from '@/hooks/useForm';
-import { customerServiceSchema } from '@/utilities/validations/schema';
+import { customerServiceSchema } from '@/utilities/validations';
 import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
 import {
   createItem,

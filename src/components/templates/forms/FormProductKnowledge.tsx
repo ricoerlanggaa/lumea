@@ -7,9 +7,10 @@ import type {
   FormProductKnowledgeProps,
   FormProductKnowledgeValues,
 } from '@/types/components/templates';
-import useForm from '@/hooks/useForm';
 import useToast from '@/hooks/useToast';
 import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
+import useForm from '@/hooks/useForm';
+import { productKnowledgeSchema } from '@/utilities/validations';
 import {
   createItem,
   fetchItem,
@@ -26,7 +27,6 @@ import {
   selectOptionsState as customerServiceSelectOptions,
   fetchSelectOptions as fetchCustomerServiceSelectOptions,
 } from '@/store/customerServiceSlice';
-import { productKnowledgeSchema } from '@/utilities/validations/schema';
 
 export default function FormProductKnowledge({ action, itemId = 0 }: FormProductKnowledgeProps) {
   const dispatch = useAppDispatch();

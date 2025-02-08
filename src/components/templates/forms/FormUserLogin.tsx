@@ -3,9 +3,9 @@
 import { useRouter } from 'next/navigation';
 import { Button, Input } from '@/components/atoms';
 import type { FormUserLoginValues } from '@/types/components/templates';
-import useForm from '@/hooks/useForm';
 import useToast from '@/hooks/useToast';
-import { userLoginSchema } from '@/utilities/validations/schema';
+import useForm from '@/hooks/useForm';
+import { userLoginSchema } from '@/utilities/validations';
 import { apiUserLogin } from '@/services';
 
 export default function FormUserLogin() {

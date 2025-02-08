@@ -3,9 +3,9 @@
 import { useRouter } from 'next/navigation';
 import { Button, Input } from '@/components/atoms';
 import type { FormUserRegisterValues } from '@/types/components/templates';
-import useForm from '@/hooks/useForm';
 import useToast from '@/hooks/useToast';
-import { userRegisterSchema } from '@/utilities/validations/schema';
+import useForm from '@/hooks/useForm';
+import { userRegisterSchema } from '@/utilities/validations';
 import { apiUserRegister } from '@/services';
 
 export default function FormUserRegister() {

@@ -3,7 +3,7 @@ import customerServiceReducer from './customerServiceSlice';
 import productKnowledgeReducer from './productKnowledgeSlice';
 import whatsappReducer from './whatsappSlice';
 
-export const makeStore = () => {
+const store = () => {
   return configureStore({
     reducer: {
       customerService: customerServiceReducer,
@@ -13,6 +13,4 @@ export const makeStore = () => {
   });
 };
 
-export type AppStore = ReturnType<typeof makeStore>;
-export type RootState = ReturnType<AppStore['getState']>;
-export type AppDispatch = AppStore['dispatch'];
+export default store;

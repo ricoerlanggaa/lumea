@@ -1,11 +1,4 @@
-type ClassNames =
-  | string
-  | number
-  | boolean
-  | null
-  | undefined
-  | Record<string, boolean | undefined>
-  | ClassNames[];
+import { ClassNames } from '@/types/utilities/formats';
 
 export function classNames(...args: ClassNames[]): string {
   return args
@@ -30,7 +23,7 @@ export function classNames(...args: ClassNames[]): string {
     .join(' ');
 }
 
-export function getInitials(value: string | undefined) {
+export function getInitials(value?: string) {
   if (!value) return '';
   const words = value.trim().split(/\s+/);
   return words
@@ -39,7 +32,7 @@ export function getInitials(value: string | undefined) {
     .join('');
 }
 
-export function formatPhoneNumber(phoneNumber: string | undefined): string {
+export function formatPhoneNumber(phoneNumber?: string): string {
   if (!phoneNumber) return '';
   let normalizedNumber = phoneNumber.trim();
 

@@ -2,12 +2,13 @@
 
 import { ReactNode, useRef } from 'react';
 import { Provider } from 'react-redux';
-import { makeStore, AppStore } from '@/store';
+import store from '@/store';
+import { StoreApp } from '@/types/hooks/useStore';
 
 export default function StoreProvider({ children }: { children: ReactNode }) {
-  const storeRef = useRef<AppStore | null>(null);
+  const storeRef = useRef<StoreApp | null>(null);
   if (!storeRef.current) {
-    storeRef.current = makeStore();
+    storeRef.current = store();
   }
 
   return <Provider store={storeRef.current}>{children}</Provider>;

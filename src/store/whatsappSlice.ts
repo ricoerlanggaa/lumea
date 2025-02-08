@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import type { RootState } from '@/store';
+import type { StoreState } from '@/types/hooks/useStore';
 import { WhatsappList, WhatsappSelectOptions, WhatsappState } from '@/types/store/whatsappSlice';
 import {
   apiConnectWhatsapp,
@@ -61,7 +61,7 @@ const refreshCode = createAsyncThunk(
       code: response.data?.code ?? '',
       isConnected: !!response.data?.isConnected,
     };
-    const state = (getState() as RootState).whatsapp;
+    const state = (getState() as StoreState).whatsapp;
     if (interval && (result.isConnected || state.remainingExpiredCode < 1)) {
       clearInterval(interval);
     }
@@ -243,9 +243,9 @@ const whatsappSlice = createSlice({
   },
 });
 
-export const listState = (state: RootState) => state.whatsapp.list;
-export const codeState = (state: RootState) => state.whatsapp.code;
-export const codeStatusState = (state: RootState) => state.whatsapp.codeStatus;
-export const selectOptionsState = (state: RootState) => state.whatsapp.selectOptions;
+export const listState = (state: StoreState) => state.whatsapp.list;
+export const codeState = (state: StoreState) => state.whatsapp.code;
+export const codeStatusState = (state: StoreState) => state.whatsapp.codeStatus;
+export const selectOptionsState = (state: StoreState) => state.whatsapp.selectOptions;
 
 export default whatsappSlice.reducer;

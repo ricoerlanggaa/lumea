@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import type { RootState } from '@/store';
+import type { StoreState } from '@/types/hooks/useStore';
 import {
   apiCreateCustomerService,
   apiDeleteCustomerService,
@@ -202,9 +202,9 @@ const customerServiceSlice = createSlice({
   },
 });
 
-export const listState = (state: RootState) => state.customerService.list;
-export const selectOptionsState = (state: RootState) => state.customerService.selectOptions;
-export const itemState = (state: RootState) => state.customerService.item;
-export const isLoadingState = (state: RootState) => state.customerService.isLoading;
+export const listState = (state: StoreState) => state.customerService.list;
+export const selectOptionsState = (state: StoreState) => state.customerService.selectOptions;
+export const itemState = (state: StoreState) => state.customerService.item;
+export const isLoadingState = (state: StoreState) => state.customerService.isLoading;
 
 export default customerServiceSlice.reducer;

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import type { RootState } from '@/store';
+import type { StoreState } from '@/types/hooks/useStore';
 import {
   apiCreateProductKnowledge,
   apiDeleteProductKnowledge,
@@ -174,8 +174,8 @@ const productKnowledgeSlice = createSlice({
   },
 });
 
-export const listState = (state: RootState) => state.productKnowledge.list;
-export const itemState = (state: RootState) => state.productKnowledge.item;
-export const isLoadingState = (state: RootState) => state.productKnowledge.isLoading;
+export const listState = (state: StoreState) => state.productKnowledge.list;
+export const itemState = (state: StoreState) => state.productKnowledge.item;
+export const isLoadingState = (state: StoreState) => state.productKnowledge.isLoading;
 
 export default productKnowledgeSlice.reducer;

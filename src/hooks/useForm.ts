@@ -1,60 +1,53 @@
 'use client';
 
-import { ChangeEvent, FormEvent, useCallback, useMemo, useState } from 'react';
-import Ajv, { JSONSchemaType } from 'ajv';
-import ajvErrors from 'ajv-errors';
-
-type FormState<T> = {
-  values: T;
-  errors: Partial<Record<keyof T, string>>;
-  isLoading: boolean;
-  isSubmitted: boolean;
-};
-
-const ajv = new Ajv({ allErrors: true, strict: false, $data: true });
-ajvErrors(ajv);
+import { useCallback, useMemo, useState } from 'react';
+import type {
+  UseFormChangeEvent,
+  UseFormError,
+  UseFormSchema,
+  UseFormState,
+  UseFormSubmitAction,
+  UseFormSubmitEvent,
+} from '@/types/hooks/useForm';
+import { Validator } from '@/utilities/validations';
 
 export default function useForm<T extends object>(
-  schema: JSONSchemaType<T>,
+  schema: UseFormSchema<T>,
   options?: { defaultValues?: T },
 ) {
   const defaultValues = useMemo(
     () => options?.defaultValues ?? ({} as T),
     [options?.defaultValues],
   );
-  const [formState, setFormState] = useState<FormState<T>>({
+  const [formState, setFormState] = useState<UseFormState<T>>({
     values: defaultValues,
     errors: {},
     isLoading: false,
     isSubmitted: false,
   });
 
+  const validator = useMemo(() => new Validator<T>(schema), [schema]);
+
   const validateForm = useCallback(() => {
-    const validate = ajv.compile(schema);
-    const valid = validate(formState.values);
+    const result = validator.validate(formState.values);
 
-    if (!valid && validate.errors) {
-      const errors = validate.errors.reduce<Partial<Record<keyof T, string>>>(
-        (acc, err) => {
-          const field = (err.instancePath.slice(1) ||
-            err.params?.errors?.[0].params.missingProperty ||
-            err.params?.missingProperty) as keyof T;
-
-          if (field && !acc[field]) {
-            acc[field] = err.message || 'Invalid value';
-          }
-          return acc;
-        },
-        {} as Partial<Record<keyof T, string>>,
-      );
-
-      setFormState((prev) => ({ ...prev, errors }));
+    if (!result.valid) {
+      const errors = result.errors?.reduce<UseFormError<T>>((acc, err) => {
+        const field = (err.instancePath.slice(1) ||
+          err.params?.errors?.[0].params.missingProperty ||
+          err.params?.missingProperty) as keyof T;
+        if (field && !acc[field]) {
+          acc[field] = err.message || 'Invalid value';
+        }
+        return acc;
+      }, {} as UseFormError<T>);
+      setFormState((prev) => ({ ...prev, errors: errors || {} }));
       return false;
     }
 
     setFormState((prev) => ({ ...prev, errors: {} }));
     return true;
-  }, [formState.values, schema]);
+  }, [formState.values, validator]);
 
   const setValues = useCallback((value: T) => {
     setFormState((prev) => ({ ...prev, values: value }));
@@ -73,18 +66,16 @@ export default function useForm<T extends object>(
   }, [defaultValues]);
 
   const handleChange = useCallback(
-    (name: keyof T) =>
-      (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { value } = e.target;
-        setFormState((prev) => {
-          const updatedValues = { ...prev.values, [name]: value };
-          return { ...prev, values: updatedValues };
-        });
-
-        if (formState.isSubmitted) {
-          validateForm();
-        }
-      },
+    (name: keyof T) => (event: UseFormChangeEvent) => {
+      const { value } = event.target;
+      setFormState((prev) => {
+        const updatedValues = { ...prev.values, [name]: value };
+        return { ...prev, values: updatedValues };
+      });
+      if (formState.isSubmitted) {
+        validateForm();
+      }
+    },
     [formState.isSubmitted, validateForm],
   );
 
@@ -98,10 +89,9 @@ export default function useForm<T extends object>(
   );
 
   const submitHandler = useCallback(
-    // eslint-disable-next-line no-unused-vars
-    (action: (data: T) => Promise<void> | void) => {
-      return async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    (action: UseFormSubmitAction<T>) => {
+      return async (event: UseFormSubmitEvent) => {
+        event.preventDefault();
         setFormState((prev) => ({ ...prev, isSubmitted: true }));
         try {
           setFormState((prev) => ({ ...prev, isLoading: true }));

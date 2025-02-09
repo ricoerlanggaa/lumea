@@ -17,8 +17,6 @@ import {
   fetchList,
 } from '@/store/customerServiceSlice';
 import { useCallback, useEffect } from 'react';
-import useToast from '@/hooks/useToast';
-import { useRouter } from 'next/navigation';
 
 export default function FormCustomerService({ itemId = 0, action }: FormCustomerServiceProps) {
   const dispatch = useAppDispatch();
@@ -32,9 +30,6 @@ export default function FormCustomerService({ itemId = 0, action }: FormCustomer
     resetValues,
     submitHandler,
   } = useForm(customerServiceSchema);
-  const { showToast } = useToast();
-  const router = useRouter();
-
   const fetchDetail = useCallback(() => {
     if (itemId) {
       dispatch(fetchItem(itemId));
@@ -57,27 +52,13 @@ export default function FormCustomerService({ itemId = 0, action }: FormCustomer
     }
   }, [action, item, resetValues, setValues]);
 
-  const onSubmit = async (data: FormCustomerServiceValues) => {
-    try {
-      if (action === 'update') {
-        await dispatch(updateItem({ ...data, id: itemId })).unwrap();
-      } else {
-        await dispatch(createItem(data)).unwrap();
-      }
-      showToast({
-        variant: 'success',
-        message: `Customer service berhasil ${action === 'update' ? 'diperbarui' : 'ditambahkan'}!`,
-        duration: 3000,
-      });
-      dispatch(fetchList());
-      router.push('/product-setup/ai-customer-service');
-    } catch (error) {
-      showToast({
-        variant: 'error',
-        message: String(error),
-        duration: 3000,
-      });
+  const onSubmit = (data: FormCustomerServiceValues) => {
+    if (action === 'update') {
+      dispatch(updateItem({ ...data, id: itemId }));
+    } else {
+      dispatch(createItem(data));
     }
+    dispatch(fetchList());
   };
 
   return (

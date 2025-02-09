@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { Button, Input } from '@/components/atoms';
 import type { FormUserLoginValues } from '@/types/components/templates';
 import useToast from '@/hooks/useToast';
@@ -14,7 +13,6 @@ export default function FormUserLogin() {
     formState: { errors, isLoading },
     submitHandler,
   } = useForm<FormUserLoginValues>(userLoginSchema);
-  const router = useRouter();
   const { showToast } = useToast();
 
   const onSubmit = async (data: FormUserLoginValues) => {
@@ -22,13 +20,7 @@ export default function FormUserLogin() {
       email: data.email,
       password: data.password,
     });
-    if (response.status) {
-      showToast({
-        variant: 'success',
-        message: 'Login berhasil!',
-      });
-      router.refresh();
-    } else {
+    if (!response.success) {
       showToast({
         variant: 'error',
         message: response.message || 'Something went wrong!',

@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect } from 'react';
+import Link from 'next/link';
 import {
   Delete02Icon,
   MoreVerticalCircle01Icon,
@@ -8,33 +10,15 @@ import {
 } from 'hugeicons-react';
 import { DropdownMenu } from '@/components/molecules';
 import { Avatar, Typography } from '@/components/atoms';
-import Link from 'next/link';
-import { useEffect } from 'react';
-import { deleteItem, fetchList, listState } from '@/store/customerServiceSlice';
 import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
-import useToast from '@/hooks/useToast';
+import { deleteItem, fetchList, listState } from '@/store/customerServiceSlice';
 
 export default function CardCustomerService() {
   const dispatch = useAppDispatch();
   const list = useAppSelector(listState);
 
-  const { showToast } = useToast();
-
-  const handleDelete = async (id: number) => {
-    try {
-      await dispatch(deleteItem(id)).unwrap();
-      showToast({
-        variant: 'success',
-        message: 'Customer service berhasil dihapus!',
-        duration: 3000,
-      });
-    } catch (error) {
-      showToast({
-        variant: 'error',
-        message: String(error),
-        duration: 3000,
-      });
-    }
+  const handleDelete = (id: number) => {
+    dispatch(deleteItem(id));
   };
 
   useEffect(() => {

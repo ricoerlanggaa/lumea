@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { Button, Input } from '@/components/atoms';
 import type { FormUserRegisterValues } from '@/types/components/templates';
 import useToast from '@/hooks/useToast';
@@ -14,7 +13,6 @@ export default function FormUserRegister() {
     formState: { errors, isLoading },
     submitHandler,
   } = useForm(userRegisterSchema);
-  const router = useRouter();
   const { showToast } = useToast();
 
   const onSubmit = async (data: FormUserRegisterValues) => {
@@ -25,13 +23,7 @@ export default function FormUserRegister() {
       password: data.password,
       confirm_password: data.confirmPassword,
     });
-    if (response.status) {
-      showToast({
-        variant: 'success',
-        message: 'Registrasi berhasil!',
-      });
-      router.push('/login');
-    } else {
+    if (!response.success) {
       showToast({
         variant: 'error',
         message: response.message || 'Something went wrong!',

@@ -9,88 +9,170 @@ import type {
   CreateCustomerServiceDTO,
   UpdateCustomerServiceDTO,
   GetCustomerServiceSelectListResponse,
+  ServiceResponse,
 } from '@/types/services';
 
-export async function apiGetCustomerServiceList() {
+export async function apiGetCustomerServiceList(): Promise<
+  ServiceResponse<GetCustomerServiceListResponse>
+> {
   try {
     const response = await apiClient.get('/v1/customer-service');
     const responseData = response.data as MetaResponse<GetCustomerServiceListResponse>;
-    const message = responseData.meta?.message || response.statusText;
-    return { status: true, message, data: responseData.data ?? [] };
+    const responseMessage = responseData.meta?.message ?? response.statusText;
+
+    return {
+      statusCode: response.status,
+      success: true,
+      message: responseMessage,
+      data: [],
+    };
   } catch (error) {
     const err = error as MetaResponseError<[]>;
-    const errorResponse = err.response?.data;
-    const errorMessage = errorResponse?.meta?.message || err.response?.statusText;
-    return { status: false, message: errorMessage, data: [] };
+    const errorResponse = err.response;
+    const errorData = errorResponse?.data ?? null;
+    const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
+
+    return {
+      statusCode: errorResponse?.status,
+      success: false,
+      message: errorMessage,
+      data: [],
+    };
   }
 }
 
-export async function apiGetCustomerServiceDetail(id: number) {
+export async function apiGetCustomerServiceDetail(
+  id: number,
+): Promise<ServiceResponse<GetCustomerServiceDetailResponse>> {
   try {
     const response = await apiClient.get(`/v1/customer-service/${id}`);
     const responseData = response.data as MetaResponse<GetCustomerServiceDetailResponse>;
-    const message = responseData.meta?.message || response.statusText;
-    return { status: true, message, data: responseData.data ?? null };
+    const responseMessage = responseData.meta?.message ?? response.statusText;
+
+    return {
+      statusCode: response.status,
+      success: true,
+      message: responseMessage,
+      data: responseData.data,
+    };
   } catch (error) {
-    const err = error as MetaResponseError<null>;
-    const errorResponse = err.response?.data;
-    const errorMessage = errorResponse?.meta?.message || err.response?.statusText;
-    return { status: false, message: errorMessage, data: null };
+    const err = error as MetaResponseError;
+    const errorResponse = err.response;
+    const errorData = errorResponse?.data ?? null;
+    const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
+
+    return {
+      statusCode: errorResponse?.status,
+      success: false,
+      message: errorMessage,
+    };
   }
 }
 
-export async function apiCreateCustomerService(payload: CreateCustomerServiceDTO) {
+export async function apiCreateCustomerService(
+  payload: CreateCustomerServiceDTO,
+): Promise<ServiceResponse> {
   try {
     const response = await apiClient.post('/v1/customer-service', payload);
-    const responseData = response.data as MetaResponse<{ id: number }>;
-    const message = responseData.meta?.message || response.statusText;
-    return { status: true, message, data: responseData.data ?? null };
+    const responseData = response.data as MetaResponse;
+    const responseMessage = responseData.meta?.message ?? response.statusText;
+
+    return {
+      statusCode: response.status,
+      success: true,
+      message: responseMessage,
+    };
   } catch (error) {
-    const err = error as MetaResponseError<null>;
-    const errorResponse = err.response?.data;
-    const errorMessage = errorResponse?.meta?.message || err.response?.statusText;
-    return { status: false, message: errorMessage, data: null };
+    const err = error as MetaResponseError;
+    const errorResponse = err.response;
+    const errorData = errorResponse?.data ?? null;
+    const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
+
+    return {
+      statusCode: errorResponse?.status,
+      success: false,
+      message: errorMessage,
+    };
   }
 }
 
-export async function apiUpdateCustomerService(payload: UpdateCustomerServiceDTO) {
+export async function apiUpdateCustomerService(
+  payload: UpdateCustomerServiceDTO,
+): Promise<ServiceResponse> {
   try {
     const response = await apiClient.put('/v1/customer-service', payload);
-    const responseData = response.data as MetaResponse<null>;
-    const message = responseData.meta?.message || response.statusText;
-    return { status: true, message, data: null };
+    const responseData = response.data as MetaResponse;
+    const responseMessage = responseData.meta?.message ?? response.statusText;
+
+    return {
+      statusCode: response.status,
+      success: true,
+      message: responseMessage,
+    };
   } catch (error) {
-    const err = error as MetaResponseError<null>;
-    const errorResponse = err.response?.data;
-    const errorMessage = errorResponse?.meta?.message || err.response?.statusText;
-    return { status: false, message: errorMessage, data: null };
+    const err = error as MetaResponseError;
+    const errorResponse = err.response;
+    const errorData = errorResponse?.data ?? null;
+    const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
+
+    return {
+      statusCode: errorResponse?.status,
+      success: false,
+      message: errorMessage,
+    };
   }
 }
 
-export async function apiDeleteCustomerService(id: number) {
+export async function apiDeleteCustomerService(id: number): Promise<ServiceResponse> {
   try {
     const response = await apiClient.delete(`/v1/customer-service/${id}`);
-    const responseData = response.data as MetaResponse<null>;
-    const message = responseData.meta?.message || response.statusText;
-    return { status: true, message, data: null };
+    const responseData = response.data as MetaResponse;
+    const responseMessage = responseData.meta?.message ?? response.statusText;
+
+    return {
+      statusCode: response.status,
+      success: true,
+      message: responseMessage,
+    };
   } catch (error) {
-    const err = error as MetaResponseError<null>;
-    const errorResponse = err.response?.data;
-    const errorMessage = errorResponse?.meta?.message || err.response?.statusText;
-    return { status: false, message: errorMessage, data: null };
+    const err = error as MetaResponseError;
+    const errorResponse = err.response;
+    const errorData = errorResponse?.data ?? null;
+    const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
+
+    return {
+      statusCode: errorResponse?.status,
+      success: false,
+      message: errorMessage,
+    };
   }
 }
 
-export async function apiGetCustomerServiceSelectList() {
+export async function apiGetCustomerServiceSelectList(): Promise<
+  ServiceResponse<GetCustomerServiceSelectListResponse>
+> {
   try {
     const response = await apiClient.get('/v1/customer-service/list-select');
     const responseData = response.data as MetaResponse<GetCustomerServiceSelectListResponse>;
-    const message = responseData.meta?.message || response.statusText;
-    return { status: true, message, data: responseData.data ?? [] };
+    const responseMessage = responseData.meta?.message ?? response.statusText;
+
+    return {
+      statusCode: response.status,
+      success: true,
+      message: responseMessage,
+      data: responseData.data,
+    };
   } catch (error) {
     const err = error as MetaResponseError<[]>;
-    const errorResponse = err.response?.data;
-    const errorMessage = errorResponse?.meta?.message || err.response?.statusText;
-    return { status: false, message: errorMessage, data: [] };
+    const errorResponse = err.response;
+    const errorData = errorResponse?.data ?? null;
+    const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
+
+    return {
+      statusCode: errorResponse?.status,
+      success: false,
+      message: errorMessage,
+      data: [],
+    };
   }
 }

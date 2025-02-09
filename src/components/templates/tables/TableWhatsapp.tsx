@@ -10,7 +10,6 @@ import {
 import { DropdownMenu } from '@/components/molecules';
 import { TableColumns } from '@/types/components/organisms';
 import { Table } from '@/components/organism';
-import useToast from '@/hooks/useToast';
 import { formatPhoneNumber } from '@/utilities/formats/string';
 import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
 import {
@@ -26,55 +25,14 @@ export default function TableWhatsapp() {
   const dispatch = useAppDispatch();
   const list = useAppSelector(listState);
 
-  const { showToast } = useToast();
-
   const handleConnect = async (id: string) => {
-    try {
-      await dispatch(connectNumber(id)).unwrap();
-      showToast({
-        variant: 'success',
-        message: 'Nomor whatsapp berhasil terhubung!',
-        duration: 3000,
-      });
-    } catch (error) {
-      showToast({
-        variant: 'error',
-        message: String(error),
-        duration: 3000,
-      });
-    }
+    dispatch(connectNumber(id));
   };
   const handleDisconnect = async (id: string) => {
-    try {
-      await dispatch(disconnectNumber(id)).unwrap();
-      showToast({
-        variant: 'success',
-        message: 'Nomor whatsapp berhasil terputus!',
-        duration: 3000,
-      });
-    } catch (error) {
-      showToast({
-        variant: 'error',
-        message: String(error),
-        duration: 3000,
-      });
-    }
+    dispatch(disconnectNumber(id));
   };
   const handleDelete = async (id: string) => {
-    try {
-      await dispatch(deleteNumber(id)).unwrap();
-      showToast({
-        variant: 'success',
-        message: 'Nomor whatsapp berhasil dihapus!',
-        duration: 3000,
-      });
-    } catch (error) {
-      showToast({
-        variant: 'error',
-        message: String(error),
-        duration: 3000,
-      });
-    }
+    dispatch(deleteNumber(id));
   };
   const action = (id: string, type: 'connect' | 'disconnect') => (
     <DropdownMenu

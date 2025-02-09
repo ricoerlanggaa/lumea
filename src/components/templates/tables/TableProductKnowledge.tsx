@@ -5,7 +5,6 @@ import { Delete02Icon, MoreHorizontalCircle01Icon, PencilEdit02Icon } from 'huge
 import { DropdownMenu } from '@/components/molecules';
 import { Table } from '@/components/organism';
 import type { TableColumns } from '@/types/components/organisms';
-import useToast from '@/hooks/useToast';
 import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
 import { deleteItem, fetchList, listState } from '@/store/productKnowledgeSlice';
 import { formatPhoneNumber } from '@/utilities/formats/string';
@@ -14,23 +13,8 @@ export default function TableProductKnowledge() {
   const dispatch = useAppDispatch();
   const list = useAppSelector(listState);
 
-  const { showToast } = useToast();
-
-  const handleDelete = async (id: number) => {
-    try {
-      await dispatch(deleteItem(id)).unwrap();
-      showToast({
-        variant: 'success',
-        message: 'Product Knowledge berhasil dihapus!',
-        duration: 3000,
-      });
-    } catch (error) {
-      showToast({
-        variant: 'error',
-        message: String(error),
-        duration: 3000,
-      });
-    }
+  const handleDelete = (id: number) => {
+    dispatch(deleteItem(id));
   };
   const action = (id: number) => (
     <DropdownMenu

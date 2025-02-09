@@ -6,7 +6,6 @@ import { Button } from '@/components/atoms';
 import { QRCode } from '@/components/molecules';
 import { Modal } from '@/components/organism';
 import useModal from '@/hooks/useModal';
-import useToast from '@/hooks/useToast';
 import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
 import { codeState, codeStatusState, fetchList, generateCode } from '@/store/whatsappSlice';
 
@@ -16,18 +15,9 @@ export default function ButtonConnectWhatsapp() {
   const codeStatus = useAppSelector(codeStatusState);
 
   const { isOpen, openModal, closeModal } = useModal('modal-connect-whatsapp');
-  const { showToast } = useToast();
 
-  const handleGenerateCode = async () => {
-    try {
-      await dispatch(generateCode()).unwrap();
-    } catch (error) {
-      showToast({
-        variant: 'error',
-        message: String(error),
-        duration: 3000,
-      });
-    }
+  const handleGenerateCode = () => {
+    dispatch(generateCode());
   };
   const handleConnectWhatsapp = () => {
     openModal();
@@ -36,15 +26,10 @@ export default function ButtonConnectWhatsapp() {
 
   useEffect(() => {
     if (codeStatus === 'connected') {
-      showToast({
-        variant: 'success',
-        message: 'Nomor anda berhasil terhubung!',
-        duration: 3000,
-      });
       closeModal();
       dispatch(fetchList());
     }
-  }, [closeModal, codeStatus, dispatch, showToast]);
+  }, [closeModal, codeStatus, dispatch]);
 
   return (
     <>

@@ -1,13 +1,11 @@
 'use client';
 
 import { useCallback, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { Button, Input, Select, TextArea } from '@/components/atoms';
 import type {
   FormProductKnowledgeProps,
   FormProductKnowledgeValues,
 } from '@/types/components/templates';
-import useToast from '@/hooks/useToast';
 import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
 import useForm from '@/hooks/useForm';
 import { productKnowledgeSchema } from '@/utilities/validations';
@@ -42,30 +40,14 @@ export default function FormProductKnowledge({ action, itemId = 0 }: FormProduct
     resetValues,
     submitHandler,
   } = useForm(productKnowledgeSchema);
-  const router = useRouter();
-  const { showToast } = useToast();
 
-  const handleSubmit = async (data: FormProductKnowledgeValues) => {
-    try {
-      if (action === 'update') {
-        await dispatch(updateItem({ ...data, id: itemId })).unwrap();
-      } else {
-        await dispatch(createItem(data)).unwrap();
-      }
-      showToast({
-        variant: 'success',
-        message: `Customer service berhasil ${action === 'update' ? 'diperbarui' : 'ditambahkan'}!`,
-        duration: 3000,
-      });
-      dispatch(fetchList());
-      router.push('/product-setup/ai-customer-service');
-    } catch (error) {
-      showToast({
-        variant: 'error',
-        message: String(error),
-        duration: 3000,
-      });
+  const handleSubmit = (data: FormProductKnowledgeValues) => {
+    if (action === 'update') {
+      dispatch(updateItem({ ...data, id: itemId }));
+    } else {
+      dispatch(createItem(data));
     }
+    dispatch(fetchList());
   };
   const fetchDetail = useCallback(() => {
     if (itemId) dispatch(fetchItem(itemId));

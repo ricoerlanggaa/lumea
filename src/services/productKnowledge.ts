@@ -7,75 +7,142 @@ import type {
   GetProductKnowledgeListResponse,
   MetaResponse,
   MetaResponseError,
+  ServiceResponse,
   UpdateProductKnowledgeDTO,
 } from '@/types/services';
 
-export async function apiGetProductKnowledgeList() {
+export async function apiGetProductKnowledgeList(): Promise<
+  ServiceResponse<GetProductKnowledgeListResponse>
+> {
   try {
     const response = await apiClient.get('/v1/knowledge');
     const responseData = response.data as MetaResponse<GetProductKnowledgeListResponse>;
-    const message = responseData.meta?.message || response.statusText;
-    return { status: true, message, data: responseData.data ?? [] };
+    const responseMessage = responseData.meta?.message ?? response.statusText;
+
+    return {
+      statusCode: response.status,
+      success: true,
+      message: responseMessage,
+      data: responseData.data,
+    };
   } catch (error) {
     const err = error as MetaResponseError<[]>;
-    const errorResponse = err.response?.data;
-    const errorMessage = errorResponse?.meta?.message || err.response?.statusText;
-    return { status: false, message: errorMessage, data: [] };
+    const errorResponse = err.response;
+    const errorData = errorResponse?.data ?? null;
+    const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
+
+    return {
+      statusCode: errorResponse?.status,
+      success: false,
+      message: errorMessage,
+      data: [],
+    };
   }
 }
 
-export async function apiGetProductKnowledgeDetail(id: number) {
+export async function apiGetProductKnowledgeDetail(
+  id: number,
+): Promise<ServiceResponse<GetProductKnowledgeDetailResponse>> {
   try {
     const response = await apiClient.get(`/v1/knowledge/${id}`);
     const responseData = response.data as MetaResponse<GetProductKnowledgeDetailResponse>;
-    const message = responseData.meta?.message || response.statusText;
-    return { status: true, message, data: responseData.data ?? null };
+    const responseMessage = responseData.meta?.message ?? response.statusText;
+
+    return {
+      statusCode: response.status,
+      success: true,
+      message: responseMessage,
+      data: responseData.data,
+    };
   } catch (error) {
-    const err = error as MetaResponseError<null>;
-    const errorResponse = err.response?.data;
-    const errorMessage = errorResponse?.meta?.message || err.response?.statusText;
-    return { status: false, message: errorMessage, data: null };
+    const err = error as MetaResponseError;
+    const errorResponse = err.response;
+    const errorData = errorResponse?.data ?? null;
+    const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
+
+    return {
+      statusCode: errorResponse?.status,
+      success: false,
+      message: errorMessage,
+    };
   }
 }
 
-export async function apiCreateProductKnowledge(payload: CreateProductKnowledgeDTO) {
+export async function apiCreateProductKnowledge(
+  payload: CreateProductKnowledgeDTO,
+): Promise<ServiceResponse> {
   try {
     const response = await apiClient.post('/v1/knowledge', payload);
-    const responseData = response.data as MetaResponse<null>;
-    const message = responseData.meta?.message || response.statusText;
-    return { status: true, message, data: null };
+    const responseData = response.data as MetaResponse;
+    const responseMessage = responseData.meta?.message ?? response.statusText;
+
+    return {
+      statusCode: response.status,
+      success: true,
+      message: responseMessage,
+    };
   } catch (error) {
-    const err = error as MetaResponseError<null>;
-    const errorResponse = err.response?.data;
-    const errorMessage = errorResponse?.meta?.message || err.response?.statusText;
-    return { status: false, message: errorMessage, data: null };
+    const err = error as MetaResponseError;
+    const errorResponse = err.response;
+    const errorData = errorResponse?.data ?? null;
+    const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
+
+    return {
+      statusCode: errorResponse?.status,
+      success: false,
+      message: errorMessage,
+    };
   }
 }
 
-export async function apiUpdateProductKnowledge(payload: UpdateProductKnowledgeDTO) {
+export async function apiUpdateProductKnowledge(
+  payload: UpdateProductKnowledgeDTO,
+): Promise<ServiceResponse> {
   try {
     const response = await apiClient.put('/v1/knowledge', payload);
-    const responseData = response.data as MetaResponse<null>;
-    const message = responseData.meta?.message || response.statusText;
-    return { status: true, message, data: null };
+    const responseData = response.data as MetaResponse;
+    const responseMessage = responseData.meta?.message ?? response.statusText;
+
+    return {
+      statusCode: response.status,
+      success: true,
+      message: responseMessage,
+    };
   } catch (error) {
-    const err = error as MetaResponseError<null>;
-    const errorResponse = err.response?.data;
-    const errorMessage = errorResponse?.meta?.message || err.response?.statusText;
-    return { status: false, message: errorMessage, data: null };
+    const err = error as MetaResponseError;
+    const errorResponse = err.response;
+    const errorData = errorResponse?.data ?? null;
+    const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
+
+    return {
+      statusCode: errorResponse?.status,
+      success: false,
+      message: errorMessage,
+    };
   }
 }
 
-export async function apiDeleteProductKnowledge(id: number) {
+export async function apiDeleteProductKnowledge(id: number): Promise<ServiceResponse> {
   try {
     const response = await apiClient.delete(`/v1/knowledge/${id}`);
-    const responseData = response.data as MetaResponse<null>;
-    const message = responseData.meta?.message || response.statusText;
-    return { status: true, message, data: null };
+    const responseData = response.data as MetaResponse;
+    const responseMessage = responseData.meta?.message ?? response.statusText;
+
+    return {
+      statusCode: response.status,
+      success: true,
+      message: responseMessage,
+    };
   } catch (error) {
-    const err = error as MetaResponseError<null>;
-    const errorResponse = err.response?.data;
-    const errorMessage = errorResponse?.meta?.message || err.response?.statusText;
-    return { status: false, message: errorMessage, data: null };
+    const err = error as MetaResponseError;
+    const errorResponse = err.response;
+    const errorData = errorResponse?.data ?? null;
+    const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
+
+    return {
+      statusCode: errorResponse?.status,
+      success: false,
+      message: errorMessage,
+    };
   }
 }

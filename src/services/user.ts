@@ -6,30 +6,16 @@ import apiClient from '@/utilities/http/apiClient';
 import type {
   MetaResponse,
   MetaResponseError,
+  ServiceResponse,
   UserLoginDTO,
   UserLoginResponse,
   UserRegisterDTO,
 } from '@/types/services';
 
-export async function apiUserRegister(payload: UserRegisterDTO) {
-  try {
-    const response = await apiClient.post('/v1/user/registration', payload);
-    const responseData = response.data as MetaResponse<null>;
-    const message = responseData.meta?.message || response.statusText;
-    return { status: true, message, data: null };
-  } catch (error) {
-    const err = error as MetaResponseError<null>;
-    const errorResponse = err.response?.data;
-    const errorMessage = errorResponse?.meta?.message || err.response?.statusText;
-    return { status: false, message: errorMessage, data: null };
-  }
-}
-
-export async function apiUserLogin(payload: UserLoginDTO) {
+export async function apiUserLogin(payload: UserLoginDTO): Promise<ServiceResponse> {
   try {
     const response = await apiClient.post('/v1/user/login', payload);
     const responseData = response.data as MetaResponse<UserLoginResponse>;
-    const message = responseData.meta?.message || response.statusText;
 
     if (responseData.data) {
       const cookieStore = await cookies();
@@ -43,19 +29,65 @@ export async function apiUserLogin(payload: UserLoginDTO) {
         httpOnly: true,
         secure: true,
       });
+
+      redirect('/product-setup/ai-customer-service');
     }
-    return { status: true, message, data: responseData.data ?? null };
+
+    throw new Error('Auth token not found!');
   } catch (error) {
-    const err = error as MetaResponseError<null>;
-    const errorResponse = err.response?.data;
-    const errorMessage = errorResponse?.meta?.message || err.response?.statusText;
-    return { status: false, message: errorMessage, data: null };
+    const err = error as MetaResponseError;
+    const errorResponse = err.response;
+    const errorData = errorResponse?.data ?? null;
+    const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
+
+    return {
+      statusCode: errorResponse?.status,
+      success: false,
+      message: errorMessage,
+    };
   }
 }
 
-export async function apiUserLogout() {
+export async function apiUserRegister(payload: UserRegisterDTO): Promise<ServiceResponse> {
+  try {
+    const response = await apiClient.post('/v1/user/registration', payload);
+    const responseData = response.data as MetaResponse;
+    const responseMessage = responseData.meta?.message ?? response.statusText;
+
+    if (response.status) {
+      const login = await apiUserLogin({
+        email: payload.email,
+        password: payload.password,
+      });
+      if (login.success) {
+        redirect('/product-setup/ai-customer-service');
+      }
+    }
+
+    return {
+      statusCode: response.status,
+      success: true,
+      message: responseMessage,
+    };
+  } catch (error) {
+    const err = error as MetaResponseError;
+    const errorResponse = err.response;
+    const errorData = errorResponse?.data ?? null;
+    const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
+
+    return {
+      statusCode: errorResponse?.status,
+      success: false,
+      message: errorMessage,
+    };
+  }
+}
+
+export async function apiUserLogout(): Promise<void> {
   const cookieStore = await cookies();
+
   cookieStore.delete('access_token');
   cookieStore.delete('refresh_token');
+
   redirect('/login');
 }

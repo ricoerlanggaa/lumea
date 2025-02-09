@@ -1,6 +1,6 @@
 import type { Config } from 'tailwindcss';
 import daisyui from 'daisyui';
-import { breakpoints, light } from '@/utilities/themes';
+import { breakpoints, light } from './src/utilities/themes';
 
 export default {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
@@ -16,6 +16,6 @@ export default {
   plugins: [daisyui],
   daisyui: {
     logs: false,
-    themes: [light],
+    themes: [{ light }],
   },
 } satisfies Config;

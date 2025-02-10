@@ -89,6 +89,7 @@ export const customerServiceSchema: JSONSchemaType<FormCustomerServiceValues> = 
     },
     label: {
       type: 'string',
+      nullable: true,
     },
     personality: {
       type: 'string',
@@ -117,6 +118,7 @@ export const productKnowledgeSchema: JSONSchemaType<FormProductKnowledgeValues> 
     },
     label: {
       type: 'string',
+      nullable: true,
     },
     description: {
       type: 'string',

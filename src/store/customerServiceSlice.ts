@@ -126,6 +126,14 @@ export const createItem = createAsyncThunk(
       return rejectWithValue(response);
     }
     const result = { ...response, data: item };
+    dispatch(
+      showToast({
+        variant: 'success',
+        message: 'AI Customer Service berhasil ditambahkan!',
+        duration: 3000,
+      }),
+    );
+
     return result;
   },
 );
@@ -151,6 +159,14 @@ export const updateItem = createAsyncThunk(
       return rejectWithValue(response);
     }
     const result = { ...response, data: item };
+    dispatch(
+      showToast({
+        variant: 'success',
+        message: 'AI Customer Service berhasil diperbarui!',
+        duration: 3000,
+      }),
+    );
+
     return result;
   },
 );
@@ -171,6 +187,14 @@ export const deleteItem = createAsyncThunk(
       return rejectWithValue(response);
     }
     const result = { ...response, data: { id: +id } };
+    dispatch(
+      showToast({
+        variant: 'success',
+        message: 'AI Customer Service berhasil dihapus!',
+        duration: 3000,
+      }),
+    );
+
     return result;
   },
 );
@@ -250,11 +274,8 @@ const customerServiceSlice = createSlice({
         const data = state;
         data.isLoading = true;
       })
-      .addCase(deleteItem.fulfilled, (state, action) => {
+      .addCase(deleteItem.fulfilled, (state) => {
         const data = state;
-        const result = action.payload;
-
-        data.list = data.list.filter((item) => item.id !== result.data.id);
         data.isLoading = false;
       })
       .addCase(deleteItem.rejected, (state) => {

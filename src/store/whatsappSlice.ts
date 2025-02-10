@@ -9,6 +9,7 @@ import {
   apiGetWhatsappList,
   apiGetWhatsappSelectList,
 } from '@/services';
+import { formatPhoneNumber } from '@/utilities/formats/string';
 import { showToast } from './toastSlice';
 
 const TOTAL_REFRESHED_CODE = 20;
@@ -67,7 +68,7 @@ export const fetchSelectOptions = createAsyncThunk(
     const result: WhatsappSelectOptions =
       response.data?.map((item) => ({
         key: item.id,
-        label: item.number,
+        label: formatPhoneNumber(item.number),
         value: item.id,
       })) ?? [];
     return result;
@@ -98,15 +99,26 @@ const refreshCode = createAsyncThunk(
       },
     };
     const state = (getState() as StoreState).whatsapp;
-    if (interval && (result.data.isConnected || state.remainingExpiredCode < 1)) {
+    if (interval && response.data?.isConnected) {
+      clearInterval(interval);
+      dispatch(
+        showToast({
+          variant: 'success',
+          message: 'Nomor Whatsapp anda berhasil terhubung!',
+          duration: 3000,
+        }),
+      );
+      dispatch(fetchList());
+    } else if (interval && state.remainingExpiredCode < 1) {
       clearInterval(interval);
     }
+
     return result;
   },
 );
 export const generateCode = createAsyncThunk(
   'whatsapp/generateCode',
-  async (_, { rejectWithValue, dispatch }) => {
+  async (_, { rejectWithValue, dispatch, getState }) => {
     const response = await apiGetCodeWhatsapp('');
     const responseCode = response?.statusCode ?? 400;
     if (!response.success) {
@@ -120,6 +132,9 @@ export const generateCode = createAsyncThunk(
       );
       return rejectWithValue(response);
     }
+
+    interval = setInterval(() => dispatch(refreshCode(response.data?.id ?? '')), 15000);
+
     const result = {
       ...response,
       data: {
@@ -128,8 +143,20 @@ export const generateCode = createAsyncThunk(
         isConnected: !!response.data?.isConnected,
       },
     };
-
-    interval = setInterval(() => dispatch(refreshCode(result.data.id)), 15000);
+    const state = (getState() as StoreState).whatsapp;
+    if (response.data?.isConnected) {
+      clearInterval(interval);
+      dispatch(
+        showToast({
+          variant: 'success',
+          message: 'Nomor Whatsapp anda berhasil terhubung!',
+          duration: 3000,
+        }),
+      );
+      dispatch(fetchList());
+    } else if (state.remainingExpiredCode < 1) {
+      clearInterval(interval);
+    }
 
     return result;
   },
@@ -151,6 +178,14 @@ export const connectNumber = createAsyncThunk(
       return rejectWithValue(response);
     }
     const result = { ...response, data: { id } };
+    dispatch(
+      showToast({
+        variant: 'success',
+        message: 'Nomor Whatsapp anda berhasil diaktifkan!',
+        duration: 3000,
+      }),
+    );
+
     return result;
   },
 );
@@ -171,6 +206,14 @@ export const disconnectNumber = createAsyncThunk(
       return rejectWithValue(response);
     }
     const result = { ...response, data: { id } };
+    dispatch(
+      showToast({
+        variant: 'success',
+        message: 'Nomor Whatsapp anda berhasil dinonaktifkan!',
+        duration: 3000,
+      }),
+    );
+
     return result;
   },
 );
@@ -191,6 +234,14 @@ export const deleteNumber = createAsyncThunk(
       return rejectWithValue(response);
     }
     const result = { ...response, data: { id } };
+    dispatch(
+      showToast({
+        variant: 'success',
+        message: 'Nomor Whatsapp anda berhasil dihapus!',
+        duration: 3000,
+      }),
+    );
+
     return result;
   },
 );

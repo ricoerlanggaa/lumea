@@ -24,7 +24,7 @@ export async function apiGetCustomerServiceList(): Promise<
       statusCode: response.status,
       success: true,
       message: responseMessage,
-      data: [],
+      data: responseData.data,
     };
   } catch (error) {
     const err = error as MetaResponseError<[]>;

@@ -7,7 +7,7 @@ import { QRCode } from '@/components/molecules';
 import { Modal } from '@/components/organism';
 import useModal from '@/hooks/useModal';
 import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
-import { codeState, codeStatusState, fetchList, generateCode } from '@/store/whatsappSlice';
+import { codeState, codeStatusState, generateCode } from '@/store/whatsappSlice';
 
 export default function ButtonConnectWhatsapp() {
   const dispatch = useAppDispatch();
@@ -16,24 +16,18 @@ export default function ButtonConnectWhatsapp() {
 
   const { isOpen, openModal, closeModal } = useModal('modal-connect-whatsapp');
 
-  const handleGenerateCode = () => {
-    dispatch(generateCode());
-  };
-  const handleConnectWhatsapp = () => {
+  const handleConnect = () => {
     openModal();
-    handleGenerateCode();
+    dispatch(generateCode());
   };
 
   useEffect(() => {
-    if (codeStatus === 'connected') {
-      closeModal();
-      dispatch(fetchList());
-    }
-  }, [closeModal, codeStatus, dispatch]);
+    if (codeStatus === 'connected') closeModal();
+  }, [closeModal, codeStatus]);
 
   return (
     <>
-      <Button color="black" className="mr-auto mb-4" onClick={() => handleConnectWhatsapp()}>
+      <Button color="black" className="mr-auto mb-4" onClick={() => handleConnect()}>
         <MetaIcon className="mr-1" />
         Hubungkan Nomor
       </Button>
@@ -69,7 +63,7 @@ export default function ButtonConnectWhatsapp() {
           icon="/images/logo/whatsapp.svg"
           iconSize={64}
           className="mx-auto"
-          onRefresh={() => handleGenerateCode()}
+          onRefresh={() => dispatch(generateCode())}
         />
       </Modal>
     </>

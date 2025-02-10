@@ -14,7 +14,6 @@ import {
   itemState,
   isLoadingState,
   updateItem,
-  fetchList,
 } from '@/store/customerServiceSlice';
 import { useCallback, useEffect } from 'react';
 
@@ -58,7 +57,6 @@ export default function FormCustomerService({ itemId = 0, action }: FormCustomer
     } else {
       dispatch(createItem(data));
     }
-    dispatch(fetchList());
   };
 
   return (

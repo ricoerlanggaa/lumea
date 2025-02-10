@@ -16,6 +16,7 @@ export async function apiUserLogin(payload: UserLoginDTO): Promise<ServiceRespon
   try {
     const response = await apiClient.post('/v1/user/login', payload);
     const responseData = response.data as MetaResponse<UserLoginResponse>;
+    const responseMessage = responseData.meta?.message ?? response.statusText;
 
     if (responseData.data) {
       const cookieStore = await cookies();
@@ -30,7 +31,11 @@ export async function apiUserLogin(payload: UserLoginDTO): Promise<ServiceRespon
         secure: true,
       });
 
-      redirect('/product-setup/ai-customer-service');
+      return {
+        statusCode: response.status,
+        success: true,
+        message: responseMessage,
+      };
     }
 
     throw new Error('Auth token not found!');
@@ -38,7 +43,7 @@ export async function apiUserLogin(payload: UserLoginDTO): Promise<ServiceRespon
     const err = error as MetaResponseError;
     const errorResponse = err.response;
     const errorData = errorResponse?.data ?? null;
-    const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
+    const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? (error as string);
 
     return {
       statusCode: errorResponse?.status,
@@ -53,16 +58,6 @@ export async function apiUserRegister(payload: UserRegisterDTO): Promise<Service
     const response = await apiClient.post('/v1/user/registration', payload);
     const responseData = response.data as MetaResponse;
     const responseMessage = responseData.meta?.message ?? response.statusText;
-
-    if (response.status) {
-      const login = await apiUserLogin({
-        email: payload.email,
-        password: payload.password,
-      });
-      if (login.success) {
-        redirect('/product-setup/ai-customer-service');
-      }
-    }
 
     return {
       statusCode: response.status,

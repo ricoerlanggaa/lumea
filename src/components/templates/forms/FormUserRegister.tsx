@@ -2,25 +2,23 @@
 
 import { Button, Input } from '@/components/atoms';
 import type { FormUserRegisterValues } from '@/types/components/templates';
+import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
 import useForm from '@/hooks/useForm';
+import { isLoadingState, register as userRegister } from '@/store/userSlice';
 import { userRegisterSchema } from '@/utilities/validations';
-import { apiUserRegister } from '@/services';
 
 export default function FormUserRegister() {
+  const dispatch = useAppDispatch();
+  const isLoading = useAppSelector(isLoadingState);
+
   const {
     register,
-    formState: { errors, isLoading },
+    formState: { errors },
     submitHandler,
   } = useForm(userRegisterSchema);
 
-  const onSubmit = async (data: FormUserRegisterValues) => {
-    apiUserRegister({
-      name: data.fullName,
-      phone_number: data.phoneNumber,
-      email: data.email,
-      password: data.password,
-      confirm_password: data.confirmPassword,
-    });
+  const onSubmit = (data: FormUserRegisterValues) => {
+    dispatch(userRegister(data));
   };
   return (
     <form onSubmit={submitHandler(onSubmit)}>

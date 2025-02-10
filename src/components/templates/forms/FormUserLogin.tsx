@@ -2,22 +2,23 @@
 
 import { Button, Input } from '@/components/atoms';
 import type { FormUserLoginValues } from '@/types/components/templates';
+import { isLoadingState, login } from '@/store/userSlice';
 import useForm from '@/hooks/useForm';
+import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
 import { userLoginSchema } from '@/utilities/validations';
-import { apiUserLogin } from '@/services';
 
 export default function FormUserLogin() {
+  const dispatch = useAppDispatch();
+  const isLoading = useAppSelector(isLoadingState);
+
   const {
     register,
-    formState: { errors, isLoading },
+    formState: { errors },
     submitHandler,
-  } = useForm<FormUserLoginValues>(userLoginSchema);
+  } = useForm(userLoginSchema);
 
   const onSubmit = (data: FormUserLoginValues) => {
-    apiUserLogin({
-      email: data.email,
-      password: data.password,
-    });
+    dispatch(login(data));
   };
   return (
     <form onSubmit={submitHandler(onSubmit)}>

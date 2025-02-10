@@ -1,10 +1,13 @@
-import { useContext } from 'react';
-import ToastContext from '@/contexts/ToastContext';
+import { useAppDispatch } from '@/hooks/useStore';
+import { showToast as showToastAction } from '@/store/toastSlice';
+import { ToastShowAction } from '@/types/store';
 
 export default function useToast() {
-  const context = useContext(ToastContext);
-  if (!context) {
-    throw new Error('toast context not found!');
-  }
-  return context;
+  const dispatch = useAppDispatch();
+
+  const showToast = (config: ToastShowAction) => {
+    dispatch(showToastAction(config));
+  };
+
+  return { showToast };
 }

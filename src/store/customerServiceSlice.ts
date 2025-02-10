@@ -16,6 +16,7 @@ import {
   CustomerServiceState,
   CustomerServiceUpdate,
 } from '@/types/store';
+import { showToast } from './toastSlice';
 
 const initialState: CustomerServiceState = {
   list: [],
@@ -31,40 +32,69 @@ const initialState: CustomerServiceState = {
 
 export const fetchList = createAsyncThunk(
   'customerService/fetchList',
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, dispatch }) => {
     const response = await apiGetCustomerServiceList();
-    if (!response.status) {
-      return rejectWithValue(response.message);
+    const responseCode = response?.statusCode ?? 400;
+    if (!response.success) {
+      const isClientError = responseCode >= 400 && responseCode < 500;
+      dispatch(
+        showToast({
+          variant: isClientError ? 'warning' : 'error',
+          message: response.message,
+          duration: 3000,
+        }),
+      );
+      return rejectWithValue(response);
     }
-    const result: CustomerServiceList = response.data.map((item) => ({
-      id: item.id,
-      label: item.labels,
-      name: item.name,
-    }));
+    const result: CustomerServiceList =
+      response.data?.map((item) => ({
+        id: +item.id,
+        label: item.labels,
+        name: item.name,
+      })) ?? [];
     return result;
   },
 );
 export const fetchSelectOptions = createAsyncThunk(
   'customerService/fetchSelectOptions',
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, dispatch }) => {
     const response = await apiGetCustomerServiceSelectList();
-    if (!response.status) {
-      return rejectWithValue(response.message);
+    const responseCode = response?.statusCode ?? 400;
+    if (!response.success) {
+      const isClientError = responseCode >= 400 && responseCode < 500;
+      dispatch(
+        showToast({
+          variant: isClientError ? 'warning' : 'error',
+          message: response.message,
+          duration: 3000,
+        }),
+      );
+      return rejectWithValue(response);
     }
-    const result: CustomerServiceSelectOptions = response.data.map((item) => ({
-      key: item.id,
-      label: item.name,
-      value: item.id,
-    }));
+    const result: CustomerServiceSelectOptions =
+      response.data?.map((item) => ({
+        key: +item.id,
+        label: item.name,
+        value: +item.id,
+      })) ?? [];
     return result;
   },
 );
 export const fetchItem = createAsyncThunk(
   'customerService/fetchItem',
-  async (id: number, { rejectWithValue }) => {
-    const response = await apiGetCustomerServiceDetail(id);
-    if (!response.status) {
-      return rejectWithValue(response.message);
+  async (id: number, { rejectWithValue, dispatch }) => {
+    const response = await apiGetCustomerServiceDetail(+id);
+    const responseCode = response?.statusCode ?? 400;
+    if (!response.success) {
+      const isClientError = responseCode >= 400 && responseCode < 500;
+      dispatch(
+        showToast({
+          variant: isClientError ? 'warning' : 'error',
+          message: response.message,
+          duration: 3000,
+        }),
+      );
+      return rejectWithValue(response);
     }
     const result: CustomerServiceItem = {
       id: response.data?.id ?? 0,
@@ -77,42 +107,71 @@ export const fetchItem = createAsyncThunk(
 );
 export const createItem = createAsyncThunk(
   'customerService/createItem',
-  async (item: CustomerServiceCreate, { rejectWithValue }) => {
+  async (item: CustomerServiceCreate, { rejectWithValue, dispatch }) => {
     const response = await apiCreateCustomerService({
       name: item.name,
-      label: item.label,
+      label: item.label ?? '',
       personality: item.personality,
     });
-    if (!response.status) {
-      return rejectWithValue(response.message);
+    const responseCode = response?.statusCode ?? 400;
+    if (!response.success) {
+      const isClientError = responseCode >= 400 && responseCode < 500;
+      dispatch(
+        showToast({
+          variant: isClientError ? 'warning' : 'error',
+          message: response.message,
+          duration: 3000,
+        }),
+      );
+      return rejectWithValue(response);
     }
-    const result = { ...item, id: response.data?.id ?? 0 };
+    const result = { ...response, data: item };
     return result;
   },
 );
 export const updateItem = createAsyncThunk(
   'customerService/updateItem',
-  async (item: CustomerServiceUpdate, { rejectWithValue }) => {
+  async (item: CustomerServiceUpdate, { rejectWithValue, dispatch }) => {
     const response = await apiUpdateCustomerService({
       id: +item.id,
       name: item.name,
-      label: item.label,
+      label: item.label ?? '',
       personality: item.personality,
     });
-    if (!response.status) {
-      return rejectWithValue(response.message);
+    const responseCode = response?.statusCode ?? 400;
+    if (!response.success) {
+      const isClientError = responseCode >= 400 && responseCode < 500;
+      dispatch(
+        showToast({
+          variant: isClientError ? 'warning' : 'error',
+          message: response.message,
+          duration: 3000,
+        }),
+      );
+      return rejectWithValue(response);
     }
-    return item;
+    const result = { ...response, data: item };
+    return result;
   },
 );
 export const deleteItem = createAsyncThunk(
   'customerService/deleteItem',
-  async (id: number, { rejectWithValue }) => {
-    const response = await apiDeleteCustomerService(id);
-    if (!response.status) {
-      return rejectWithValue(response.message);
+  async (id: number, { rejectWithValue, dispatch }) => {
+    const response = await apiDeleteCustomerService(+id);
+    const responseCode = response?.statusCode ?? 400;
+    if (!response.success) {
+      const isClientError = responseCode >= 400 && responseCode < 500;
+      dispatch(
+        showToast({
+          variant: isClientError ? 'warning' : 'error',
+          message: response.message,
+          duration: 3000,
+        }),
+      );
+      return rejectWithValue(response);
     }
-    return { id };
+    const result = { ...response, data: { id: +id } };
+    return result;
   },
 );
 
@@ -141,7 +200,9 @@ const customerServiceSlice = createSlice({
       })
       .addCase(fetchSelectOptions.fulfilled, (state, action) => {
         const data = state;
-        data.selectOptions = action.payload;
+        const result = action.payload;
+
+        data.selectOptions = result;
         data.isLoading = false;
       })
       .addCase(fetchSelectOptions.rejected, (state) => {
@@ -191,8 +252,9 @@ const customerServiceSlice = createSlice({
       })
       .addCase(deleteItem.fulfilled, (state, action) => {
         const data = state;
+        const result = action.payload;
 
-        data.list = data.list.filter((item) => item.id !== action.payload.id);
+        data.list = data.list.filter((item) => item.id !== result.data.id);
         data.isLoading = false;
       })
       .addCase(deleteItem.rejected, (state) => {

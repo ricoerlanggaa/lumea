@@ -44,7 +44,7 @@ export default function FormCustomerService({ itemId = 0, action }: FormCustomer
     if (action === 'update' && item) {
       setValues({
         name: item.name,
-        label: item.label,
+        label: item.label ?? '',
         personality: item.personality,
       });
     } else {

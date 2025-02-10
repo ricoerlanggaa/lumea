@@ -6,7 +6,7 @@ export type CustomerServiceList = {
 export interface CustomerServiceItem {
   id: number;
   name: string;
-  label: string;
+  label?: string;
   personality: string;
 }
 export type CustomerServiceCreate = Omit<CustomerServiceItem, 'id'>;

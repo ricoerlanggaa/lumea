@@ -9,6 +9,7 @@ import {
   apiGetWhatsappList,
   apiGetWhatsappSelectList,
 } from '@/services';
+import { showToast } from './toastSlice';
 
 const TOTAL_REFRESHED_CODE = 20;
 
@@ -22,47 +23,82 @@ const initialState: WhatsappState = {
 };
 let interval: ReturnType<typeof setInterval> | null = null;
 
-export const fetchList = createAsyncThunk('whatsapp/fetchList', async (_, { rejectWithValue }) => {
-  const response = await apiGetWhatsappList();
-  if (!response.status) {
-    return rejectWithValue(response.message);
-  }
-  const result: WhatsappList = response.data.map((item) => ({
-    id: item.id,
-    number: item.number,
-    status: item.isConnected ? 'connected' : 'disconnected',
-  }));
-  return result;
-});
+export const fetchList = createAsyncThunk(
+  'whatsapp/fetchList',
+  async (_, { rejectWithValue, dispatch }) => {
+    const response = await apiGetWhatsappList();
+    const responseCode = response?.statusCode ?? 400;
+    if (!response.success) {
+      const isClientError = responseCode >= 400 && responseCode < 500;
+      dispatch(
+        showToast({
+          variant: isClientError ? 'warning' : 'error',
+          message: response.message,
+          duration: 3000,
+        }),
+      );
+      return rejectWithValue(response);
+    }
+    const result: WhatsappList =
+      response.data?.map((item) => ({
+        id: item.id,
+        number: item.number,
+        status: item.isConnected ? 'connected' : 'disconnected',
+      })) ?? [];
+    return result;
+  },
+);
 export const fetchSelectOptions = createAsyncThunk(
   'whatsapp/fetchSelectOptions',
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, dispatch }) => {
     const response = await apiGetWhatsappSelectList();
-    if (!response.status) {
-      return rejectWithValue(response.message);
+    const responseCode = response?.statusCode ?? 400;
+    if (!response.success) {
+      const isClientError = responseCode >= 400 && responseCode < 500;
+      dispatch(
+        showToast({
+          variant: isClientError ? 'warning' : 'error',
+          message: response.message,
+          duration: 3000,
+        }),
+      );
+      return rejectWithValue(response);
     }
-    const result: WhatsappSelectOptions = response.data.map((item) => ({
-      key: item.id,
-      label: item.number,
-      value: item.id,
-    }));
+    const result: WhatsappSelectOptions =
+      response.data?.map((item) => ({
+        key: item.id,
+        label: item.number,
+        value: item.id,
+      })) ?? [];
     return result;
   },
 );
 const refreshCode = createAsyncThunk(
   'whatsapp/refreshCode',
-  async (id: string, { rejectWithValue, getState }) => {
+  async (id: string, { rejectWithValue, getState, dispatch }) => {
     const response = await apiGetCodeWhatsapp(id);
-    if (!response.status) {
-      return rejectWithValue(response.message);
+    const responseCode = response?.statusCode ?? 400;
+    if (!response.success) {
+      const isClientError = responseCode >= 400 && responseCode < 500;
+      dispatch(
+        showToast({
+          variant: isClientError ? 'warning' : 'error',
+          message: response.message,
+          duration: 3000,
+        }),
+      );
+      return rejectWithValue(response);
     }
     const result = {
-      id: response.data?.id ?? '',
-      code: response.data?.code ?? '',
-      isConnected: !!response.data?.isConnected,
+      ...response,
+      data: {
+        id: response.data?.id ?? '',
+        code: response.data?.code ?? '',
+        isConnected: !!response.data?.isConnected,
+      },
     };
     const state = (getState() as StoreState).whatsapp;
-    if (interval && (result.isConnected || state.remainingExpiredCode < 1)) {
+    if (interval && (result.data.isConnected || state.remainingExpiredCode < 1)) {
       clearInterval(interval);
     }
     return result;
@@ -72,48 +108,90 @@ export const generateCode = createAsyncThunk(
   'whatsapp/generateCode',
   async (_, { rejectWithValue, dispatch }) => {
     const response = await apiGetCodeWhatsapp('');
-    if (!response.status) {
-      return rejectWithValue(response.message);
+    const responseCode = response?.statusCode ?? 400;
+    if (!response.success) {
+      const isClientError = responseCode >= 400 && responseCode < 500;
+      dispatch(
+        showToast({
+          variant: isClientError ? 'warning' : 'error',
+          message: response.message,
+          duration: 3000,
+        }),
+      );
+      return rejectWithValue(response);
     }
     const result = {
-      id: response.data?.id ?? '',
-      code: response.data?.code ?? '',
-      isConnected: !!response.data?.isConnected,
+      ...response,
+      data: {
+        id: response.data?.id ?? '',
+        code: response.data?.code ?? '',
+        isConnected: !!response.data?.isConnected,
+      },
     };
 
-    interval = setInterval(() => dispatch(refreshCode(result.id)), 15000);
+    interval = setInterval(() => dispatch(refreshCode(result.data.id)), 15000);
 
     return result;
   },
 );
 export const connectNumber = createAsyncThunk(
   'whatsapp/connectNumber',
-  async (id: string, { rejectWithValue }) => {
+  async (id: string, { rejectWithValue, dispatch }) => {
     const response = await apiConnectWhatsapp(id);
-    if (!response.status) {
-      return rejectWithValue(response.message);
+    const responseCode = response?.statusCode ?? 400;
+    if (!response.success) {
+      const isClientError = responseCode >= 400 && responseCode < 500;
+      dispatch(
+        showToast({
+          variant: isClientError ? 'warning' : 'error',
+          message: response.message,
+          duration: 3000,
+        }),
+      );
+      return rejectWithValue(response);
     }
-    return { id };
+    const result = { ...response, data: { id } };
+    return result;
   },
 );
 export const disconnectNumber = createAsyncThunk(
   'whatsapp/disconnectNumber',
-  async (id: string, { rejectWithValue }) => {
+  async (id: string, { rejectWithValue, dispatch }) => {
     const response = await apiDisconnectWhatsapp(id);
-    if (!response.status) {
-      return rejectWithValue(response.message);
+    const responseCode = response?.statusCode ?? 400;
+    if (!response.success) {
+      const isClientError = responseCode >= 400 && responseCode < 500;
+      dispatch(
+        showToast({
+          variant: isClientError ? 'warning' : 'error',
+          message: response.message,
+          duration: 3000,
+        }),
+      );
+      return rejectWithValue(response);
     }
-    return { id };
+    const result = { ...response, data: { id } };
+    return result;
   },
 );
 export const deleteNumber = createAsyncThunk(
   'whatsapp/deleteNumber',
-  async (id: string, { rejectWithValue }) => {
+  async (id: string, { rejectWithValue, dispatch }) => {
     const response = await apiDeleteWhatsapp(id);
-    if (!response.status) {
-      return rejectWithValue(response.message);
+    const responseCode = response?.statusCode ?? 400;
+    if (!response.success) {
+      const isClientError = responseCode >= 400 && responseCode < 500;
+      dispatch(
+        showToast({
+          variant: isClientError ? 'warning' : 'error',
+          message: response.message,
+          duration: 3000,
+        }),
+      );
+      return rejectWithValue(response);
     }
-    return { id };
+    const result = { ...response, data: { id } };
+    return result;
   },
 );
 
@@ -151,10 +229,12 @@ const whatsappSlice = createSlice({
       })
       .addCase(refreshCode.fulfilled, (state, action) => {
         const data = state;
-        if (data.remainingExpiredCode > 0 && !action.payload.isConnected) {
-          data.code = action.payload.code;
+        const result = action.payload;
+
+        if (data.remainingExpiredCode > 0 && !result.data.isConnected) {
+          data.code = result.data.code;
           data.remainingExpiredCode -= 1;
-        } else if (action.payload.isConnected) {
+        } else if (result.data.isConnected) {
           data.codeStatus = 'connected';
         } else {
           data.codeStatus = 'expired';
@@ -174,11 +254,13 @@ const whatsappSlice = createSlice({
       })
       .addCase(generateCode.fulfilled, (state, action) => {
         const data = state;
-        if (data.remainingExpiredCode > 0 && !action.payload.isConnected) {
+        const result = action.payload;
+
+        if (data.remainingExpiredCode > 0 && !result.data.isConnected) {
           data.codeStatus = 'active';
-          data.code = action.payload.code;
+          data.code = result.data.code;
           data.remainingExpiredCode -= 1;
-        } else if (action.payload.isConnected) {
+        } else if (result.data.isConnected) {
           data.codeStatus = 'connected';
         } else {
           data.codeStatus = 'expired';
@@ -198,7 +280,8 @@ const whatsappSlice = createSlice({
       })
       .addCase(connectNumber.fulfilled, (state, action) => {
         const data = state;
-        const index = data.list.findIndex((item) => item.id === action.payload.id);
+        const result = action.payload;
+        const index = data.list.findIndex((item) => item.id === result.data.id);
 
         if (index !== -1) {
           data.list[index] = { ...data.list[index], status: 'connected' };
@@ -215,7 +298,8 @@ const whatsappSlice = createSlice({
       })
       .addCase(disconnectNumber.fulfilled, (state, action) => {
         const data = state;
-        const index = data.list.findIndex((item) => item.id === action.payload.id);
+        const result = action.payload;
+        const index = data.list.findIndex((item) => item.id === result.data.id);
 
         if (index !== -1) {
           data.list[index] = { ...data.list[index], status: 'disconnected' };
@@ -232,8 +316,9 @@ const whatsappSlice = createSlice({
       })
       .addCase(deleteNumber.fulfilled, (state, action) => {
         const data = state;
+        const result = action.payload;
 
-        data.list = data.list.filter((item) => item.id !== action.payload.id);
+        data.list = data.list.filter((item) => item.id !== result.data.id);
         data.isLoading = false;
       })
       .addCase(deleteNumber.rejected, (state) => {

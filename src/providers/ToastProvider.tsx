@@ -1,34 +1,21 @@
 'use client';
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Alert } from '@/components/atoms';
-import ToastContext from '@/contexts/ToastContext';
-import type { ToastProps, ToastShowProps, ToastState } from '@/types/providers/ToastProvider';
+import { StoreState } from '@/types/hooks/useStore';
+import { useAppSelector } from '@/hooks/useStore';
 
-export default function ToastProvider({ children }: ToastProps) {
-  const [toasts, setToasts] = useState<ToastState>([]);
+export default function ToastProvider({ children }: { children: ReactNode }) {
+  const toasts = useAppSelector((state: StoreState) => state.toast.toasts);
   const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
     setPortalRoot(document.body);
   }, []);
 
-  const showToast = useCallback(({ variant, message, duration }: ToastShowProps) => {
-    const id = `${Date.now()}-${Math.random()}`;
-    setToasts((prevToasts) => [...prevToasts, { id, variant, message, duration }]);
-
-    if (duration) {
-      setTimeout(() => {
-        setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
-      }, duration);
-    }
-  }, []);
-
-  const contextValue = useMemo(() => ({ showToast }), [showToast]);
-
   return (
-    <ToastContext.Provider value={contextValue}>
+    <>
       {children}
       {portalRoot &&
         createPortal(
@@ -39,6 +26,6 @@ export default function ToastProvider({ children }: ToastProps) {
           </div>,
           portalRoot,
         )}
-    </ToastContext.Provider>
+    </>
   );
 }

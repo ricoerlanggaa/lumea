@@ -8,7 +8,7 @@ export interface ProductKnowledgeItem {
   id: number;
   customerServiceId: number;
   whatsappId: string;
-  label: string;
+  label?: string;
   description: string;
 }
 export type ProductKnowledgeCreate = Omit<ProductKnowledgeItem, 'id'>;

@@ -2,7 +2,6 @@
 
 import { Button, Input } from '@/components/atoms';
 import type { FormUserRegisterValues } from '@/types/components/templates';
-import useToast from '@/hooks/useToast';
 import useForm from '@/hooks/useForm';
 import { userRegisterSchema } from '@/utilities/validations';
 import { apiUserRegister } from '@/services';
@@ -13,22 +12,15 @@ export default function FormUserRegister() {
     formState: { errors, isLoading },
     submitHandler,
   } = useForm(userRegisterSchema);
-  const { showToast } = useToast();
 
   const onSubmit = async (data: FormUserRegisterValues) => {
-    const response = await apiUserRegister({
+    apiUserRegister({
       name: data.fullName,
       phone_number: data.phoneNumber,
       email: data.email,
       password: data.password,
       confirm_password: data.confirmPassword,
     });
-    if (!response.success) {
-      showToast({
-        variant: 'error',
-        message: response.message || 'Something went wrong!',
-      });
-    }
   };
   return (
     <form onSubmit={submitHandler(onSubmit)}>

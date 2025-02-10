@@ -1,6 +1,6 @@
 export interface FormCustomerServiceValues {
   name: string;
-  label: string;
+  label?: string;
   personality: string;
 }
 export interface FormCustomerServiceProps {
@@ -10,7 +10,7 @@ export interface FormCustomerServiceProps {
 export interface FormProductKnowledgeValues {
   customerServiceId: number;
   whatsappId: string;
-  label: string;
+  label?: string;
   description: string;
 }
 export interface FormProductKnowledgeProps {

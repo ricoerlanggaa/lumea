@@ -2,16 +2,14 @@ import type { Config } from 'tailwindcss';
 import daisyui from 'daisyui';
 import { breakpoints, light } from './src/utilities/themes';
 
+const themeScreens = Object.fromEntries(
+  Object.entries(breakpoints).map(([key, value]) => [key, `${value}px`]),
+);
+
 export default {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
-    screens: {
-      sm: `${breakpoints.sm}`,
-      md: `${breakpoints.md}`,
-      lg: `${breakpoints.lg}`,
-      xl: `${breakpoints.xl}`,
-      '2xl': `${breakpoints['2xl']}`,
-    },
+    screens: themeScreens,
   },
   plugins: [daisyui],
   daisyui: {

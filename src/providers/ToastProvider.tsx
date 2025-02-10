@@ -19,7 +19,7 @@ export default function ToastProvider({ children }: { children: ReactNode }) {
       {children}
       {portalRoot &&
         createPortal(
-          <div className="toast toast-bottom toast-center">
+          <div className="toast toast-bottom toast-center z-max">
             {toasts.map(({ id, variant, message }) => (
               <Alert key={id} variant={variant} message={message} />
             ))}

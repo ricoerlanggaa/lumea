@@ -126,6 +126,7 @@ export const createItem = createAsyncThunk(
       return rejectWithValue(response);
     }
     const result = { ...response, data: item };
+    dispatch(fetchList());
     dispatch(
       showToast({
         variant: 'success',
@@ -262,8 +263,18 @@ const customerServiceSlice = createSlice({
         const data = state;
         data.isLoading = true;
       })
-      .addCase(updateItem.fulfilled, (state) => {
+      .addCase(updateItem.fulfilled, (state, action) => {
         const data = state;
+        const result = action.payload;
+        const index = data.list.findIndex((item) => item.id === result.data.id);
+
+        if (index !== -1) {
+          data.list[index] = {
+            id: result.data.id,
+            name: result.data.name,
+            label: result.data.label ?? '',
+          };
+        }
         data.isLoading = false;
       })
       .addCase(updateItem.rejected, (state) => {
@@ -274,8 +285,11 @@ const customerServiceSlice = createSlice({
         const data = state;
         data.isLoading = true;
       })
-      .addCase(deleteItem.fulfilled, (state) => {
+      .addCase(deleteItem.fulfilled, (state, action) => {
         const data = state;
+        const result = action.payload;
+
+        data.list = data.list.filter((item) => item.id !== result.data.id);
         data.isLoading = false;
       })
       .addCase(deleteItem.rejected, (state) => {

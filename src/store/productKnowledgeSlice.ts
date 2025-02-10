@@ -102,6 +102,8 @@ export const createItem = createAsyncThunk(
       return rejectWithValue(response);
     }
     const result = { ...response, data: item };
+    dispatch(fetchList());
+
     return result;
   },
 );
@@ -128,6 +130,8 @@ export const updateItem = createAsyncThunk(
       return rejectWithValue(response);
     }
     const result = { ...response, data: item };
+    dispatch(fetchList());
+
     return result;
   },
 );
@@ -219,6 +223,7 @@ const productKnowledgeSlice = createSlice({
       .addCase(deleteItem.fulfilled, (state, action) => {
         const data = state;
         const result = action.payload;
+
         data.list = data.list.filter((item) => item.id !== result.data.id);
         data.isLoading = false;
       })

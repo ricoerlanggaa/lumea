@@ -52,7 +52,7 @@ export async function apiGetCodeWhatsapp(
       data: responseData.data,
     };
   } catch (error) {
-    const err = error as MetaResponseError;
+    const err = error as MetaResponseError<null>;
     const errorResponse = err.response;
     const errorData = errorResponse?.data ?? null;
     const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
@@ -65,10 +65,10 @@ export async function apiGetCodeWhatsapp(
   }
 }
 
-export async function apiDeleteWhatsapp(id: string): Promise<ServiceResponse> {
+export async function apiDeleteWhatsapp(id: string): Promise<ServiceResponse<null>> {
   try {
     const response = await apiClient.delete(`/v1/whatsapp/${id}`);
-    const responseData = response.data as MetaResponse;
+    const responseData = response.data as MetaResponse<null>;
     const responseMessage = responseData.meta?.message ?? response.statusText;
 
     return {
@@ -77,7 +77,7 @@ export async function apiDeleteWhatsapp(id: string): Promise<ServiceResponse> {
       message: responseMessage,
     };
   } catch (error) {
-    const err = error as MetaResponseError;
+    const err = error as MetaResponseError<null>;
     const errorResponse = err.response;
     const errorData = errorResponse?.data ?? null;
     const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
@@ -90,7 +90,9 @@ export async function apiDeleteWhatsapp(id: string): Promise<ServiceResponse> {
   }
 }
 
-export async function apiConnectWhatsapp(id: string): Promise<ServiceResponse> {
+export async function apiConnectWhatsapp(
+  id: string,
+): Promise<ServiceResponse<GetWhatsappListResponse>> {
   try {
     const response = await apiClient.get(`/v1/whatsapp/connect/${id}`);
     const responseData = response.data as MetaResponse<GetWhatsappListResponse>;
@@ -102,7 +104,7 @@ export async function apiConnectWhatsapp(id: string): Promise<ServiceResponse> {
       message: responseMessage,
     };
   } catch (error) {
-    const err = error as MetaResponseError;
+    const err = error as MetaResponseError<null>;
     const errorResponse = err.response;
     const errorData = errorResponse?.data ?? null;
     const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
@@ -115,10 +117,10 @@ export async function apiConnectWhatsapp(id: string): Promise<ServiceResponse> {
   }
 }
 
-export async function apiDisconnectWhatsapp(id: string): Promise<ServiceResponse> {
+export async function apiDisconnectWhatsapp(id: string): Promise<ServiceResponse<null>> {
   try {
     const response = await apiClient.get(`/v1/whatsapp/disconnect/${id}`);
-    const responseData = response.data as MetaResponse;
+    const responseData = response.data as MetaResponse<null>;
     const responseMessage = responseData.meta?.message ?? response.statusText;
 
     return {
@@ -127,7 +129,7 @@ export async function apiDisconnectWhatsapp(id: string): Promise<ServiceResponse
       message: responseMessage,
     };
   } catch (error) {
-    const err = error as MetaResponseError;
+    const err = error as MetaResponseError<null>;
     const errorResponse = err.response;
     const errorData = errorResponse?.data ?? null;
     const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';

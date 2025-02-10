@@ -101,6 +101,7 @@ const refreshCode = createAsyncThunk(
     const state = (getState() as StoreState).whatsapp;
     if (interval && response.data?.isConnected) {
       clearInterval(interval);
+      dispatch(fetchList());
       dispatch(
         showToast({
           variant: 'success',
@@ -108,7 +109,6 @@ const refreshCode = createAsyncThunk(
           duration: 3000,
         }),
       );
-      dispatch(fetchList());
     } else if (interval && state.remainingExpiredCode < 1) {
       clearInterval(interval);
     }
@@ -146,6 +146,7 @@ export const generateCode = createAsyncThunk(
     const state = (getState() as StoreState).whatsapp;
     if (response.data?.isConnected) {
       clearInterval(interval);
+      dispatch(fetchList());
       dispatch(
         showToast({
           variant: 'success',
@@ -153,7 +154,6 @@ export const generateCode = createAsyncThunk(
           duration: 3000,
         }),
       );
-      dispatch(fetchList());
     } else if (state.remainingExpiredCode < 1) {
       clearInterval(interval);
     }

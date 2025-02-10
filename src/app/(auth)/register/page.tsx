@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function RegisterPage() {
   return (
-    <section className="flex flex-col gap-4 w-full sm:w-4/5 md:w-3/4 lg:w-[60%]">
+    <section className="flex flex-col gap-4 w-full sm:w-4/5 md:w-3/4 lg:w-1/2">
       <Typography as="h1" variant="h2" weight="semibold">
         Daftar
       </Typography>

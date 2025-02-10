@@ -55,7 +55,7 @@ export async function apiGetProductKnowledgeDetail(
       data: responseData.data,
     };
   } catch (error) {
-    const err = error as MetaResponseError;
+    const err = error as MetaResponseError<null>;
     const errorResponse = err.response;
     const errorData = errorResponse?.data ?? null;
     const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
@@ -70,10 +70,10 @@ export async function apiGetProductKnowledgeDetail(
 
 export async function apiCreateProductKnowledge(
   payload: CreateProductKnowledgeDTO,
-): Promise<ServiceResponse> {
+): Promise<ServiceResponse<null>> {
   try {
     const response = await apiClient.post('/v1/knowledge', payload);
-    const responseData = response.data as MetaResponse;
+    const responseData = response.data as MetaResponse<null>;
     const responseMessage = responseData.meta?.message ?? response.statusText;
 
     return {
@@ -82,7 +82,7 @@ export async function apiCreateProductKnowledge(
       message: responseMessage,
     };
   } catch (error) {
-    const err = error as MetaResponseError;
+    const err = error as MetaResponseError<null>;
     const errorResponse = err.response;
     const errorData = errorResponse?.data ?? null;
     const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
@@ -97,10 +97,10 @@ export async function apiCreateProductKnowledge(
 
 export async function apiUpdateProductKnowledge(
   payload: UpdateProductKnowledgeDTO,
-): Promise<ServiceResponse> {
+): Promise<ServiceResponse<null>> {
   try {
     const response = await apiClient.put('/v1/knowledge', payload);
-    const responseData = response.data as MetaResponse;
+    const responseData = response.data as MetaResponse<null>;
     const responseMessage = responseData.meta?.message ?? response.statusText;
 
     return {
@@ -109,7 +109,7 @@ export async function apiUpdateProductKnowledge(
       message: responseMessage,
     };
   } catch (error) {
-    const err = error as MetaResponseError;
+    const err = error as MetaResponseError<null>;
     const errorResponse = err.response;
     const errorData = errorResponse?.data ?? null;
     const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
@@ -122,10 +122,10 @@ export async function apiUpdateProductKnowledge(
   }
 }
 
-export async function apiDeleteProductKnowledge(id: number): Promise<ServiceResponse> {
+export async function apiDeleteProductKnowledge(id: number): Promise<ServiceResponse<null>> {
   try {
     const response = await apiClient.delete(`/v1/knowledge/${id}`);
-    const responseData = response.data as MetaResponse;
+    const responseData = response.data as MetaResponse<null>;
     const responseMessage = responseData.meta?.message ?? response.statusText;
 
     return {
@@ -134,7 +134,7 @@ export async function apiDeleteProductKnowledge(id: number): Promise<ServiceResp
       message: responseMessage,
     };
   } catch (error) {
-    const err = error as MetaResponseError;
+    const err = error as MetaResponseError<null>;
     const errorResponse = err.response;
     const errorData = errorResponse?.data ?? null;
     const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';

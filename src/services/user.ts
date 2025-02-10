@@ -12,7 +12,9 @@ import type {
   UserRegisterDTO,
 } from '@/types/services';
 
-export async function apiUserLogin(payload: UserLoginDTO): Promise<ServiceResponse> {
+export async function apiUserLogin(
+  payload: UserLoginDTO,
+): Promise<ServiceResponse<UserLoginResponse>> {
   try {
     const response = await apiClient.post('/v1/user/login', payload);
     const responseData = response.data as MetaResponse<UserLoginResponse>;
@@ -40,7 +42,7 @@ export async function apiUserLogin(payload: UserLoginDTO): Promise<ServiceRespon
 
     throw new Error('Auth token not found!');
   } catch (error) {
-    const err = error as MetaResponseError;
+    const err = error as MetaResponseError<null>;
     const errorResponse = err.response;
     const errorData = errorResponse?.data ?? null;
     const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? (error as string);
@@ -53,10 +55,10 @@ export async function apiUserLogin(payload: UserLoginDTO): Promise<ServiceRespon
   }
 }
 
-export async function apiUserRegister(payload: UserRegisterDTO): Promise<ServiceResponse> {
+export async function apiUserRegister(payload: UserRegisterDTO): Promise<ServiceResponse<null>> {
   try {
     const response = await apiClient.post('/v1/user/registration', payload);
-    const responseData = response.data as MetaResponse;
+    const responseData = response.data as MetaResponse<null>;
     const responseMessage = responseData.meta?.message ?? response.statusText;
 
     return {
@@ -65,7 +67,7 @@ export async function apiUserRegister(payload: UserRegisterDTO): Promise<Service
       message: responseMessage,
     };
   } catch (error) {
-    const err = error as MetaResponseError;
+    const err = error as MetaResponseError<null>;
     const errorResponse = err.response;
     const errorData = errorResponse?.data ?? null;
     const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';

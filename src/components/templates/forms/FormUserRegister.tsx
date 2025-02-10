@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { Button, Input } from '@/components/atoms';
 import type { FormUserRegisterValues } from '@/types/components/templates';
 import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
@@ -16,12 +17,16 @@ export default function FormUserRegister() {
     formState: { errors },
     submitHandler,
   } = useForm(userRegisterSchema);
+  const router = useRouter();
 
-  const onSubmit = (data: FormUserRegisterValues) => {
-    dispatch(userRegister(data));
+  const onSubmit = async (data: FormUserRegisterValues) => {
+    const response = await dispatch(userRegister(data)).unwrap();
+    if (response.success) {
+      router.push('/login');
+    }
   };
   return (
-    <form onSubmit={submitHandler(onSubmit)}>
+    <form onSubmit={submitHandler(onSubmit)} noValidate>
       <Input
         type="text"
         label="Nama Lengkap"
@@ -58,6 +63,7 @@ export default function FormUserRegister() {
         type="password"
         label="Konfirmasi Password"
         placeholder="Konfirmasi Password Anda"
+        className="mb-4"
         hasError={!!errors.confirmPassword}
         helperText={errors.confirmPassword}
         {...register('confirmPassword')}

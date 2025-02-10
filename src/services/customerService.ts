@@ -56,7 +56,7 @@ export async function apiGetCustomerServiceDetail(
       data: responseData.data,
     };
   } catch (error) {
-    const err = error as MetaResponseError;
+    const err = error as MetaResponseError<null>;
     const errorResponse = err.response;
     const errorData = errorResponse?.data ?? null;
     const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
@@ -71,10 +71,10 @@ export async function apiGetCustomerServiceDetail(
 
 export async function apiCreateCustomerService(
   payload: CreateCustomerServiceDTO,
-): Promise<ServiceResponse> {
+): Promise<ServiceResponse<null>> {
   try {
     const response = await apiClient.post('/v1/customer-service', payload);
-    const responseData = response.data as MetaResponse;
+    const responseData = response.data as MetaResponse<null>;
     const responseMessage = responseData.meta?.message ?? response.statusText;
 
     return {
@@ -83,7 +83,7 @@ export async function apiCreateCustomerService(
       message: responseMessage,
     };
   } catch (error) {
-    const err = error as MetaResponseError;
+    const err = error as MetaResponseError<null>;
     const errorResponse = err.response;
     const errorData = errorResponse?.data ?? null;
     const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
@@ -98,10 +98,10 @@ export async function apiCreateCustomerService(
 
 export async function apiUpdateCustomerService(
   payload: UpdateCustomerServiceDTO,
-): Promise<ServiceResponse> {
+): Promise<ServiceResponse<null>> {
   try {
     const response = await apiClient.put('/v1/customer-service', payload);
-    const responseData = response.data as MetaResponse;
+    const responseData = response.data as MetaResponse<null>;
     const responseMessage = responseData.meta?.message ?? response.statusText;
 
     return {
@@ -110,7 +110,7 @@ export async function apiUpdateCustomerService(
       message: responseMessage,
     };
   } catch (error) {
-    const err = error as MetaResponseError;
+    const err = error as MetaResponseError<null>;
     const errorResponse = err.response;
     const errorData = errorResponse?.data ?? null;
     const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';
@@ -123,10 +123,10 @@ export async function apiUpdateCustomerService(
   }
 }
 
-export async function apiDeleteCustomerService(id: number): Promise<ServiceResponse> {
+export async function apiDeleteCustomerService(id: number): Promise<ServiceResponse<null>> {
   try {
     const response = await apiClient.delete(`/v1/customer-service/${id}`);
-    const responseData = response.data as MetaResponse;
+    const responseData = response.data as MetaResponse<null>;
     const responseMessage = responseData.meta?.message ?? response.statusText;
 
     return {
@@ -135,7 +135,7 @@ export async function apiDeleteCustomerService(id: number): Promise<ServiceRespo
       message: responseMessage,
     };
   } catch (error) {
-    const err = error as MetaResponseError;
+    const err = error as MetaResponseError<null>;
     const errorResponse = err.response;
     const errorData = errorResponse?.data ?? null;
     const errorMessage = errorData?.meta?.message ?? errorResponse?.statusText ?? '';

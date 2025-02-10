@@ -1,13 +1,8 @@
 'use client';
 
+import { useCallback, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button, Input, TextArea } from '@/components/atoms';
-import type {
-  FormCustomerServiceProps,
-  FormCustomerServiceValues,
-} from '@/types/components/templates';
-import useForm from '@/hooks/useForm';
-import { customerServiceSchema } from '@/utilities/validations';
-import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
 import {
   createItem,
   fetchItem,
@@ -15,7 +10,13 @@ import {
   isLoadingState,
   updateItem,
 } from '@/store/customerServiceSlice';
-import { useCallback, useEffect } from 'react';
+import type {
+  FormCustomerServiceProps,
+  FormCustomerServiceValues,
+} from '@/types/components/templates';
+import useForm from '@/hooks/useForm';
+import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
+import { customerServiceSchema } from '@/utilities/validations';
 
 export default function FormCustomerService({ itemId = 0, action }: FormCustomerServiceProps) {
   const dispatch = useAppDispatch();
@@ -29,6 +30,8 @@ export default function FormCustomerService({ itemId = 0, action }: FormCustomer
     resetValues,
     submitHandler,
   } = useForm(customerServiceSchema);
+  const router = useRouter();
+
   const fetchDetail = useCallback(() => {
     if (itemId) {
       dispatch(fetchItem(itemId));
@@ -51,16 +54,20 @@ export default function FormCustomerService({ itemId = 0, action }: FormCustomer
     }
   }, [action, item, resetValues, setValues]);
 
-  const onSubmit = (data: FormCustomerServiceValues) => {
+  const onSubmit = async (data: FormCustomerServiceValues) => {
+    let response = null;
     if (action === 'update') {
-      dispatch(updateItem({ ...data, id: itemId }));
+      response = await dispatch(updateItem({ ...data, id: itemId })).unwrap();
     } else {
-      dispatch(createItem(data));
+      response = await dispatch(createItem(data)).unwrap();
+    }
+    if (response.success) {
+      router.push('/product-setup/ai-customer-service');
     }
   };
 
   return (
-    <form onSubmit={submitHandler(onSubmit)}>
+    <form onSubmit={submitHandler(onSubmit)} noValidate>
       <Input
         label="Nama"
         placeholder="Masukkan Nama Customer Service Anda"
@@ -79,6 +86,7 @@ export default function FormCustomerService({ itemId = 0, action }: FormCustomer
         label="Personality"
         placeholder="Masukkan Personality Customer Service Anda"
         rows={5}
+        className="mb-4"
         hasError={!!errors.personality}
         helperText={errors.personality}
         {...register('personality')}

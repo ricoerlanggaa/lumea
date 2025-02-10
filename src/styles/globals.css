@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .z-max {
+    z-index: 2147483647;
+  }
+}
 @layer components {
   .text-gradient {
     background: linear-gradient(91.06deg, #ff1cf7 2.26%, #00f0ff 100%);

@@ -17,8 +17,11 @@ export default function CardCustomerService() {
   const dispatch = useAppDispatch();
   const list = useAppSelector(listState);
 
-  const handleDelete = (id: number) => {
-    dispatch(deleteItem(id));
+  const handleDelete = async (id: number) => {
+    const response = await dispatch(deleteItem(id)).unwrap();
+    if (response.success) {
+      dispatch(fetchList());
+    }
   };
 
   useEffect(() => {

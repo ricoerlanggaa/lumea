@@ -1,18 +1,15 @@
 'use client';
 
 import { useCallback, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button, Input, Select, TextArea } from '@/components/atoms';
 import type {
   FormProductKnowledgeProps,
   FormProductKnowledgeValues,
 } from '@/types/components/templates';
-import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
-import useForm from '@/hooks/useForm';
-import { productKnowledgeSchema } from '@/utilities/validations';
 import {
   createItem,
   fetchItem,
-  fetchList,
   isLoadingState,
   itemState,
   updateItem,
@@ -25,6 +22,9 @@ import {
   selectOptionsState as customerServiceSelectOptions,
   fetchSelectOptions as fetchCustomerServiceSelectOptions,
 } from '@/store/customerServiceSlice';
+import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
+import useForm from '@/hooks/useForm';
+import { productKnowledgeSchema } from '@/utilities/validations';
 
 export default function FormProductKnowledge({ action, itemId = 0 }: FormProductKnowledgeProps) {
   const dispatch = useAppDispatch();
@@ -40,15 +40,20 @@ export default function FormProductKnowledge({ action, itemId = 0 }: FormProduct
     resetValues,
     submitHandler,
   } = useForm(productKnowledgeSchema);
+  const router = useRouter();
 
-  const handleSubmit = (data: FormProductKnowledgeValues) => {
+  const handleSubmit = async (data: FormProductKnowledgeValues) => {
+    let response = null;
     if (action === 'update') {
-      dispatch(updateItem({ ...data, id: itemId }));
+      response = await dispatch(updateItem({ ...data, id: itemId })).unwrap();
     } else {
-      dispatch(createItem(data));
+      response = await dispatch(createItem(data)).unwrap();
     }
-    dispatch(fetchList());
+    if (response.success) {
+      router.push('/product-setup/product-knowledge');
+    }
   };
+
   const fetchDetail = useCallback(() => {
     if (itemId) dispatch(fetchItem(itemId));
   }, [dispatch, itemId]);
@@ -76,7 +81,7 @@ export default function FormProductKnowledge({ action, itemId = 0 }: FormProduct
   }, [action, item, resetValues, setValues]);
 
   return (
-    <form onSubmit={submitHandler(handleSubmit)}>
+    <form onSubmit={submitHandler(handleSubmit)} noValidate>
       <Select
         label="Customer Service"
         placeholder="Pilih Customer Service"
@@ -103,6 +108,7 @@ export default function FormProductKnowledge({ action, itemId = 0 }: FormProduct
       <TextArea
         label="Deskripsi"
         placeholder="Masukkan Deskripsi Product Anda"
+        className="mb-4"
         rows={5}
         hasError={!!errors.description}
         helperText={errors.description}

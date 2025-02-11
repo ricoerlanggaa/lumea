@@ -104,7 +104,8 @@ jobs:
 
       - name: Deploy App to Netlify
         run: |
-          npx netlify-cli deploy --build --prod --message "Deploy App v$(node -p \"require('./package.json').version\")"
+          VERSION=$(node -p "require('./package.json').version")
+          npx netlify-cli deploy --build --prod --message "Deploy App v$VERSION"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_APP_SITE_ID }}
@@ -128,7 +129,8 @@ jobs:
 
       - name: Deploy Storybook Docs to Netlify
         run: |
-          npx netlify-cli deploy --prod --dir=storybook-static --message "Deploy Storybook Docs v$(node -p \"require('./package.json').version\")"
+          VERSION=$(node -p "require('./package.json').version")
+          npx netlify-cli deploy --prod --dir=storybook-static --message "Deploy Storybook Docs v$VERSION"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_STORYBOOK_SITE_ID }}

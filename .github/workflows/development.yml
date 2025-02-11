@@ -26,7 +26,7 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Create Version and Publish
+      - name: Create Version and Generate Changelog
         id: changeset
         run: |
           npx changeset version
@@ -39,8 +39,12 @@ jobs:
       - name: Create Git Tag
         run: |
           VERSION=$(node -p "require('./package.json').version")
-          git tag "v$VERSION"
-          git push origin "v$VERSION"
+          if git rev-parse "v$VERSION" >/dev/null 2>&1; then
+            echo "Tag v$VERSION already exists, skipping..."
+          else
+            git tag "v$VERSION"
+            git push origin "v$VERSION"
+          fi
 
   setup:
     runs-on: ubuntu-latest
@@ -100,7 +104,7 @@ jobs:
 
       - name: Deploy App to Netlify
         run: |
-          npx netlify-cli deploy --build --prod --message "Deploy App ${GITHUB_REF_NAME}"
+          npx netlify-cli deploy --build --prod --message "Deploy App v$(node -p \"require('./package.json').version\")"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_APP_SITE_ID }}
@@ -124,7 +128,7 @@ jobs:
 
       - name: Deploy Storybook Docs to Netlify
         run: |
-          npx netlify-cli deploy --prod --dir=storybook-static --message "Deploy Storybook Docs ${GITHUB_REF_NAME}"
+          npx netlify-cli deploy --prod --dir=storybook-static --message "Deploy Storybook Docs v$(node -p \"require('./package.json').version\")"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_STORYBOOK_SITE_ID }}

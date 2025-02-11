@@ -6,7 +6,7 @@ import { cookies } from 'next/headers';
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const apiClient = axios.create({
-  baseURL: `${BASE_URL}/api`,
+  baseURL: BASE_URL,
   withCredentials: true,
   timeout: 20000,
   headers: {
